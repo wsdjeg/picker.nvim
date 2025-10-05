@@ -18,6 +18,23 @@ local promot_bufnr = -1
 
 local extns = vim.api.nvim_create_namespace("picker.nvim")
 
+local function highlight_matched_chars(config)
+    local info = vim.fn.getwininfo(list_winid)[1]
+	local from = info.topline
+	local to = info.botline
+    local filter_rst = vim.api.nvim_win_get_var(list_winid, 'filter_rst')
+	local ns = vim.api.nvim_create_namespace("picker-matched-chars")
+	for x = from, to do
+		for y = 1, #filter_rst[x].hs do
+			local col = filter_rst[x].hs[y]
+			vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, col - 1, {
+				end_col = col,
+				hl_group = config.highlight.matched,
+			})
+		end
+	end
+end
+
 --- @class PickerSource
 --- @field get function
 --- @field default_action function
@@ -117,16 +134,8 @@ function M.open(source)
 						return t.line
 					end, filter_rst)
 				)
-				local ns = vim.api.nvim_create_namespace("picker-matched-chars")
-				for x = 1, #filter_rst do
-					for y = 1, #filter_rst[x].hs do
-                        local col = filter_rst[x].hs[y]
-						vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, col - 1, {
-							end_col = col,
-							hl_group = config.highlight.matched,
-						})
-					end
-				end
+                vim.api.nvim_win_set_var(list_winid, 'filter_rst', filter_rst)
+                highlight_matched_chars(config)
 			else
 				vim.api.nvim_buf_set_lines(list_bufnr, 0, -1, false, source.get())
 			end

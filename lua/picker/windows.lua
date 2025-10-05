@@ -21,10 +21,10 @@ local extns = vim.api.nvim_create_namespace("picker.nvim")
 local config
 
 local function highlight_matched_chars()
-    local info = vim.fn.getwininfo(list_winid)[1]
+	local info = vim.fn.getwininfo(list_winid)[1]
 	local from = info.topline
 	local to = info.botline
-    local filter_rst = vim.api.nvim_win_get_var(list_winid, 'filter_rst')
+	local filter_rst = vim.api.nvim_win_get_var(list_winid, "filter_rst")
 	local ns = vim.api.nvim_create_namespace("picker-matched-chars")
 	for x = from, to do
 		for y = 1, #filter_rst[x][2] do
@@ -56,35 +56,65 @@ function M.open(source)
 	if not vim.api.nvim_buf_is_valid(list_bufnr) then
 		list_bufnr = vim.api.nvim_create_buf(false, false)
 	end
-	if not vim.api.nvim_win_is_valid(list_winid) then
-		list_winid = vim.api.nvim_open_win(list_bufnr, false, {
-
-			relative = "editor",
-			width = screen_width,
-			height = screen_height - 5,
-			col = start_col,
-			row = start_row,
-			focusable = false,
-			border = "rounded",
-			-- title = 'Result',
-			-- title_pos = 'center',
-			-- noautocmd = true,
-		})
-	end
 	if not vim.api.nvim_buf_is_valid(promot_bufnr) then
 		promot_bufnr = vim.api.nvim_create_buf(false, false)
 	end
-	if not vim.api.nvim_win_is_valid(promot_winid) then
-		promot_winid = vim.api.nvim_open_win(promot_bufnr, true, {
-			relative = "editor",
-			width = screen_width,
-			height = 1,
-			col = start_col,
-			row = start_row + screen_height - 3,
-			focusable = true,
-			border = "rounded",
-			-- noautocmd = true,
-		})
+	if config.prompt.position == "bottom" then
+		if not vim.api.nvim_win_is_valid(list_winid) then
+			list_winid = vim.api.nvim_open_win(list_bufnr, false, {
+
+				relative = "editor",
+				width = screen_width,
+				height = screen_height - 5,
+				col = start_col,
+				row = start_row,
+				focusable = false,
+				border = "rounded",
+				-- title = 'Result',
+				-- title_pos = 'center',
+				-- noautocmd = true,
+			})
+		end
+		if not vim.api.nvim_win_is_valid(promot_winid) then
+			promot_winid = vim.api.nvim_open_win(promot_bufnr, true, {
+				relative = "editor",
+				width = screen_width,
+				height = 1,
+				col = start_col,
+				row = start_row + screen_height - 3,
+				focusable = true,
+				border = "rounded",
+				-- noautocmd = true,
+			})
+		end
+	else
+		if not vim.api.nvim_win_is_valid(list_winid) then
+			list_winid = vim.api.nvim_open_win(list_bufnr, false, {
+
+				relative = "editor",
+				width = screen_width,
+				height = screen_height - 5,
+				col = start_col,
+				row = start_row + 3,
+				focusable = false,
+				border = "rounded",
+				-- title = 'Result',
+				-- title_pos = 'center',
+				-- noautocmd = true,
+			})
+		end
+		if not vim.api.nvim_win_is_valid(promot_winid) then
+			promot_winid = vim.api.nvim_open_win(promot_bufnr, true, {
+				relative = "editor",
+				width = screen_width,
+				height = 1,
+				col = start_col,
+				row = start_row,
+				focusable = true,
+				border = "rounded",
+				-- noautocmd = true,
+			})
+		end
 	end
 	vim.api.nvim_set_option_value("winhighlight", "NormalFloat:Normal,FloatBorder:WinSeparator", { win = list_winid })
 	vim.api.nvim_set_option_value("winhighlight", "NormalFloat:Normal,FloatBorder:WinSeparator", { win = promot_winid })
@@ -111,8 +141,8 @@ function M.open(source)
 			local input = vim.api.nvim_buf_get_lines(promot_bufnr, 0, 1, false)[1]
 			if input ~= "" then
 				local fzy = require("picker.matchers.fzy")
-                local results = source.get()
-                local filter_rst = fzy.filter(input, results)
+				local results = source.get()
+				local filter_rst = fzy.filter(input, results)
 
 				vim.api.nvim_buf_set_lines(
 					list_bufnr,
@@ -123,8 +153,8 @@ function M.open(source)
 						return t[4]
 					end, filter_rst)
 				)
-                vim.api.nvim_win_set_var(list_winid, 'filter_rst', filter_rst)
-                highlight_matched_chars()
+				vim.api.nvim_win_set_var(list_winid, "filter_rst", filter_rst)
+				highlight_matched_chars()
 			else
 				vim.api.nvim_buf_set_lines(list_bufnr, 0, -1, false, source.get())
 			end
@@ -149,7 +179,7 @@ function M.open(source)
 			cursor[1] = cursor[1] + 1
 		end
 		vim.api.nvim_win_set_cursor(list_winid, cursor)
-        highlight_matched_chars()
+		highlight_matched_chars()
 	end, { buffer = promot_bufnr })
 	vim.keymap.set("i", "<S-Tab>", function()
 		local cursor = vim.api.nvim_win_get_cursor(list_winid)
@@ -157,7 +187,7 @@ function M.open(source)
 			cursor[1] = cursor[1] - 1
 		end
 		vim.api.nvim_win_set_cursor(list_winid, cursor)
-        highlight_matched_chars()
+		highlight_matched_chars()
 	end, { buffer = promot_bufnr })
 	if ok then
 		cmp.setup.buffer({

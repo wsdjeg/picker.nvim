@@ -7,9 +7,12 @@ local default = {
 		col = 0.1,
 		row = 0.1,
 	},
-    highlight = {
-        matched = 'Search'
-    }
+	highlight = {
+		matched = "Search",
+	},
+	prompt = {
+		position = "bottom", --- bottom or top
+	},
 }
 
 function M.setup(opt)

@@ -27,8 +27,8 @@ local function highlight_matched_chars()
     local filter_rst = vim.api.nvim_win_get_var(list_winid, 'filter_rst')
 	local ns = vim.api.nvim_create_namespace("picker-matched-chars")
 	for x = from, to do
-		for y = 1, #filter_rst[x].hs do
-			local col = filter_rst[x].hs[y]
+		for y = 1, #filter_rst[x][2] do
+			local col = filter_rst[x][2][y]
 			vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, col - 1, {
 				end_col = col,
 				hl_group = config.highlight.matched,
@@ -111,21 +111,8 @@ function M.open(source)
 			local input = vim.api.nvim_buf_get_lines(promot_bufnr, 0, 1, false)[1]
 			if input ~= "" then
 				local fzy = require("picker.matchers.fzy")
-				local result = vim.tbl_map(function(t)
-					local score, hs = fzy.score(input, t)
-					return {
-						line = t,
-						score = score,
-						hs = hs,
-					}
-				end, source.get())
-				table.sort(result, function(a, b)
-					return a.score > b.score
-				end)
-
-				local filter_rst = vim.tbl_filter(function(t)
-					return t.score ~= -math.huge
-				end, result)
+                local results = source.get()
+                local filter_rst = fzy.filter(input, results)
 
 				vim.api.nvim_buf_set_lines(
 					list_bufnr,
@@ -133,7 +120,7 @@ function M.open(source)
 					-1,
 					false,
 					vim.tbl_map(function(t)
-						return t.line
+						return t[4]
 					end, filter_rst)
 				)
                 vim.api.nvim_win_set_var(list_winid, 'filter_rst', filter_rst)

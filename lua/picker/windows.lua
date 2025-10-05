@@ -137,7 +137,7 @@ function M.open(source)
 					end, filter_rst)
 				)
                 vim.api.nvim_win_set_var(list_winid, 'filter_rst', filter_rst)
-                highlight_matched_chars(config)
+                highlight_matched_chars()
 			else
 				vim.api.nvim_buf_set_lines(list_bufnr, 0, -1, false, source.get())
 			end

@@ -23,4 +23,9 @@ require('plug').add({
 
 ## Key bindings
 
-
+| key binding | description    |
+| ----------- | -------------- |
+| `Tab`       | next item      |
+| `S-Tab`     | previous item  |
+| `Enter`     | default action |
+| `Esc`       | close picker   |

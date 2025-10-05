@@ -16,6 +16,8 @@ local promot_winid = -1
 
 local promot_bufnr = -1
 
+local extns = vim.api.nvim_create_namespace("picker.nvim")
+
 --- @class PickerSource
 --- @field get function
 --- @field default_action function
@@ -67,10 +69,18 @@ function M.open(source)
 	end
 	vim.api.nvim_set_option_value("winhighlight", "NormalFloat:Normal,FloatBorder:WinSeparator", { win = list_winid })
 	vim.api.nvim_set_option_value("winhighlight", "NormalFloat:Normal,FloatBorder:WinSeparator", { win = promot_winid })
-    vim.api.nvim_set_option_value('buftype', 'nowrite', { buf = promot_bufnr })
-    vim.api.nvim_set_option_value('buftype', 'nowrite', { buf = list_bufnr })
-    vim.api.nvim_set_option_value('bufhidden', 'wipe', { buf = promot_bufnr })
-    vim.api.nvim_set_option_value('bufhidden', 'wipe', { buf = list_bufnr })
+	vim.api.nvim_set_option_value("buftype", "nowrite", { buf = promot_bufnr })
+	vim.api.nvim_set_option_value("buftype", "nowrite", { buf = list_bufnr })
+	vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = promot_bufnr })
+	vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = list_bufnr })
+	vim.api.nvim_set_option_value("number", false, { win = promot_winid })
+	vim.api.nvim_set_option_value("relativenumber", false, { win = promot_winid })
+	vim.api.nvim_set_option_value("cursorline", false, { win = promot_winid })
+	vim.api.nvim_set_option_value("signcolumn", "yes", { win = promot_winid })
+	vim.api.nvim_buf_set_extmark(promot_bufnr, extns, 0, 0, {
+		sign_text = ">",
+		sign_hl_group = "Error",
+	})
 	local augroup = vim.api.nvim_create_augroup("picker.nvim", {
 		clear = true,
 	})

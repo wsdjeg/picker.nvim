@@ -18,7 +18,9 @@ local promot_bufnr = -1
 
 local extns = vim.api.nvim_create_namespace("picker.nvim")
 
-local function highlight_matched_chars(config)
+local config
+
+local function highlight_matched_chars()
     local info = vim.fn.getwininfo(list_winid)[1]
 	local from = info.topline
 	local to = info.botline
@@ -42,7 +44,7 @@ end
 
 --- @param source PickerSource
 function M.open(source)
-	local config = require("picker.config").get()
+	config = require("picker.config").get()
 	-- 窗口位置
 	-- 宽度： columns 的 80%
 	local screen_width = math.floor(vim.o.columns * config.window.width)
@@ -160,6 +162,7 @@ function M.open(source)
 			cursor[1] = cursor[1] + 1
 		end
 		vim.api.nvim_win_set_cursor(list_winid, cursor)
+        highlight_matched_chars()
 	end, { buffer = promot_bufnr })
 	vim.keymap.set("i", "<S-Tab>", function()
 		local cursor = vim.api.nvim_win_get_cursor(list_winid)
@@ -167,6 +170,7 @@ function M.open(source)
 			cursor[1] = cursor[1] - 1
 		end
 		vim.api.nvim_win_set_cursor(list_winid, cursor)
+        highlight_matched_chars()
 	end, { buffer = promot_bufnr })
 	if ok then
 		cmp.setup.buffer({

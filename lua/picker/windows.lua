@@ -1,5 +1,13 @@
 local M = {}
 
+--- what the fuck?
+--- 没办法禁用 cmp，只能 require 后 setup？？
+local ok, cmp = pcall(require, 'cmp')
+if not ok then
+    vim.cmd('doautocmd InsertEnter')
+    ok, cmp = pcall(require, 'cmp')
+end
+
 local list_winid = -1
 
 local list_bufnr = -1
@@ -11,6 +19,7 @@ local promot_bufnr = -1
 --- @class PickerSource
 --- @field get function
 --- @field default_action function
+--- @field __results nil | table<string>
 
 --- @param source PickerSource
 function M.open(source)
@@ -66,6 +75,15 @@ function M.open(source)
 		callback = function(ev)
 			local input = vim.api.nvim_buf_get_lines(promot_bufnr, 0, 1, false)[1]
 			if input ~= "" then
+				local result = source.get()
+                local fzy = require('picker.matchers.fzy')
+				table.sort(result, function(a, b)
+					return fzy.score(input, a) > fzy.score(input, b)
+				end)
+
+				vim.api.nvim_buf_set_lines(list_bufnr, 0, -1, false, vim.tbl_filter(function(t)
+					return fzy.score(input, t) ~= -math.huge
+				end, result))
 			else
 				vim.api.nvim_buf_set_lines(list_bufnr, 0, -1, false, source.get())
 			end
@@ -80,8 +98,15 @@ function M.open(source)
 		local selected = vim.api.nvim_buf_get_lines(list_bufnr, cursor[1], cursor[1], false)[1]
 		vim.api.nvim_win_close(promot_winid, true)
 		vim.api.nvim_win_close(list_winid, true)
-        source.default_action(selected)
+		source.default_action(selected)
 	end, { buffer = promot_bufnr })
+    if ok then
+        cmp.setup.buffer({
+            completion = {
+                autocomplete = false,
+            },
+        })
+    end
 	vim.cmd("startinsert | doautocmd TextChangedI")
 end
 

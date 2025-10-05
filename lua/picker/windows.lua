@@ -120,8 +120,9 @@ function M.open(source)
 				local ns = vim.api.nvim_create_namespace("picker-matched-chars")
 				for x = 1, #filter_rst do
 					for y = 1, #filter_rst[x].hs do
-						vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, y - 1, {
-							end_col = y,
+                        local col = filter_rst[x].hs[y]
+						vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, col - 1, {
+							end_col = col,
 							hl_group = "Search",
 						})
 					end

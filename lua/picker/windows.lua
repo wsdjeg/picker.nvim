@@ -69,6 +69,8 @@ function M.open(source)
 	vim.api.nvim_set_option_value("winhighlight", "NormalFloat:Normal,FloatBorder:WinSeparator", { win = promot_winid })
     vim.api.nvim_set_option_value('buftype', 'nowrite', { buf = promot_bufnr })
     vim.api.nvim_set_option_value('buftype', 'nowrite', { buf = list_bufnr })
+    vim.api.nvim_set_option_value('bufhidden', 'wipe', { buf = promot_bufnr })
+    vim.api.nvim_set_option_value('bufhidden', 'wipe', { buf = list_bufnr })
 	local augroup = vim.api.nvim_create_augroup("picker.nvim", {
 		clear = true,
 	})

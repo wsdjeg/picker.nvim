@@ -65,16 +65,8 @@ function M.open(source)
 			-- noautocmd = true,
 		})
 	end
-    vim.api.nvim_set_option_value(
-        'winhighlight',
-        'NormalFloat:Normal,FloatBorder:WinSeparator',
-        { win = list_winid }
-    )
-    vim.api.nvim_set_option_value(
-        'winhighlight',
-        'NormalFloat:Normal,FloatBorder:WinSeparator',
-        { win = promot_winid }
-    )
+	vim.api.nvim_set_option_value("winhighlight", "NormalFloat:Normal,FloatBorder:WinSeparator", { win = list_winid })
+	vim.api.nvim_set_option_value("winhighlight", "NormalFloat:Normal,FloatBorder:WinSeparator", { win = promot_winid })
 	local augroup = vim.api.nvim_create_augroup("picker.nvim", {
 		clear = true,
 	})
@@ -117,6 +109,20 @@ function M.open(source)
 		vim.api.nvim_win_close(promot_winid, true)
 		vim.api.nvim_win_close(list_winid, true)
 		source.default_action(selected)
+	end, { buffer = promot_bufnr })
+	vim.keymap.set("i", "<Tab>", function()
+		local cursor = vim.api.nvim_win_get_cursor(list_winid)
+		if cursor[1] < vim.api.nvim_buf_line_count(list_bufnr) then
+			cursor[1] = cursor[1] + 1
+		end
+		vim.api.nvim_win_set_cursor(list_winid, cursor)
+	end, { buffer = promot_bufnr })
+	vim.keymap.set("i", "<S-Tab>", function()
+		local cursor = vim.api.nvim_win_get_cursor(list_winid)
+		if cursor[1] > 1 then
+			cursor[1] = cursor[1] - 1
+		end
+		vim.api.nvim_win_set_cursor(list_winid, cursor)
 	end, { buffer = promot_bufnr })
 	if ok then
 		cmp.setup.buffer({

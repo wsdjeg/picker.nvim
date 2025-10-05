@@ -8,7 +8,12 @@ local promot_winid = -1
 
 local promot_bufnr = -1
 
-function M.open()
+--- @class PickerSource
+--- @field get function
+--- @field default_action function
+
+--- @param source PickerSource
+function M.open(source)
 	local config = require("picker.config").get()
 	-- 窗口位置
 	-- 宽度： columns 的 80%
@@ -40,7 +45,7 @@ function M.open()
 		promot_bufnr = vim.api.nvim_create_buf(false, true)
 	end
 	if not vim.api.nvim_win_is_valid(promot_winid) then
-		promot_winid = vim.api.nvim_open_win(promot_bufnr, false, {
+		promot_winid = vim.api.nvim_open_win(promot_bufnr, true, {
 			relative = "editor",
 			width = screen_width,
 			height = 1,
@@ -51,6 +56,33 @@ function M.open()
 			-- noautocmd = true,
 		})
 	end
+	local augroup = vim.api.nvim_create_augroup("picker.nvim", {
+		clear = true,
+	})
+
+	vim.api.nvim_create_autocmd({ "TextChangedI" }, {
+		group = augroup,
+		buffer = promot_bufnr,
+		callback = function(ev)
+			local input = vim.api.nvim_buf_get_lines(promot_bufnr, 0, 1, false)[1]
+			if input ~= "" then
+			else
+				vim.api.nvim_buf_set_lines(list_bufnr, 0, -1, false, source.get())
+			end
+		end,
+	})
+	vim.keymap.set("i", "<Esc>", function()
+		vim.api.nvim_win_close(promot_winid, true)
+		vim.api.nvim_win_close(list_winid, true)
+	end, { buffer = promot_bufnr })
+	vim.keymap.set("i", "<Enter>", function()
+		local cursor = vim.api.nvim_win_get_cursor(list_winid)
+		local selected = vim.api.nvim_buf_get_lines(list_bufnr, cursor[1], cursor[1], false)[1]
+		vim.api.nvim_win_close(promot_winid, true)
+		vim.api.nvim_win_close(list_winid, true)
+        source.default_action(selected)
+	end, { buffer = promot_bufnr })
+	vim.cmd("startinsert | doautocmd TextChangedI")
 end
 
 return M

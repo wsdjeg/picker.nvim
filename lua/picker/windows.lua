@@ -123,7 +123,7 @@ function M.open(source)
                         local col = filter_rst[x].hs[y]
 						vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, col - 1, {
 							end_col = col,
-							hl_group = "Search",
+							hl_group = config.highlight.matched,
 						})
 					end
 				end

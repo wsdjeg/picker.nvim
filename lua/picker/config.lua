@@ -7,6 +7,9 @@ local default = {
 		col = 0.1,
 		row = 0.1,
 	},
+    highlight = {
+        matched = 'Search'
+    }
 }
 
 function M.setup(opt)

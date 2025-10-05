@@ -15,3 +15,7 @@ vim.print(vim.tbl_filter(function(t)
     return fzy.score(input, t) ~= -math.huge
 end, give))
 vim.print(give)
+
+local a, b = fzy.score('ac', 'abc')
+vim.print(a)
+vim.print(b)

@@ -91,21 +91,41 @@ function M.open(source)
 		callback = function(ev)
 			local input = vim.api.nvim_buf_get_lines(promot_bufnr, 0, 1, false)[1]
 			if input ~= "" then
-				local result = source.get()
 				local fzy = require("picker.matchers.fzy")
+				local result = vim.tbl_map(function(t)
+					local score, hs = fzy.score(input, t)
+					return {
+						line = t,
+						score = score,
+						hs = hs,
+					}
+				end, source.get())
 				table.sort(result, function(a, b)
-					return fzy.score(input, a) > fzy.score(input, b)
+					return a.score > b.score
 				end)
+
+				local filter_rst = vim.tbl_filter(function(t)
+					return t.score ~= -math.huge
+				end, result)
 
 				vim.api.nvim_buf_set_lines(
 					list_bufnr,
 					0,
 					-1,
 					false,
-					vim.tbl_filter(function(t)
-						return fzy.score(input, t) ~= -math.huge
-					end, result)
+					vim.tbl_map(function(t)
+						return t.line
+					end, filter_rst)
 				)
+				local ns = vim.api.nvim_create_namespace("picker-matched-chars")
+				for x = 1, #filter_rst do
+					for y = 1, #filter_rst[x].hs do
+						vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, y - 1, {
+							end_col = y,
+							hl_group = "Search",
+						})
+					end
+				end
 			else
 				vim.api.nvim_buf_set_lines(list_bufnr, 0, -1, false, source.get())
 			end

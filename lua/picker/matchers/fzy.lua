@@ -4,6 +4,7 @@ local M = {}
 --- @param needle string 输入字符串
 --- @param haystack string 候选字符串
 --- @return number 得分，越大表示匹配越好，-math.huge表示不匹配
+--- @return table<integer>? 匹配位置列表
 function M.score(needle, haystack)
   if needle == "" or haystack == "" then return 0 end
   if #needle > #haystack then return -math.huge end
@@ -11,6 +12,7 @@ function M.score(needle, haystack)
   local score = 0
   local n_pos = 1
   local consecutive = 0
+  local hs = {}
   
   for h_pos = 1, #haystack do
     if n_pos > #needle then break end
@@ -21,6 +23,7 @@ function M.score(needle, haystack)
       score = score + consecutive * 0.1 -- 连续匹配加分
       if h_pos == 1 then score = score + 0.5 end -- 首字母匹配加分
       n_pos = n_pos + 1
+      table.insert(hs, h_pos)
     else
       consecutive = 0
     end
@@ -28,7 +31,7 @@ function M.score(needle, haystack)
   
   if n_pos <= #needle then return -math.huge end -- 未完全匹配
   score = score - (#haystack - #needle) * 0.05 -- 长度惩罚
-  return score
+  return score, hs
 end
 
 return M

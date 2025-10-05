@@ -65,6 +65,16 @@ function M.open(source)
 			-- noautocmd = true,
 		})
 	end
+    vim.api.nvim_set_option_value(
+        'winhighlight',
+        'NormalFloat:Normal,FloatBorder:WinSeparator',
+        { win = list_winid }
+    )
+    vim.api.nvim_set_option_value(
+        'winhighlight',
+        'NormalFloat:Normal,FloatBorder:WinSeparator',
+        { win = promot_winid }
+    )
 	local augroup = vim.api.nvim_create_augroup("picker.nvim", {
 		clear = true,
 	})

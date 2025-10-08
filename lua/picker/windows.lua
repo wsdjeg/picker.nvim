@@ -20,19 +20,34 @@ local extns = vim.api.nvim_create_namespace("picker.nvim")
 
 local config
 
+local prompt_count_id
+
+local function update_result_count()
+	local count = vim.api.nvim_buf_line_count(list_bufnr)
+	local line = vim.api.nvim_win_get_cursor(list_winid)[1]
+	prompt_count_id = vim.api.nvim_buf_set_extmark(promot_bufnr, extns, 0, 0, {
+		id = prompt_count_id,
+		virt_text = { { string.format("%d/%d", line, count), "Comment" } },
+		virt_text_pos = "right_align",
+	})
+	return prompt_count_id
+end
+
 local function highlight_matched_chars()
 	local info = vim.fn.getwininfo(list_winid)[1]
 	local from = info.topline
 	local to = info.botline
-	local filter_rst = vim.api.nvim_win_get_var(list_winid, "filter_rst")
-	local ns = vim.api.nvim_create_namespace("picker-matched-chars")
-	for x = from, to do
-		for y = 1, #filter_rst[x][2] do
-			local col = filter_rst[x][2][y]
-			vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, col - 1, {
-				end_col = col,
-				hl_group = config.highlight.matched,
-			})
+	local ok, filter_rst = pcall(vim.api.nvim_win_get_var, list_winid, "filter_rst")
+	if ok then
+		local ns = vim.api.nvim_create_namespace("picker-matched-chars")
+		for x = from, to do
+			for y = 1, #filter_rst[x][2] do
+				local col = filter_rst[x][2][y]
+				vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, col - 1, {
+					end_col = col,
+					hl_group = config.highlight.matched,
+				})
+			end
 		end
 	end
 end
@@ -158,6 +173,7 @@ function M.open(source)
 			else
 				vim.api.nvim_buf_set_lines(list_bufnr, 0, -1, false, source.get())
 			end
+			update_result_count()
 		end,
 	})
 	vim.keymap.set("i", "<Esc>", function()
@@ -177,17 +193,21 @@ function M.open(source)
 		local cursor = vim.api.nvim_win_get_cursor(list_winid)
 		if cursor[1] < vim.api.nvim_buf_line_count(list_bufnr) then
 			cursor[1] = cursor[1] + 1
+        else
+            cursor[1] = 1
 		end
 		vim.api.nvim_win_set_cursor(list_winid, cursor)
-		highlight_matched_chars()
+		update_result_count()
 	end, { buffer = promot_bufnr })
 	vim.keymap.set("i", "<S-Tab>", function()
 		local cursor = vim.api.nvim_win_get_cursor(list_winid)
 		if cursor[1] > 1 then
 			cursor[1] = cursor[1] - 1
+        else
+           cursor[1] = vim.api.nvim_buf_line_count(list_bufnr)
 		end
 		vim.api.nvim_win_set_cursor(list_winid, cursor)
-		highlight_matched_chars()
+		update_result_count()
 	end, { buffer = promot_bufnr })
 	if ok then
 		cmp.setup.buffer({

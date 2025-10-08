@@ -22,6 +22,8 @@ local config
 
 local prompt_count_id
 
+local current_icon_extmark
+
 local function update_result_count()
 	local count = vim.api.nvim_buf_line_count(list_bufnr)
 	local line = vim.api.nvim_win_get_cursor(list_winid)[1]
@@ -30,7 +32,11 @@ local function update_result_count()
 		virt_text = { { string.format("%d/%d", line, count), "Comment" } },
 		virt_text_pos = "right_align",
 	})
-	return prompt_count_id
+	current_icon_extmark = vim.api.nvim_buf_set_extmark(list_bufnr, extns, line - 1, 0, {
+        id = current_icon_extmark,
+		sign_text = config.window.current_icon,
+		sign_hl_group = config.window.current_icon_hl,
+	})
 end
 
 local function highlight_matched_chars()

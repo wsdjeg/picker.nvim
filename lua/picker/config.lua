@@ -6,6 +6,8 @@ local default = {
 		height = 0.8,
 		col = 0.1,
 		row = 0.1,
+        current_icon = '>',
+        current_icon_hl = 'Normal'
 	},
 	highlight = {
 		matched = "Search",

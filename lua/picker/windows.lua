@@ -154,6 +154,7 @@ function M.open(source)
 		buffer = promot_bufnr,
 		callback = function(ev)
 			local input = vim.api.nvim_buf_get_lines(promot_bufnr, 0, 1, false)[1]
+            vim.api.nvim_win_set_cursor(list_winid, {1, 1})
 			if input ~= "" then
 				local fzy = require("picker.matchers.fzy")
 				local results = source.get()

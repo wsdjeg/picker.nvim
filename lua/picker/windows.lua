@@ -173,6 +173,7 @@ function M.open(source)
 					highlight_matched_chars()
 				end
 			else
+				vim.api.nvim_win_set_var(list_winid, "filter_rst", {})
 				vim.api.nvim_buf_set_lines(list_bufnr, 0, -1, false, source.get())
 			end
 			update_result_count()

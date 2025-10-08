@@ -1,6 +1,6 @@
 # picker.nvim
 
-_picker.nvim_ is a fuzzy finder for neovim. This plugin is WIP.
+_picker.nvim_ is a fuzzy finder for neovim.
 
 ![](https://private-user-images.githubusercontent.com/13142418/497562552-7b31fcd7-6185-43cf-80be-147fb5ede58c.png)
 

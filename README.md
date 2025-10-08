@@ -25,6 +25,8 @@ require("plug").add({
 				},
 				prompt = {
 					position = "bottom", --- bottom or top
+					icon = ">",
+					icon_hl = "Error",
 				},
 				mappings = {
 					close = "<Esc>",

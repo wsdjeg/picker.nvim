@@ -37,8 +37,8 @@ local function highlight_matched_chars()
 	local info = vim.fn.getwininfo(list_winid)[1]
 	local from = info.topline
 	local to = info.botline
-	local ok, filter_rst = pcall(vim.api.nvim_win_get_var, list_winid, "filter_rst")
-	if ok and #filter_rst > 0 then
+	local _ok, filter_rst = pcall(vim.api.nvim_win_get_var, list_winid, "filter_rst")
+	if _ok and #filter_rst > 0 then
 		local ns = vim.api.nvim_create_namespace("picker-matched-chars")
 		for x = from, to do
 			for y = 1, #filter_rst[x][2] do
@@ -146,8 +146,8 @@ function M.open(source)
 	vim.api.nvim_set_option_value("cursorline", false, { win = promot_winid })
 	vim.api.nvim_set_option_value("signcolumn", "yes", { win = promot_winid })
 	vim.api.nvim_buf_set_extmark(promot_bufnr, extns, 0, 0, {
-		sign_text = ">",
-		sign_hl_group = "Error",
+		sign_text = config.prompt.icon,
+		sign_hl_group = config.prompt.icon_hl,
 	})
 	local augroup = vim.api.nvim_create_augroup("picker.nvim", {
 		clear = true,

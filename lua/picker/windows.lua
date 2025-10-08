@@ -38,7 +38,7 @@ local function highlight_matched_chars()
 	local from = info.topline
 	local to = info.botline
 	local ok, filter_rst = pcall(vim.api.nvim_win_get_var, list_winid, "filter_rst")
-	if ok then
+	if ok and #filter_rst > 0 then
 		local ns = vim.api.nvim_create_namespace("picker-matched-chars")
 		for x = from, to do
 			for y = 1, #filter_rst[x][2] do

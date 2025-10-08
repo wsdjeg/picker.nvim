@@ -32,7 +32,8 @@ require('plug').add({
 
 ## Default Sources
 
-| source      | description          |
-| ----------- | -------------------- |
-| files       | files in current dir |
-| colorscheme | all colorschemes     |
+| source      | description                                           |
+| ----------- | ----------------------------------------------------- |
+| files       | files in current dir                                  |
+| colorscheme | all colorschemes                                      |
+| mru         | [mru.nvim](https://github.com/wsdjeg/mru.nvim) source |

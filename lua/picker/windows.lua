@@ -199,6 +199,7 @@ function M.open(source)
 			cursor[1] = 1
 		end
 		vim.api.nvim_win_set_cursor(list_winid, cursor)
+        highlight_matched_chars()
 		update_result_count()
 	end, { buffer = promot_bufnr })
 	vim.keymap.set("i", "<S-Tab>", function()
@@ -209,6 +210,7 @@ function M.open(source)
 			cursor[1] = vim.api.nvim_buf_line_count(list_bufnr)
 		end
 		vim.api.nvim_win_set_cursor(list_winid, cursor)
+        highlight_matched_chars()
 		update_result_count()
 	end, { buffer = promot_bufnr })
 	if ok then

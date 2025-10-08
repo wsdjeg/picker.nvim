@@ -26,6 +26,12 @@ require("plug").add({
 				prompt = {
 					position = "bottom", --- bottom or top
 				},
+				mappings = {
+					close = "<Esc>",
+					next_item = "<Tab>",
+					previous_item = "<S-Tab>",
+					open_item = "<Enter>",
+				},
 			})
 		end,
 	},

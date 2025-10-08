@@ -178,12 +178,12 @@ function M.open(source)
 			update_result_count()
 		end,
 	})
-	vim.keymap.set("i", "<Esc>", function()
+	vim.keymap.set("i", config.mappings.close, function()
 		vim.cmd("noautocmd stopinsert")
 		vim.api.nvim_win_close(promot_winid, true)
 		vim.api.nvim_win_close(list_winid, true)
 	end, { buffer = promot_bufnr })
-	vim.keymap.set("i", "<Enter>", function()
+	vim.keymap.set("i", config.mappings.open_item, function()
 		vim.cmd("noautocmd stopinsert")
 		local cursor = vim.api.nvim_win_get_cursor(list_winid)
 		local selected = vim.api.nvim_buf_get_lines(list_bufnr, cursor[1] - 1, cursor[1], false)[1]
@@ -191,7 +191,7 @@ function M.open(source)
 		vim.api.nvim_win_close(list_winid, true)
 		source.default_action(selected)
 	end, { buffer = promot_bufnr })
-	vim.keymap.set("i", "<Tab>", function()
+	vim.keymap.set("i", config.mappings.next_item, function()
 		local cursor = vim.api.nvim_win_get_cursor(list_winid)
 		if cursor[1] < vim.api.nvim_buf_line_count(list_bufnr) then
 			cursor[1] = cursor[1] + 1
@@ -202,7 +202,7 @@ function M.open(source)
         highlight_matched_chars()
 		update_result_count()
 	end, { buffer = promot_bufnr })
-	vim.keymap.set("i", "<S-Tab>", function()
+	vim.keymap.set("i", config.mappings.previous_item, function()
 		local cursor = vim.api.nvim_win_get_cursor(list_winid)
 		if cursor[1] > 1 then
 			cursor[1] = cursor[1] - 1

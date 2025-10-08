@@ -9,15 +9,26 @@ _picker.nvim_ is a fuzzy finder for neovim. This plugin is WIP.
 - use [nvim-plug](https://github.com/wsdjeg/nvim-plug)
 
 ```lua
-require('plug').add({
-    {
-        'wsdjeg/picker.nvim',
-        config = function()
-            require('picker').setup({
-
-            })
-        end,
-    },
+require("plug").add({
+	{
+		"wsdjeg/picker.nvim",
+		config = function()
+			require("picker").setup({
+				window = {
+					width = 0.8,
+					height = 0.8,
+					col = 0.1,
+					row = 0.1,
+				},
+				highlight = {
+					matched = "Search",
+				},
+				prompt = {
+					position = "bottom", --- bottom or top
+				},
+			})
+		end,
+	},
 })
 ```
 

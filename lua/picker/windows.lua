@@ -169,7 +169,9 @@ function M.open(source)
 					end, filter_rst)
 				)
 				vim.api.nvim_win_set_var(list_winid, "filter_rst", filter_rst)
-				highlight_matched_chars()
+				if #filter_rst > 0 then
+					highlight_matched_chars()
+				end
 			else
 				vim.api.nvim_buf_set_lines(list_bufnr, 0, -1, false, source.get())
 			end
@@ -193,8 +195,8 @@ function M.open(source)
 		local cursor = vim.api.nvim_win_get_cursor(list_winid)
 		if cursor[1] < vim.api.nvim_buf_line_count(list_bufnr) then
 			cursor[1] = cursor[1] + 1
-        else
-            cursor[1] = 1
+		else
+			cursor[1] = 1
 		end
 		vim.api.nvim_win_set_cursor(list_winid, cursor)
 		update_result_count()
@@ -203,8 +205,8 @@ function M.open(source)
 		local cursor = vim.api.nvim_win_get_cursor(list_winid)
 		if cursor[1] > 1 then
 			cursor[1] = cursor[1] - 1
-        else
-           cursor[1] = vim.api.nvim_buf_line_count(list_bufnr)
+		else
+			cursor[1] = vim.api.nvim_buf_line_count(list_bufnr)
 		end
 		vim.api.nvim_win_set_cursor(list_winid, cursor)
 		update_result_count()

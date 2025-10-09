@@ -109,6 +109,10 @@ function M.open(source)
 					"NormalFloat:Normal,FloatBorder:WinSeparator",
 					{ win = preview_winid }
 				)
+				vim.api.nvim_set_option_value("number", false, { win = preview_winid })
+				vim.api.nvim_set_option_value("relativenumber", false, { win = preview_winid })
+				vim.api.nvim_set_option_value("cursorline", false, { win = preview_winid })
+				vim.api.nvim_set_option_value("signcolumn", "yes", { win = preview_winid })
 			end
 			if not vim.api.nvim_win_is_valid(list_winid) then
 				list_winid = vim.api.nvim_open_win(list_bufnr, false, {
@@ -175,6 +179,10 @@ function M.open(source)
 					"NormalFloat:Normal,FloatBorder:WinSeparator",
 					{ win = preview_winid }
 				)
+				vim.api.nvim_set_option_value("number", false, { win = preview_winid })
+				vim.api.nvim_set_option_value("relativenumber", false, { win = preview_winid })
+				vim.api.nvim_set_option_value("cursorline", false, { win = preview_winid })
+				vim.api.nvim_set_option_value("signcolumn", "yes", { win = preview_winid })
 			end
 			if not vim.api.nvim_win_is_valid(list_winid) then
 				list_winid = vim.api.nvim_open_win(list_bufnr, false, {
@@ -388,6 +396,10 @@ function M.open(source)
 						"NormalFloat:Normal,FloatBorder:WinSeparator",
 						{ win = preview_winid }
 					)
+					vim.api.nvim_set_option_value("number", false, { win = preview_winid })
+					vim.api.nvim_set_option_value("relativenumber", false, { win = preview_winid })
+					vim.api.nvim_set_option_value("cursorline", false, { win = preview_winid })
+					vim.api.nvim_set_option_value("signcolumn", "yes", { win = preview_winid })
 				end
 				local cursor = vim.api.nvim_win_get_cursor(list_winid)
 				source.preview(
@@ -429,6 +441,10 @@ function M.open(source)
 						"NormalFloat:Normal,FloatBorder:WinSeparator",
 						{ win = preview_winid }
 					)
+					vim.api.nvim_set_option_value("number", false, { win = preview_winid })
+					vim.api.nvim_set_option_value("relativenumber", false, { win = preview_winid })
+					vim.api.nvim_set_option_value("cursorline", false, { win = preview_winid })
+					vim.api.nvim_set_option_value("signcolumn", "yes", { win = preview_winid })
 				end
 				local cursor = vim.api.nvim_win_get_cursor(list_winid)
 				source.preview(

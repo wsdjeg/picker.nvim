@@ -6,10 +6,21 @@ local timerout = 500
 
 local preview_winid, preview_bufid, preview_file
 
+local function is_binary(f)
+	for _, v in ipairs({ ".png" }) do
+		return vim.endswith(f, v)
+	end
+end
+
 local function preview_timer(t)
 	-- if preview win does exists, return
 	if not vim.api.nvim_win_is_valid(preview_winid) then
 		return
+	end
+	-- skip binary
+	if is_binary(preview_file) then
+		vim.api.nvim_buf_set_lines(preview_bufid, 0, -1, false, {})
+        return
 	end
 	local context = vim.fn.readfile(preview_file, "")
 	if #context == 0 then

@@ -2,6 +2,8 @@
 
 _picker.nvim_ is a fuzzy finder for neovim.
 
+![picker-neovim](https://wsdjeg.net/images/picker-neovim.png)
+
 ## Install
 
 - use [nvim-plug](https://github.com/wsdjeg/nvim-plug)

@@ -351,6 +351,12 @@ function M.open(source)
 						{ win = preview_winid }
 					)
 				end
+				local cursor = vim.api.nvim_win_get_cursor(list_winid)
+				source.preview(
+					vim.api.nvim_buf_get_lines(list_bufnr, cursor[1] - 1, cursor[1], false)[1],
+					preview_winid,
+					preview_bufnr
+				)
 				vim.api.nvim_win_set_config(list_winid, {
 
 					relative = "editor",

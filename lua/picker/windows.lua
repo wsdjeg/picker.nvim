@@ -154,20 +154,58 @@ function M.open(source)
 			})
 		end
 	else
-		if not vim.api.nvim_win_is_valid(list_winid) then
-			list_winid = vim.api.nvim_open_win(list_bufnr, false, {
+		if config.window.enable_preview and source.preview_win then
+			if not vim.api.nvim_buf_is_valid(preview_bufnr) then
+				preview_bufnr = vim.api.nvim_create_buf(false, true)
+			end
+			-- 初始化时，清空 preview 窗口内容
+			vim.api.nvim_buf_set_lines(preview_bufnr, 0, -1, false, {})
+			if not vim.api.nvim_win_is_valid(preview_winid) then
+				preview_winid = vim.api.nvim_open_win(preview_bufnr, false, {
+					relative = "editor",
+					width = screen_width,
+					height = math.floor((screen_height - 5) / 2),
+					col = start_col,
+					row = start_row + math.floor((screen_height - 5) / 2) + 4,
+					focusable = false,
+					border = "rounded",
+				})
+				vim.api.nvim_set_option_value(
+					"winhighlight",
+					"NormalFloat:Normal,FloatBorder:WinSeparator",
+					{ win = preview_winid }
+				)
+			end
+			if not vim.api.nvim_win_is_valid(list_winid) then
+				list_winid = vim.api.nvim_open_win(list_bufnr, false, {
+					relative = "editor",
+					width = screen_width,
+					height = screen_height - 5 - math.floor((screen_height - 5) / 2) - 2,
+					col = start_col,
+					row = start_row + 3,
+					focusable = false,
+					border = "rounded",
+					-- title = 'Result',
+					-- title_pos = 'center',
+					-- noautocmd = true,
+				})
+			end
+		else
+			if not vim.api.nvim_win_is_valid(list_winid) then
+				list_winid = vim.api.nvim_open_win(list_bufnr, false, {
 
-				relative = "editor",
-				width = screen_width,
-				height = screen_height - 5,
-				col = start_col,
-				row = start_row + 3,
-				focusable = false,
-				border = "rounded",
-				-- title = 'Result',
-				-- title_pos = 'center',
-				-- noautocmd = true,
-			})
+					relative = "editor",
+					width = screen_width,
+					height = screen_height - 5,
+					col = start_col,
+					row = start_row + 3,
+					focusable = false,
+					border = "rounded",
+					-- title = 'Result',
+					-- title_pos = 'center',
+					-- noautocmd = true,
+				})
+			end
 		end
 		if not vim.api.nvim_win_is_valid(promot_winid) then
 			promot_winid = vim.api.nvim_open_win(promot_bufnr, true, {
@@ -371,11 +409,38 @@ function M.open(source)
 					-- noautocmd = true,
 				})
 			else
+				if not vim.api.nvim_buf_is_valid(preview_bufnr) then
+					preview_bufnr = vim.api.nvim_create_buf(false, true)
+				end
+				-- 初始化时，清空 preview 窗口内容
+				vim.api.nvim_buf_set_lines(preview_bufnr, 0, -1, false, {})
+				if not vim.api.nvim_win_is_valid(preview_winid) then
+					preview_winid = vim.api.nvim_open_win(preview_bufnr, false, {
+						relative = "editor",
+						width = screen_width,
+						height = math.floor((screen_height - 5) / 2),
+						col = start_col,
+						row = start_row + math.floor((screen_height - 5) / 2) + 4,
+						focusable = false,
+						border = "rounded",
+					})
+					vim.api.nvim_set_option_value(
+						"winhighlight",
+						"NormalFloat:Normal,FloatBorder:WinSeparator",
+						{ win = preview_winid }
+					)
+				end
+				local cursor = vim.api.nvim_win_get_cursor(list_winid)
+				source.preview(
+					vim.api.nvim_buf_get_lines(list_bufnr, cursor[1] - 1, cursor[1], false)[1],
+					preview_winid,
+					preview_bufnr
+				)
 				vim.api.nvim_win_set_config(list_winid, {
 
 					relative = "editor",
 					width = screen_width,
-					height = screen_height - 5,
+					height = screen_height - 5 - math.floor((screen_height - 5) / 2) - 2,
 					col = start_col,
 					row = start_row + 3,
 					focusable = false,

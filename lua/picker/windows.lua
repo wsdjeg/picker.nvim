@@ -270,7 +270,7 @@ function M.open(source)
 		highlight_matched_chars()
 		if config.window.enable_preview and source.preview then
 			source.preview(
-				vim.api.nvim_buf_get_lines(list_bufnr, cursor[1] - 1, cursor[2], false)[1],
+				vim.api.nvim_buf_get_lines(list_bufnr, cursor[1] - 1, cursor[1], false)[1],
 				preview_winid,
 				preview_bufnr
 			)
@@ -288,7 +288,7 @@ function M.open(source)
 		highlight_matched_chars()
 		if config.window.enable_preview and source.preview then
 			source.preview(
-				vim.api.nvim_buf_get_lines(list_bufnr, cursor[1] - 1, cursor[2], false)[1],
+				vim.api.nvim_buf_get_lines(list_bufnr, cursor[1] - 1, cursor[1], false)[1],
 				preview_winid,
 				preview_bufnr
 			)

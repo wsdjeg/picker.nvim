@@ -106,7 +106,7 @@ function M.open(source)
 				})
 				vim.api.nvim_set_option_value(
 					"winhighlight",
-					"NormalFloat:Normal,FloatBorder:WinSeparator",
+					"NormalFloat:Normal,FloatBorder:WinSeparator,Search:None",
 					{ win = preview_winid }
 				)
 				vim.api.nvim_set_option_value("number", false, { win = preview_winid })
@@ -176,7 +176,7 @@ function M.open(source)
 				})
 				vim.api.nvim_set_option_value(
 					"winhighlight",
-					"NormalFloat:Normal,FloatBorder:WinSeparator",
+					"NormalFloat:Normal,FloatBorder:WinSeparator,Search:None",
 					{ win = preview_winid }
 				)
 				vim.api.nvim_set_option_value("number", false, { win = preview_winid })
@@ -228,8 +228,8 @@ function M.open(source)
 			})
 		end
 	end
-	vim.api.nvim_set_option_value("winhighlight", "NormalFloat:Normal,FloatBorder:WinSeparator", { win = list_winid })
-	vim.api.nvim_set_option_value("winhighlight", "NormalFloat:Normal,FloatBorder:WinSeparator", { win = promot_winid })
+	vim.api.nvim_set_option_value("winhighlight", "NormalFloat:Normal,FloatBorder:WinSeparator,Search:None", { win = list_winid })
+	vim.api.nvim_set_option_value("winhighlight", "NormalFloat:Normal,FloatBorder:WinSeparator,Search:None", { win = promot_winid })
 	vim.api.nvim_set_option_value("buftype", "nowrite", { buf = promot_bufnr })
 	vim.api.nvim_set_option_value("buftype", "nowrite", { buf = list_bufnr })
 	vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = promot_bufnr })
@@ -393,7 +393,7 @@ function M.open(source)
 					})
 					vim.api.nvim_set_option_value(
 						"winhighlight",
-						"NormalFloat:Normal,FloatBorder:WinSeparator",
+						"NormalFloat:Normal,FloatBorder:WinSeparator,Search:None",
 						{ win = preview_winid }
 					)
 					vim.api.nvim_set_option_value("number", false, { win = preview_winid })
@@ -438,7 +438,7 @@ function M.open(source)
 					})
 					vim.api.nvim_set_option_value(
 						"winhighlight",
-						"NormalFloat:Normal,FloatBorder:WinSeparator",
+						"NormalFloat:Normal,FloatBorder:WinSeparator,Search:None",
 						{ win = preview_winid }
 					)
 					vim.api.nvim_set_option_value("number", false, { win = preview_winid })

@@ -12,7 +12,7 @@ local default = {
 		preview_timeout = 500,
 	},
 	highlight = {
-		matched = "Search",
+		matched = "Tag",
 	},
 	prompt = {
 		position = "bottom", --- bottom or top

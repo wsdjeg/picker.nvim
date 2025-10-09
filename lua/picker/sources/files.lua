@@ -10,5 +10,6 @@ function M.default_action(s)
     vim.cmd('edit ' .. s)
 end
 
+M.preview_win = true
 
 return M

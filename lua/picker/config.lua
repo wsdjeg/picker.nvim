@@ -7,7 +7,8 @@ local default = {
 		col = 0.1,
 		row = 0.1,
         current_icon = '>',
-        current_icon_hl = 'CursorLine'
+        current_icon_hl = 'CursorLine',
+        enable_preview = false,
 	},
 	highlight = {
 		matched = "Search",

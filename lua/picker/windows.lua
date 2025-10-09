@@ -28,8 +28,6 @@ local prompt_count_id
 
 local current_icon_extmark
 
-local preview_timer_id
-
 local function update_result_count()
 	local count = vim.api.nvim_buf_line_count(list_bufnr)
 	local line = vim.api.nvim_win_get_cursor(list_winid)[1]
@@ -301,22 +299,86 @@ function M.open(source)
 			if vim.api.nvim_win_is_valid(preview_winid) then
 				vim.api.nvim_win_close(preview_winid, true)
 			end
-		end
-		if config.prompt.position == "bottom" then
-			vim.api.nvim_win_set_config(list_winid, {
+			if config.prompt.position == "bottom" then
+				vim.api.nvim_win_set_config(list_winid, {
 
-				relative = "editor",
-				width = screen_width,
-				height = screen_height - 5,
-				col = start_col,
-				row = start_row,
-				focusable = false,
-				border = "rounded",
-				-- title = 'Result',
-				-- title_pos = 'center',
-				-- noautocmd = true,
-			})
-		else
+					relative = "editor",
+					width = screen_width,
+					height = screen_height - 5,
+					col = start_col,
+					row = start_row,
+					focusable = false,
+					border = "rounded",
+					-- title = 'Result',
+					-- title_pos = 'center',
+					-- noautocmd = true,
+				})
+			else
+				vim.api.nvim_win_set_config(list_winid, {
+
+					relative = "editor",
+					width = screen_width,
+					height = screen_height - 5,
+					col = start_col,
+					row = start_row + 3,
+					focusable = false,
+					border = "rounded",
+					-- title = 'Result',
+					-- title_pos = 'center',
+					-- noautocmd = true,
+				})
+			end
+		elseif config.window.enable_preview and source.preview_win then
+			if config.prompt.position == "bottom" then
+				if not vim.api.nvim_buf_is_valid(preview_bufnr) then
+					preview_bufnr = vim.api.nvim_create_buf(false, true)
+				end
+				-- 初始化时，清空 preview 窗口内容
+				vim.api.nvim_buf_set_lines(preview_bufnr, 0, -1, false, {})
+				if not vim.api.nvim_win_is_valid(preview_winid) then
+					preview_winid = vim.api.nvim_open_win(preview_bufnr, false, {
+						relative = "editor",
+						width = screen_width,
+						height = math.floor((screen_height - 5) / 2),
+						col = start_col,
+						row = start_row,
+						focusable = false,
+						border = "rounded",
+					})
+					vim.api.nvim_set_option_value(
+						"winhighlight",
+						"NormalFloat:Normal,FloatBorder:WinSeparator",
+						{ win = preview_winid }
+					)
+				end
+				vim.api.nvim_win_set_config(list_winid, {
+
+					relative = "editor",
+					width = screen_width,
+					height = screen_height - 5 - math.floor((screen_height - 5) / 2) - 2,
+					col = start_col,
+					row = start_row + math.floor((screen_height - 5) / 2) + 2,
+					focusable = false,
+					border = "rounded",
+					-- title = 'Result',
+					-- title_pos = 'center',
+					-- noautocmd = true,
+				})
+			else
+				vim.api.nvim_win_set_config(list_winid, {
+
+					relative = "editor",
+					width = screen_width,
+					height = screen_height - 5,
+					col = start_col,
+					row = start_row + 3,
+					focusable = false,
+					border = "rounded",
+					-- title = 'Result',
+					-- title_pos = 'center',
+					-- noautocmd = true,
+				})
+			end
 		end
 	end, { buffer = promot_bufnr })
 	if ok then

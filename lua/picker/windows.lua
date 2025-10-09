@@ -94,6 +94,8 @@ function M.open(source)
 			if not vim.api.nvim_buf_is_valid(preview_bufnr) then
 				preview_bufnr = vim.api.nvim_create_buf(false, true)
 			end
+            -- 初始化时，清空 preview 窗口内容
+            vim.api.nvim_buf_set_lines(preview_bufnr, 0, -1, false, {})
 			if not vim.api.nvim_win_is_valid(preview_winid) then
 				preview_winid = vim.api.nvim_open_win(preview_bufnr, false, {
 					relative = "editor",

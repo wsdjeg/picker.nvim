@@ -94,8 +94,8 @@ function M.open(source)
 			if not vim.api.nvim_buf_is_valid(preview_bufnr) then
 				preview_bufnr = vim.api.nvim_create_buf(false, true)
 			end
-            -- 初始化时，清空 preview 窗口内容
-            vim.api.nvim_buf_set_lines(preview_bufnr, 0, -1, false, {})
+			-- 初始化时，清空 preview 窗口内容
+			vim.api.nvim_buf_set_lines(preview_bufnr, 0, -1, false, {})
 			if not vim.api.nvim_win_is_valid(preview_winid) then
 				preview_winid = vim.api.nvim_open_win(preview_bufnr, false, {
 					relative = "editor",
@@ -294,6 +294,30 @@ function M.open(source)
 			)
 		end
 		update_result_count()
+	end, { buffer = promot_bufnr })
+	vim.keymap.set("i", config.mappings.toggle_preview, function()
+		config.window.enable_preview = not config.window.enable_preview
+		if not config.window.enable_preview then
+			if vim.api.nvim_win_is_valid(preview_winid) then
+				vim.api.nvim_win_close(preview_winid, true)
+			end
+		end
+		if config.prompt.position == "bottom" then
+			vim.api.nvim_win_set_config(list_winid, {
+
+				relative = "editor",
+				width = screen_width,
+				height = screen_height - 5,
+				col = start_col,
+				row = start_row,
+				focusable = false,
+				border = "rounded",
+				-- title = 'Result',
+				-- title_pos = 'center',
+				-- noautocmd = true,
+			})
+		else
+		end
 	end, { buffer = promot_bufnr })
 	if ok then
 		cmp.setup.buffer({

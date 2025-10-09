@@ -6,9 +6,10 @@ local default = {
 		height = 0.8,
 		col = 0.1,
 		row = 0.1,
-        current_icon = '>',
-        current_icon_hl = 'CursorLine',
-        enable_preview = false,
+		current_icon = ">",
+		current_icon_hl = "CursorLine",
+		enable_preview = false,
+		preview_timeout = 500,
 	},
 	highlight = {
 		matched = "Search",
@@ -23,6 +24,7 @@ local default = {
 		next_item = "<Tab>",
 		previous_item = "<S-Tab>",
 		open_item = "<Enter>",
+		toggle_preview = "<C-p>",
 	},
 }
 

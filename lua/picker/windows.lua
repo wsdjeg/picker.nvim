@@ -232,7 +232,9 @@ function M.open(source)
 				vim.api.nvim_win_set_var(list_winid, "filter_rst", {})
 				vim.api.nvim_buf_set_lines(list_bufnr, 0, -1, false, source.get())
 			end
-			source.preview(vim.api.nvim_buf_get_lines(list_bufnr, 0, 1, false), preview_winid, preview_bufnr)
+			if config.window.enable_preview and source.preview then
+				source.preview(vim.api.nvim_buf_get_lines(list_bufnr, 0, 1, false)[1], preview_winid, preview_bufnr)
+			end
 			update_result_count()
 		end,
 	})
@@ -264,9 +266,9 @@ function M.open(source)
 		end
 		vim.api.nvim_win_set_cursor(list_winid, cursor)
 		highlight_matched_chars()
-		if config.window.enable_preview then
+		if config.window.enable_preview and source.preview then
 			source.preview(
-				vim.api.nvim_buf_get_lines(list_bufnr, cursor[1] - 1, cursor[2], false),
+				vim.api.nvim_buf_get_lines(list_bufnr, cursor[1] - 1, cursor[2], false)[1],
 				preview_winid,
 				preview_bufnr
 			)
@@ -282,9 +284,9 @@ function M.open(source)
 		end
 		vim.api.nvim_win_set_cursor(list_winid, cursor)
 		highlight_matched_chars()
-		if config.window.enable_preview then
+		if config.window.enable_preview and source.preview then
 			source.preview(
-				vim.api.nvim_buf_get_lines(list_bufnr, cursor[1] - 1, cursor[2], false),
+				vim.api.nvim_buf_get_lines(list_bufnr, cursor[1] - 1, cursor[2], false)[1],
 				preview_winid,
 				preview_bufnr
 			)

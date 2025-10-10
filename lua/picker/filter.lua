@@ -7,13 +7,23 @@ local fzy = require("picker.matchers.fzy")
 function M.filter(input, items)
 	local result = {}
 
-	for i, item in ipairs(items) do
-		if #input == 0 then
+	if #input == 0 then
+		for i, _ in ipairs(items) do
 			table.insert(result, { i, {}, 0 })
-		elseif fzy.has_match(input, item.str) then
-			local p, s = fzy.positions(input, item.str)
-			table.insert(result, { i, p, s })
 		end
+	else
+		for i, item in ipairs(items) do
+			if fzy.has_match(input, item.str) then
+				local p, s = fzy.positions(input, item.str)
+				table.insert(result, { i, p, s })
+			end
+		end
+
+		--- sort by scope?
+
+		table.sort(result, function(a, b)
+			return a[3] > b[3]
+		end)
 	end
 
 	return result

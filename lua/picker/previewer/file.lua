@@ -19,7 +19,7 @@ local function preview_timer(t)
 	if #context == 0 then
 		return
 	end
-	vim.api.nvim_buf_set_option(preview_bufid, "syntax", '')
+	vim.api.nvim_buf_set_option(preview_bufid, "syntax", "")
 	vim.api.nvim_buf_set_lines(preview_bufid, 0, -1, false, context)
 	local ft = vim.filetype.match({ filename = preview_file })
 	if ft then
@@ -39,11 +39,13 @@ local function preview_timer(t)
 		end
 	end
 end
-function M.preview(item, win, buf)
+
+---@param path string the path of preview file.
+function M.preview(path, win, buf)
 	vim.fn.timer_stop(preview_timer_id)
 	preview_winid = win
 	preview_bufid = buf
-	preview_file = item
+	preview_file = path
 	if preview_file and vim.fn.filereadable(preview_file) == 1 then
 		preview_timer_id = vim.fn.timer_start(timerout, preview_timer, { ["repeat"] = 1 })
 	end

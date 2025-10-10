@@ -272,33 +272,20 @@ function M.open(source)
 		callback = function(ev)
 			local input = vim.api.nvim_buf_get_lines(promot_bufnr, 0, 1, false)[1]
 			vim.api.nvim_win_set_cursor(list_winid, { 1, 1 })
-			if input ~= "" then
-				local results = source.get()
-				filter_rst = filter.filter(input, results)
+			local results = source.get()
+			filter_rst = filter.filter(input, results)
 
-				vim.api.nvim_buf_set_lines(
-					list_bufnr,
-					0,
-					-1,
-					false,
-					vim.tbl_map(function(t)
-						return results[t[1]].str
-					end, filter_rst)
-				)
-				if #filter_rst > 0 then
-					highlight_matched_chars()
-				end
-			else
-				filter_rst = source.get()
-				vim.api.nvim_buf_set_lines(
-					list_bufnr,
-					0,
-					-1,
-					false,
-					vim.tbl_map(function(t)
-						return t.str
-					end, filter_rst)
-				)
+			vim.api.nvim_buf_set_lines(
+				list_bufnr,
+				0,
+				-1,
+				false,
+				vim.tbl_map(function(t)
+					return results[t[1]].str
+				end, filter_rst)
+			)
+			if #filter_rst > 0 then
+				highlight_matched_chars()
 			end
 			if config.window.enable_preview and source.preview then
 				source.preview(filter_rst[1], preview_winid, preview_bufnr)

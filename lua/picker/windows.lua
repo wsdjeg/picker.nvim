@@ -286,9 +286,9 @@ function M.open(source)
 			)
 			if #filter_rst > 0 then
 				highlight_matched_chars()
-			end
-			if config.window.enable_preview and source.preview then
-				source.preview(filter_rst[1], preview_winid, preview_bufnr)
+				if config.window.enable_preview and source.preview then
+					source.preview(filter_rst[1][4], preview_winid, preview_bufnr)
+				end
 			end
 			update_result_count()
 		end,
@@ -322,7 +322,7 @@ function M.open(source)
 		vim.api.nvim_win_set_cursor(list_winid, cursor)
 		highlight_matched_chars()
 		if config.window.enable_preview and source.preview then
-			source.preview(filter_rst[cursor[1]], preview_winid, preview_bufnr)
+			source.preview(filter_rst[cursor[1]][4], preview_winid, preview_bufnr)
 		end
 		update_result_count()
 	end, { buffer = promot_bufnr })
@@ -336,7 +336,7 @@ function M.open(source)
 		vim.api.nvim_win_set_cursor(list_winid, cursor)
 		highlight_matched_chars()
 		if config.window.enable_preview and source.preview then
-			source.preview(filter_rst[cursor[1]], preview_winid, preview_bufnr)
+			source.preview(filter_rst[cursor[1]][4], preview_winid, preview_bufnr)
 		end
 		update_result_count()
 	end, { buffer = promot_bufnr })
@@ -403,7 +403,7 @@ function M.open(source)
 					vim.api.nvim_set_option_value("signcolumn", "yes", { win = preview_winid })
 				end
 				local cursor = vim.api.nvim_win_get_cursor(list_winid)
-				source.preview(filter_rst[cursor[1]], preview_winid, preview_bufnr)
+				source.preview(filter_rst[cursor[1]][4], preview_winid, preview_bufnr)
 				vim.api.nvim_win_set_config(list_winid, {
 
 					relative = "editor",
@@ -444,7 +444,7 @@ function M.open(source)
 					vim.api.nvim_set_option_value("signcolumn", "yes", { win = preview_winid })
 				end
 				local cursor = vim.api.nvim_win_get_cursor(list_winid)
-				source.preview(filter_rst[cursor[1]], preview_winid, preview_bufnr)
+				source.preview(filter_rst[cursor[1]][4], preview_winid, preview_bufnr)
 				vim.api.nvim_win_set_config(list_winid, {
 
 					relative = "editor",

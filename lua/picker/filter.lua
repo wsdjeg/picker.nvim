@@ -8,14 +8,14 @@ function M.filter(input, items)
 	local result = {}
 
 	if #input == 0 then
-		for i, _ in ipairs(items) do
-			table.insert(result, { i, {}, 0 })
+		for i, item in ipairs(items) do
+			table.insert(result, { i, {}, 0, item })
 		end
 	else
 		for i, item in ipairs(items) do
 			if fzy.has_match(input, item.str) then
 				local p, s = fzy.positions(input, item.str)
-				table.insert(result, { i, p, s })
+				table.insert(result, { i, p, s, item })
 			end
 		end
 

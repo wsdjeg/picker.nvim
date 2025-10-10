@@ -17,6 +17,7 @@ end
 
 M.preview_win = true
 
+---@field item PickerItem
 function M.preview(item, win, buf)
 	previewer.preview(item.value, win, buf)
 end

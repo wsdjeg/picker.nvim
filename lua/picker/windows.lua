@@ -320,7 +320,7 @@ function M.open(source)
 		end
 		vim.api.nvim_win_set_cursor(list_winid, cursor)
 		highlight_matched_chars()
-		if config.window.enable_preview and source.preview then
+		if config.window.enable_preview and source.preview and #filter_rst > 0 then
 			source.preview(filter_rst[cursor[1]][4], preview_winid, preview_bufnr)
 		end
 		update_result_count()
@@ -334,7 +334,7 @@ function M.open(source)
 		end
 		vim.api.nvim_win_set_cursor(list_winid, cursor)
 		highlight_matched_chars()
-		if config.window.enable_preview and source.preview then
+		if config.window.enable_preview and source.preview and #filter_rst > 0 then
 			source.preview(filter_rst[cursor[1]][4], preview_winid, preview_bufnr)
 		end
 		update_result_count()

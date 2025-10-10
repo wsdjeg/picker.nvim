@@ -10,6 +10,8 @@ end
 
 local filter = require("picker.filter")
 
+local filter_rst
+
 local list_winid = -1
 
 local list_bufnr = -1
@@ -49,8 +51,7 @@ local function highlight_matched_chars()
 	local info = vim.fn.getwininfo(list_winid)[1]
 	local from = info.topline
 	local to = info.botline
-	local _ok, filter_rst = pcall(vim.api.nvim_win_get_var, list_winid, "filter_rst")
-	if _ok and #filter_rst > 0 then
+	if #filter_rst > 0 then
 		local ns = vim.api.nvim_create_namespace("picker-matched-chars")
 		for x = from, to do
 			for y = 1, #filter_rst[x][2] do
@@ -273,7 +274,7 @@ function M.open(source)
 			vim.api.nvim_win_set_cursor(list_winid, { 1, 1 })
 			if input ~= "" then
 				local results = source.get()
-				local filter_rst = filter.filter(input, results)
+				filter_rst = filter.filter(input, results)
 
 				vim.api.nvim_buf_set_lines(
 					list_bufnr,
@@ -284,12 +285,11 @@ function M.open(source)
 						return results[t[1]].str
 					end, filter_rst)
 				)
-				vim.api.nvim_win_set_var(list_winid, "filter_rst", filter_rst)
 				if #filter_rst > 0 then
 					highlight_matched_chars()
 				end
 			else
-				vim.api.nvim_win_set_var(list_winid, "filter_rst", {})
+				filter_rst = source.get()
 				vim.api.nvim_buf_set_lines(
 					list_bufnr,
 					0,
@@ -297,11 +297,11 @@ function M.open(source)
 					false,
 					vim.tbl_map(function(t)
 						return t.str
-					end, source.get())
+					end, filter_rst)
 				)
 			end
 			if config.window.enable_preview and source.preview then
-				source.preview(vim.api.nvim_buf_get_lines(list_bufnr, 0, 1, false)[1], preview_winid, preview_bufnr)
+				source.preview(filter_rst[1], preview_winid, preview_bufnr)
 			end
 			update_result_count()
 		end,
@@ -335,11 +335,7 @@ function M.open(source)
 		vim.api.nvim_win_set_cursor(list_winid, cursor)
 		highlight_matched_chars()
 		if config.window.enable_preview and source.preview then
-			source.preview(
-				vim.api.nvim_buf_get_lines(list_bufnr, cursor[1] - 1, cursor[1], false)[1],
-				preview_winid,
-				preview_bufnr
-			)
+			source.preview(filter_rst[cursor[1]], preview_winid, preview_bufnr)
 		end
 		update_result_count()
 	end, { buffer = promot_bufnr })
@@ -353,11 +349,7 @@ function M.open(source)
 		vim.api.nvim_win_set_cursor(list_winid, cursor)
 		highlight_matched_chars()
 		if config.window.enable_preview and source.preview then
-			source.preview(
-				vim.api.nvim_buf_get_lines(list_bufnr, cursor[1] - 1, cursor[1], false)[1],
-				preview_winid,
-				preview_bufnr
-			)
+			source.preview(filter_rst[cursor[1]], preview_winid, preview_bufnr)
 		end
 		update_result_count()
 	end, { buffer = promot_bufnr })
@@ -424,11 +416,7 @@ function M.open(source)
 					vim.api.nvim_set_option_value("signcolumn", "yes", { win = preview_winid })
 				end
 				local cursor = vim.api.nvim_win_get_cursor(list_winid)
-				source.preview(
-					vim.api.nvim_buf_get_lines(list_bufnr, cursor[1] - 1, cursor[1], false)[1],
-					preview_winid,
-					preview_bufnr
-				)
+				source.preview(filter_rst[cursor[1]], preview_winid, preview_bufnr)
 				vim.api.nvim_win_set_config(list_winid, {
 
 					relative = "editor",
@@ -469,11 +457,7 @@ function M.open(source)
 					vim.api.nvim_set_option_value("signcolumn", "yes", { win = preview_winid })
 				end
 				local cursor = vim.api.nvim_win_get_cursor(list_winid)
-				source.preview(
-					vim.api.nvim_buf_get_lines(list_bufnr, cursor[1] - 1, cursor[1], false)[1],
-					preview_winid,
-					preview_bufnr
-				)
+				source.preview(filter_rst[cursor[1]], preview_winid, preview_bufnr)
 				vim.api.nvim_win_set_config(list_winid, {
 
 					relative = "editor",

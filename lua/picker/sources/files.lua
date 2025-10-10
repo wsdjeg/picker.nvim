@@ -18,7 +18,7 @@ end
 M.preview_win = true
 
 function M.preview(item, win, buf)
-	previewer.preview(item, win, buf)
+	previewer.preview(item.value, win, buf)
 end
 
 return M

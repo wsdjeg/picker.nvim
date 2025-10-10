@@ -304,13 +304,12 @@ function M.open(source)
 	vim.keymap.set("i", config.mappings.open_item, function()
 		vim.cmd("noautocmd stopinsert")
 		local cursor = vim.api.nvim_win_get_cursor(list_winid)
-		local selected = vim.api.nvim_buf_get_lines(list_bufnr, cursor[1] - 1, cursor[1], false)[1]
 		vim.api.nvim_win_close(promot_winid, true)
 		vim.api.nvim_win_close(list_winid, true)
 		if vim.api.nvim_win_is_valid(preview_winid) then
 			vim.api.nvim_win_close(preview_winid, true)
 		end
-		source.default_action(selected)
+		source.default_action(filter_rst[cursor[1]][4])
 	end, { buffer = promot_bufnr })
 	vim.keymap.set("i", config.mappings.next_item, function()
 		local cursor = vim.api.nvim_win_get_cursor(list_winid)

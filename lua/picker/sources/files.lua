@@ -11,8 +11,9 @@ function M.get()
 	end, vim.split(vim.system({ "rg", "--files" }, { text = true }):wait().stdout, "\n", { trimempty = true }))
 end
 
-function M.default_action(s)
-	vim.cmd("edit " .. s)
+---@field item PickerItem
+function M.default_action(item)
+	vim.cmd("edit " .. item.value)
 end
 
 M.preview_win = true

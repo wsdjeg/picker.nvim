@@ -2,6 +2,7 @@
 
 local M = {}
 local opts = {}
+local previewer = require("picker.previewer.buffer")
 
 -- from: https://github.com/fcying/telescope-ctags-outline.nvim/blob/master/lua/ctags-outline/init.lua#L7C1-L34C6
 local ft_opt = {
@@ -36,8 +37,10 @@ local ft_opt = {
 ---@return table<PickerItem>
 function M.get()
 	local bufnr = opts.current_buf
+    previewer.buflines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
 	local bufname = vim.api.nvim_buf_get_name(bufnr)
 	local ft = vim.api.nvim_get_option_value("filetype", { buf = bufnr })
+    previewer.filetype = ft
 	local cmd = { "ctags" }
 
 	if ft_opt[ft] then
@@ -84,8 +87,10 @@ function M.set(opt)
 	opts.current_buf = opt.buf
 end
 
-M.preview_win = false
+M.preview_win = true
 
-function M.preview(item, win, buf) end
+function M.preview(item, win, buf)
+	previewer.preview(item.value.line, win, buf)
+end
 
 return M

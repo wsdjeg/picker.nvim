@@ -62,6 +62,9 @@ local function highlight_matched_chars()
 	end
 end
 
+--- @class PickerItem
+--- @field str string
+
 --- @class PickerSource
 --- @field get function
 --- @field default_action function

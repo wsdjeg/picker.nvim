@@ -1,22 +1,24 @@
 local M = {}
 
-local previewer = require('picker.previewer.file')
-
+local previewer = require("picker.previewer.file")
 
 function M.get()
-
-    return vim.split(vim.system({'rg', '--files'}, {text = true}):wait().stdout, "\n", {trimempty = true})
-    
+	return vim.tbl_map(function(t)
+		return {
+			value = t,
+			str = t,
+		}
+	end, vim.split(vim.system({ "rg", "--files" }, { text = true }):wait().stdout, "\n", { trimempty = true }))
 end
 
 function M.default_action(s)
-    vim.cmd('edit ' .. s)
+	vim.cmd("edit " .. s)
 end
 
 M.preview_win = true
 
 function M.preview(item, win, buf)
-    previewer.preview(item, win, buf)
+	previewer.preview(item, win, buf)
 end
 
 return M

@@ -8,6 +8,8 @@ if not ok then
 	ok, cmp = pcall(require, "cmp")
 end
 
+local filter = require("picker.filter")
+
 local list_winid = -1
 
 local list_bufnr = -1
@@ -64,6 +66,7 @@ end
 
 --- @class PickerItem
 --- @field str string
+--- @field value? any
 
 --- @class PickerSource
 --- @field get function
@@ -71,6 +74,7 @@ end
 --- @field __results nil | table<string>
 --- @field preview_win boolean
 --- @field preview function
+--- @field set function
 
 --- @param source PickerSource
 function M.open(source)
@@ -231,8 +235,16 @@ function M.open(source)
 			})
 		end
 	end
-	vim.api.nvim_set_option_value("winhighlight", "NormalFloat:Normal,FloatBorder:WinSeparator,Search:None", { win = list_winid })
-	vim.api.nvim_set_option_value("winhighlight", "NormalFloat:Normal,FloatBorder:WinSeparator,Search:None", { win = promot_winid })
+	vim.api.nvim_set_option_value(
+		"winhighlight",
+		"NormalFloat:Normal,FloatBorder:WinSeparator,Search:None",
+		{ win = list_winid }
+	)
+	vim.api.nvim_set_option_value(
+		"winhighlight",
+		"NormalFloat:Normal,FloatBorder:WinSeparator,Search:None",
+		{ win = promot_winid }
+	)
 	vim.api.nvim_set_option_value("buftype", "nowrite", { buf = promot_bufnr })
 	vim.api.nvim_set_option_value("buftype", "nowrite", { buf = list_bufnr })
 	vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = promot_bufnr })
@@ -260,9 +272,8 @@ function M.open(source)
 			local input = vim.api.nvim_buf_get_lines(promot_bufnr, 0, 1, false)[1]
 			vim.api.nvim_win_set_cursor(list_winid, { 1, 1 })
 			if input ~= "" then
-				local fzy = require("picker.matchers.fzy")
 				local results = source.get()
-				local filter_rst = fzy.filter(input, results)
+				local filter_rst = filter.filter(input, results)
 
 				vim.api.nvim_buf_set_lines(
 					list_bufnr,
@@ -270,7 +281,7 @@ function M.open(source)
 					-1,
 					false,
 					vim.tbl_map(function(t)
-						return t[4]
+						return results[t[1]].str
 					end, filter_rst)
 				)
 				vim.api.nvim_win_set_var(list_winid, "filter_rst", filter_rst)
@@ -279,7 +290,15 @@ function M.open(source)
 				end
 			else
 				vim.api.nvim_win_set_var(list_winid, "filter_rst", {})
-				vim.api.nvim_buf_set_lines(list_bufnr, 0, -1, false, source.get())
+				vim.api.nvim_buf_set_lines(
+					list_bufnr,
+					0,
+					-1,
+					false,
+					vim.tbl_map(function(t)
+						return t.str
+					end, source.get())
+				)
 			end
 			if config.window.enable_preview and source.preview then
 				source.preview(vim.api.nvim_buf_get_lines(list_bufnr, 0, 1, false)[1], preview_winid, preview_bufnr)

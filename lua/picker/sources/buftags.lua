@@ -1,8 +1,7 @@
 -- cmd = ctags --lua-kinds=f --output-format=json --fields=+line  plugins.lua
 
 local M = {}
-
-local bufnr
+local opts = {}
 
 -- from: https://github.com/fcying/telescope-ctags-outline.nvim/blob/master/lua/ctags-outline/init.lua#L7C1-L34C6
 local ft_opt = {
@@ -33,15 +32,57 @@ local ft_opt = {
 	rust = "--rust-kinds=fPM",
 	ocaml = "--ocaml-kinds=mf",
 }
-local cmd = { "ctags", "--lua-kinds=f", "--output-format=json", "--fields=+line" }
 
 ---@return table<PickerItem>
-function M.get() 
-    return vim.split(vim.system(cmd, {text = true}):wait().stdout, "\n", {trimempty = true})
+function M.get()
+	local bufnr = opts.current_buf
+	local bufname = vim.api.nvim_buf_get_name(bufnr)
+	local ft = vim.api.nvim_get_option_value("filetype", { buf = bufnr })
+	local cmd = { "ctags" }
+
+	if ft_opt[ft] then
+		table.insert(cmd, ft_opt[ft])
+	end
+
+	table.insert(cmd, "--output-format=json")
+	table.insert(cmd, "--fields=+line")
+	table.insert(cmd, bufname)
+
+	---@class PickerCtagsOutput
+	---@field name
+	---@field line
+	---@field _type
+	---@field path
+	---@field pattern
+	---@field language
+	---@field line
+	---@field kind
+
+	---@type table<PickerCtagsOutput>
+	local ctags_output = vim.split(vim.system(cmd, { text = true }):wait().stdout, "\n", { trimempty = true })
+
+	---@type table<PickerItem>
+	local items = {}
+
+	for _, v in ipairs(ctags_output) do
+		table.insert(items, {
+			value = v,
+			str = v.name,
+		})
+	end
+
+	return items
 end
 
 ---@param selected PickerItem
-function M.default_action(selected) end
+function M.default_action(selected)
+	vim.cmd(tostring(selected.value.line))
+end
+
+
+function M.set(opt)
+    opts.current_buf = opt.buf
+end
 
 M.preview_win = false
 

@@ -65,9 +65,10 @@ function M.get()
 	local items = {}
 
 	for _, v in ipairs(ctags_output) do
+		local value = vim.json.decode(v)
 		table.insert(items, {
-			value = v,
-			str = v.name,
+			value = value,
+			str = value.name,
 		})
 	end
 
@@ -79,9 +80,8 @@ function M.default_action(selected)
 	vim.cmd(tostring(selected.value.line))
 end
 
-
 function M.set(opt)
-    opts.current_buf = opt.buf
+	opts.current_buf = opt.buf
 end
 
 M.preview_win = false

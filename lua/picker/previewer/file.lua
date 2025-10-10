@@ -4,7 +4,7 @@ local preview_timer_id = -1
 
 local timerout = 500
 
-local preview_winid, preview_bufid, preview_file
+local preview_winid, preview_bufid, preview_file, preview_linenr
 
 local function preview_timer(t)
 	-- if preview win does exists, return
@@ -38,14 +38,25 @@ local function preview_timer(t)
 			end
 		end
 	end
+	if preview_linenr and preview_linenr < #context then
+		vim.api.nvim_win_set_cursor(preview_winid, { preview_linenr, 0 })
+		vim.api.nvim_win_call(preview_winid, function()
+			vim.cmd("noautocmd normal! zz")
+		end)
+		vim.api.nvim_set_option_value("cursorline", true, { win = preview_winid })
+    else
+		vim.api.nvim_set_option_value("cursorline", false, { win = preview_winid })
+	end
 end
 
 ---@param path string the path of preview file.
-function M.preview(path, win, buf)
+---@param linenr? integer
+function M.preview(path, win, buf, linenr)
 	vim.fn.timer_stop(preview_timer_id)
 	preview_winid = win
 	preview_bufid = buf
 	preview_file = path
+	preview_linenr = linenr
 	if preview_file and vim.fn.filereadable(preview_file) == 1 then
 		preview_timer_id = vim.fn.timer_start(timerout, preview_timer, { ["repeat"] = 1 })
 	end

@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.0](https://github.com/wsdjeg/picker.nvim/compare/v1.1.0...v1.2.0) (2025-10-11)
+
+
+### Features
+
+* add `lines` source ([8e35736](https://github.com/wsdjeg/picker.nvim/commit/8e35736771af35abb0c7e0550c2168b7ff6464cf))
+
+
+### Bug Fixes
+
+* check win_is_valid before set win opt ([9e3f232](https://github.com/wsdjeg/picker.nvim/commit/9e3f232b48a1af8c6114b353caba293565f0b0d0))
+
 ## [1.1.0](https://github.com/wsdjeg/picker.nvim/compare/v1.0.0...v1.1.0) (2025-10-11)
 
 

@@ -78,7 +78,9 @@ end
 --- @field set function
 
 --- @param source PickerSource
+--- @param opt?
 function M.open(source, opt)
+    opt = opt or {}
 	config = require("picker.config").get()
 	if source.set then
 		source.set(opt)

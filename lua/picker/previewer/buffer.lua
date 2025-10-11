@@ -13,9 +13,11 @@ local function preview_timer(t)
 	if vim.api.nvim_buf_line_count(preview_bufnr) < #M.buflines then
 		vim.api.nvim_buf_set_lines(preview_bufnr, 0, -1, false, M.buflines)
 		vim.api.nvim_set_option_value("filetype", M.filetype, { buf = preview_bufnr })
-		vim.api.nvim_set_option_value("cursorline", true, { win = preview_winid })
+		if vim.api.nvim_win_is_valid(preview_winid) then
+			vim.api.nvim_set_option_value("cursorline", true, { win = preview_winid })
+		end
 	end
-	if line_number ~= previous_line then
+	if line_number ~= previous_line and vim.api.nvim_win_is_valid(preview_winid) then
 		vim.api.nvim_win_set_cursor(preview_winid, { line_number, 0 })
 		vim.api.nvim_win_call(preview_winid, function()
 			vim.cmd("noautocmd normal! zz")

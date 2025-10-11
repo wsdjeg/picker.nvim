@@ -467,7 +467,9 @@ function M.open(source)
 			},
 		})
 	end
-	vim.cmd("startinsert | doautocmd TextChangedI")
+	vim.schedule_wrap(function()
+		vim.cmd("startinsert | doautocmd TextChangedI")
+	end)()
 end
 
 return M

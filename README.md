@@ -95,6 +95,7 @@ run `:Picker` command with a name of source.
 | buftags     | ctags outline for current buffer                                               |
 | buffers     | listed buffers                                                                 |
 | bookmarks   | all bookmarks, need [bookmarks.nvim](https://github.com/wsdjeg/bookmarks.nvim) |
+| lines       | lines in current buffer                                                        |
 
 ## Self-Promotion
 

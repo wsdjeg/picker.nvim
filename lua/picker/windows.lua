@@ -293,6 +293,10 @@ function M.open(source)
 			update_result_count()
 		end,
 	})
+	-- disable this key binding in promot buffer
+	for _, k in ipairs({ "<C-c>" }) do
+		vim.keymap.set("i", k, "<Nop>", { buffer = promot_bufnr })
+	end
 	vim.keymap.set("i", config.mappings.close, function()
 		vim.cmd("noautocmd stopinsert")
 		vim.api.nvim_win_close(promot_winid, true)

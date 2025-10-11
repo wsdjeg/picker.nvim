@@ -78,8 +78,11 @@ end
 --- @field set function
 
 --- @param source PickerSource
-function M.open(source)
+function M.open(source, opt)
 	config = require("picker.config").get()
+	if source.set then
+		source.set(opt)
+	end
 	-- 窗口位置
 	-- 宽度： columns 的 80%
 	local screen_width = math.floor(vim.o.columns * config.window.width)
@@ -471,9 +474,11 @@ function M.open(source)
 			},
 		})
 	end
-	vim.schedule_wrap(function()
-		vim.cmd("startinsert | doautocmd TextChangedI")
-	end)()
+	if opt.input then
+		vim.api.nvim_buf_set_lines(promot_bufnr, 0, -1, false, { opt.input })
+	end
+	vim.api.nvim_input("A")
+	vim.cmd("doautocmd TextChangedI")
 end
 
 return M

@@ -4,6 +4,10 @@ local util = require("picker.util")
 
 function M.open(argv, opt)
 	util.info("argv is:" .. vim.inspect(argv))
+    if #argv == 0 then
+		require("picker.windows").open(require('picker.sources'))
+        return
+    end
 	local ok, source = pcall(require, "picker.sources." .. argv[1])
 	if not ok then
         util.notify(string.format('can not found source "%s" for picker.nvim', argv[1]))

@@ -9,13 +9,13 @@ function M.get()
 end
 
 function M.default_action(selected)
-	vim.cmd("colorscheme " .. selected)
+	vim.cmd("colorscheme " .. selected.value)
 end
 
 M.preview_win = false
 
 function M.preview(item, win, buf)
-	previewer.preview(item, win, buf)
+	previewer.preview(item.value, win, buf)
 end
 
 return M

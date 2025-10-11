@@ -9,12 +9,15 @@ function M.get()
 	end, vim.api.nvim_list_bufs())
 
 	return vim.tbl_map(function(t)
-		return vim.api.nvim_buf_get_name(t)
+        return {
+            value = t,
+            str = vim.api.nvim_buf_get_name(t)
+        }
 	end, bufnrs)
 end
 
 function M.default_action(s)
-	vim.cmd("edit " .. s)
+	vim.cmd("edit " .. s.str)
 end
 
 return M

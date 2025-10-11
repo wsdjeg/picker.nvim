@@ -45,6 +45,24 @@ require("plug").add({
 })
 ```
 
+## Usage
+
+1. fuzzy finder picker source.
+
+run `:Picker` command without source name.
+
+```
+:Picker
+```
+
+2. open picker source.
+
+run `:Picker` command with a name of source.
+
+```
+:Picker <name>
+```
+
 ## Key bindings
 
 | key binding | description    |

@@ -4,7 +4,19 @@ _picker.nvim_ is a fuzzy finder for neovim.
 
 ![picker-neovim](https://wsdjeg.net/images/picker-neovim.png)
 
-## Install
+<!-- vim-markdown-toc GFM -->
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Key bindings](#key-bindings)
+- [Available sources](#available-sources)
+- [Self-Promotion](#self-promotion)
+- [Feedback](#feedback)
+- [Credits](#credits)
+
+<!-- vim-markdown-toc -->
+
+## Installation
 
 - use [nvim-plug](https://github.com/wsdjeg/nvim-plug)
 
@@ -72,10 +84,30 @@ run `:Picker` command with a name of source.
 | `Enter`     | default action |
 | `Esc`       | close picker   |
 
-## Default Sources
+## Available sources
 
-| source      | description                                           |
-| ----------- | ----------------------------------------------------- |
-| files       | files in current dir                                  |
-| colorscheme | all colorschemes                                      |
-| mru         | [mru.nvim](https://github.com/wsdjeg/mru.nvim) source |
+| source      | description                                                                    |
+| ----------- | ------------------------------------------------------------------------------ |
+| files       | files in current dir                                                           |
+| colorscheme | all colorschemes                                                               |
+| mru         | most recent used files, need [mru.nvim](https://github.com/wsdjeg/mru.nvim)    |
+| project     | project history, need [rooter.nvim](https://github.com/wsdjeg/rooter.nvim)     |
+| buftags     | ctags outline for current buffer                                               |
+| buffers     | listed buffers                                                                 |
+| bookmarks   | all bookmarks, need [bookmarks.nvim](https://github.com/wsdjeg/bookmarks.nvim) |
+
+## Self-Promotion
+
+Like this plugin? Star the repository on
+GitHub.
+
+Love this plugin? Follow [me](https://wsdjeg.net/) on
+[GitHub](https://github.com/wsdjeg).
+
+## Feedback
+
+If you encounter any bugs or have suggestions, please file an issue in the [issue tracker](https://github.com/wsdjeg/picker.nvim/issues)
+
+## Credits
+
+- [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)

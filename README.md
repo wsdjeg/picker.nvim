@@ -10,6 +10,7 @@ _picker.nvim_ is a fuzzy finder for neovim.
 - [Usage](#usage)
 - [Key bindings](#key-bindings)
 - [Available sources](#available-sources)
+- [Custom source](#custom-source)
 - [Self-Promotion](#self-promotion)
 - [Feedback](#feedback)
 - [Credits](#credits)
@@ -96,6 +97,22 @@ run `:Picker` command with a name of source.
 | buffers     | listed buffers                                                                 |
 | bookmarks   | all bookmarks, need [bookmarks.nvim](https://github.com/wsdjeg/bookmarks.nvim) |
 | lines       | lines in current buffer                                                        |
+
+## Custom source
+
+a source main module should be `picker.sources.<name>`,
+that means you can create a custom source in `lua/picker/sources/` directly in your plugin.
+
+```lua
+--- @class PickerSource
+--- @field get function
+--- @field default_action function
+--- @field __results nil | table<string>
+--- @field preview_win boolean
+--- @field preview function
+--- @field set function
+--- @field actions? table
+```
 
 ## Self-Promotion
 

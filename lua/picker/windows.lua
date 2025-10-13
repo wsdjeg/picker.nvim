@@ -76,11 +76,12 @@ end
 --- @field preview_win boolean
 --- @field preview function
 --- @field set function
+--- @field actions? table
 
 --- @param source PickerSource
 --- @param opt?
 function M.open(source, opt)
-    opt = opt or {}
+	opt = opt or {}
 	config = require("picker.config").get()
 	if source.set then
 		source.set(opt)
@@ -310,16 +311,31 @@ function M.open(source, opt)
 			vim.api.nvim_win_close(preview_winid, true)
 		end
 	end, { buffer = promot_bufnr })
-	vim.keymap.set("i", config.mappings.open_item, function()
-		vim.cmd("noautocmd stopinsert")
-		local cursor = vim.api.nvim_win_get_cursor(list_winid)
-		vim.api.nvim_win_close(promot_winid, true)
-		vim.api.nvim_win_close(list_winid, true)
-		if vim.api.nvim_win_is_valid(preview_winid) then
-			vim.api.nvim_win_close(preview_winid, true)
+	if type(source.actions) == "function" then
+		for key, action in pairs(source.actions()) do
+			vim.keymap.set("i", key, function()
+				vim.cmd("noautocmd stopinsert")
+				local cursor = vim.api.nvim_win_get_cursor(list_winid)
+				vim.api.nvim_win_close(promot_winid, true)
+				vim.api.nvim_win_close(list_winid, true)
+				if vim.api.nvim_win_is_valid(preview_winid) then
+					vim.api.nvim_win_close(preview_winid, true)
+				end
+                action(filter_rst[cursor[1]][4])
+			end, { buffer = promot_bufnr })
 		end
-		source.default_action(filter_rst[cursor[1]][4])
-	end, { buffer = promot_bufnr })
+	else
+		vim.keymap.set("i", config.mappings.open_item, function()
+			vim.cmd("noautocmd stopinsert")
+			local cursor = vim.api.nvim_win_get_cursor(list_winid)
+			vim.api.nvim_win_close(promot_winid, true)
+			vim.api.nvim_win_close(list_winid, true)
+			if vim.api.nvim_win_is_valid(preview_winid) then
+				vim.api.nvim_win_close(preview_winid, true)
+			end
+			source.default_action(filter_rst[cursor[1]][4])
+		end, { buffer = promot_bufnr })
+	end
 	vim.keymap.set("i", config.mappings.next_item, function()
 		local cursor = vim.api.nvim_win_get_cursor(list_winid)
 		if cursor[1] < vim.api.nvim_buf_line_count(list_bufnr) then

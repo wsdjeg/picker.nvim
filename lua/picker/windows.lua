@@ -64,8 +64,8 @@ local function highlight_list_windows()
 			if filter_rst[x][4].highlight then
 				for y = 1, #filter_rst[x][4].highlight do
                     local col_a, col_b, hl = unpack(filter_rst[x][4].highlight[y])
-					vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, col_a - 1, {
-						end_col = col_b - 1,
+					vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, col_a, {
+						end_col = col_b,
 						hl_group = hl,
 					})
 				end

@@ -47,7 +47,7 @@ local function update_result_count()
 	})
 end
 
-local function highlight_matched_chars()
+local function highlight_list_windows()
 	local info = vim.fn.getwininfo(list_winid)[1]
 	local from = info.topline
 	local to = info.botline
@@ -60,6 +60,15 @@ local function highlight_matched_chars()
 					end_col = col,
 					hl_group = config.highlight.matched,
 				})
+			end
+			if filter_rst[x][4].highlight then
+				for y = 1, #filter_rst[x][4].highlight do
+                    local col_a, col_b, hl = unpack(filter_rst[x][4].highlight[y])
+					vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, col_a - 1, {
+						end_col = col_b,
+						hl_group = hl,
+					})
+				end
 			end
 		end
 	end
@@ -291,7 +300,7 @@ function M.open(source, opt)
 				end, filter_rst)
 			)
 			if #filter_rst > 0 then
-				highlight_matched_chars()
+				highlight_list_windows()
 				if config.window.enable_preview and source.preview then
 					source.preview(filter_rst[1][4], preview_winid, preview_bufnr)
 				end
@@ -321,7 +330,7 @@ function M.open(source, opt)
 				if vim.api.nvim_win_is_valid(preview_winid) then
 					vim.api.nvim_win_close(preview_winid, true)
 				end
-                action(filter_rst[cursor[1]][4])
+				action(filter_rst[cursor[1]][4])
 			end, { buffer = promot_bufnr })
 		end
 	else
@@ -344,7 +353,7 @@ function M.open(source, opt)
 			cursor[1] = 1
 		end
 		vim.api.nvim_win_set_cursor(list_winid, cursor)
-		highlight_matched_chars()
+		highlight_list_windows()
 		if config.window.enable_preview and source.preview and #filter_rst > 0 then
 			source.preview(filter_rst[cursor[1]][4], preview_winid, preview_bufnr)
 		end
@@ -358,7 +367,7 @@ function M.open(source, opt)
 			cursor[1] = vim.api.nvim_buf_line_count(list_bufnr)
 		end
 		vim.api.nvim_win_set_cursor(list_winid, cursor)
-		highlight_matched_chars()
+		highlight_list_windows()
 		if config.window.enable_preview and source.preview and #filter_rst > 0 then
 			source.preview(filter_rst[cursor[1]][4], preview_winid, preview_bufnr)
 		end

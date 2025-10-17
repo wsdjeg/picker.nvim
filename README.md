@@ -97,6 +97,7 @@ run `:Picker` command with a name of source.
 | buffers     | listed buffers                                                                 |
 | bookmarks   | all bookmarks, need [bookmarks.nvim](https://github.com/wsdjeg/bookmarks.nvim) |
 | lines       | lines in current buffer                                                        |
+| help_tags   | neovim help tags source                                                        |
 
 ## Custom source
 

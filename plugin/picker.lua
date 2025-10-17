@@ -3,6 +3,9 @@ vim.api.nvim_create_user_command("Picker", function(opt)
 	for _, argv in ipairs(opt.fargs) do
 		if vim.startswith(argv, "--input=") then
 			input = string.sub(argv, 9)
+			if input == "<cword>" then
+				input = vim.fn.expand(input)
+			end
 		end
 	end
 	require("picker").open(opt.fargs, {

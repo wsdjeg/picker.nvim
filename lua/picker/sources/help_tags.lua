@@ -29,7 +29,7 @@ function M.get()
 				table.insert(tags, {
 					name = fields[1],
 					filename = vim.fn.fnamemodify(tag_file, ":h") .. '/' .. fields[2],
-					cmd = fields[3],
+					pattern = string.sub(fields[3], 2),
 				})
 			end
 		end
@@ -50,7 +50,7 @@ end
 M.preview_win = true
 
 function M.preview(item, win, buf)
-	previewer.preview(item.value.filename, win, buf, { cmd = item.value.cmd, syntax = 'help' })
+	previewer.preview(item.value.filename, win, buf, { pattern = item.value.pattern, syntax = 'help' })
 end
 
 return M

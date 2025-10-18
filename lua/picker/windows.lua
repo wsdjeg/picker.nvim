@@ -63,7 +63,7 @@ local function highlight_list_windows()
 			end
 			if filter_rst[x][4].highlight then
 				for y = 1, #filter_rst[x][4].highlight do
-                    local col_a, col_b, hl = unpack(filter_rst[x][4].highlight[y])
+					local col_a, col_b, hl = unpack(filter_rst[x][4].highlight[y])
 					vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, col_a, {
 						end_col = col_b,
 						hl_group = hl,
@@ -114,6 +114,7 @@ function M.open(source, opt)
 		if config.window.enable_preview and source.preview_win then
 			if not vim.api.nvim_buf_is_valid(preview_bufnr) then
 				preview_bufnr = vim.api.nvim_create_buf(false, true)
+				vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = preview_bufnr })
 			end
 			-- 初始化时，清空 preview 窗口内容
 			vim.api.nvim_buf_set_lines(preview_bufnr, 0, -1, false, {})
@@ -184,6 +185,7 @@ function M.open(source, opt)
 		if config.window.enable_preview and source.preview_win then
 			if not vim.api.nvim_buf_is_valid(preview_bufnr) then
 				preview_bufnr = vim.api.nvim_create_buf(false, true)
+				vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = preview_bufnr })
 			end
 			-- 初始化时，清空 preview 窗口内容
 			vim.api.nvim_buf_set_lines(preview_bufnr, 0, -1, false, {})
@@ -412,6 +414,7 @@ function M.open(source, opt)
 			if config.prompt.position == "bottom" then
 				if not vim.api.nvim_buf_is_valid(preview_bufnr) then
 					preview_bufnr = vim.api.nvim_create_buf(false, true)
+					vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = preview_bufnr })
 				end
 				-- 初始化时，清空 preview 窗口内容
 				vim.api.nvim_buf_set_lines(preview_bufnr, 0, -1, false, {})
@@ -453,6 +456,7 @@ function M.open(source, opt)
 			else
 				if not vim.api.nvim_buf_is_valid(preview_bufnr) then
 					preview_bufnr = vim.api.nvim_create_buf(false, true)
+					vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = preview_bufnr })
 				end
 				-- 初始化时，清空 preview 窗口内容
 				vim.api.nvim_buf_set_lines(preview_bufnr, 0, -1, false, {})
@@ -493,7 +497,7 @@ function M.open(source, opt)
 				})
 			end
 		end
-        highlight_list_windows()
+		highlight_list_windows()
 	end, { buffer = promot_bufnr })
 	if ok then
 		cmp.setup.buffer({

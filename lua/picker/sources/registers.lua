@@ -47,7 +47,7 @@ function M.get()
 	return map_filter(registers, function(reg)
 		local context = vim.fn.getreg(reg, 1, true)
 		return {
-			value = reg,
+			value = { name = reg, context = vim.fn.getreg(reg) },
 			str = string.format("[%s] %s", reg, context[1]),
 			highlight = {
 				{
@@ -58,7 +58,7 @@ function M.get()
 			},
 		}
 	end, function(t)
-		return vim.fn.getreg(t) ~= ""
+		return t.context ~= ""
 	end)
 end
 

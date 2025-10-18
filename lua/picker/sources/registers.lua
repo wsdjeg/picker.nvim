@@ -12,6 +12,8 @@ local M = {}
 -- 9. The black hole register "_
 -- 10. Last search pattern register "/
 
+local previewer = require("picker.previewer.buffer")
+
 function M.get()
 	-- "
 	local registers = { '"' }
@@ -58,5 +60,14 @@ end
 
 function M.default_action(entry)
 	vim.api.nvim_paste(entry.value.context, false, -1)
+end
+
+M.preview_win = true
+
+function M.preview(item, win, buf)
+	previewer.buflines = vim.split(item.value.context, "[\r]?\n", { trimempty = true })
+	vim.api.nvim_buf_set_lines(buf, 0, -1, false, previewer.buflines)
+	previewer.filetype = nil
+	previewer.preview(1, win, buf)
 end
 return M

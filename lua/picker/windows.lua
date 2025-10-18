@@ -493,6 +493,7 @@ function M.open(source, opt)
 				})
 			end
 		end
+        highlight_list_windows()
 	end, { buffer = promot_bufnr })
 	if ok then
 		cmp.setup.buffer({

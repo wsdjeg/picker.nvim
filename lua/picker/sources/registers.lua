@@ -12,16 +12,6 @@ local M = {}
 -- 9. The black hole register "_
 -- 10. Last search pattern register "/
 
-local function map_filter(vars, map_f, filter_f)
-	local rst = {}
-	for _, v in ipairs(vars) do
-		if filter_f(v) then
-			table.insert(rst, map_f(v))
-		end
-	end
-	return rst
-end
-
 function M.get()
 	-- "
 	local registers = { '"' }
@@ -44,24 +34,29 @@ function M.get()
 		table.insert(registers, i)
 	end
 
-	return map_filter(registers, function(reg)
-		local context = vim.fn.getreg(reg, 1, true)
-		return {
-			value = { name = reg, context = vim.fn.getreg(reg) },
-			str = string.format("[%s] %s", reg, context[1]),
-			highlight = {
-				{
-					0,
-					#reg + 2,
-					"Tag",
+	local entrys = {}
+
+	for _, reg in ipairs(registers) do
+		local context = vim.fn.getreg(reg)
+		if context ~= "" then
+			table.insert(entrys, {
+
+				value = { name = reg, context = context },
+				str = string.format("[%s] %s", reg, vim.split(context, "\n", { trimempty = true })[1]),
+				highlight = {
+					{
+						0,
+						#reg + 2,
+						"Tag",
+					},
 				},
-			},
-		}
-	end, function(t)
-		return t.context ~= ""
-	end)
+			})
+		end
+	end
+	return entrys
 end
 
-function M.default_action(entry) end
-
+function M.default_action(entry)
+	vim.api.nvim_paste(entry.value.context, false, -1)
+end
 return M

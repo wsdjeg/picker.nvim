@@ -103,17 +103,20 @@ or use `<cword>` for word under cursor.
 
 ## Available sources
 
-| source      | description                                                                    |
-| ----------- | ------------------------------------------------------------------------------ |
-| files       | files in current dir                                                           |
-| colorscheme | all colorschemes                                                               |
-| mru         | most recent used files, need [mru.nvim](https://github.com/wsdjeg/mru.nvim)    |
-| project     | project history, need [rooter.nvim](https://github.com/wsdjeg/rooter.nvim)     |
-| buftags     | ctags outline for current buffer                                               |
-| buffers     | listed buffers                                                                 |
-| bookmarks   | all bookmarks, need [bookmarks.nvim](https://github.com/wsdjeg/bookmarks.nvim) |
-| lines       | lines in current buffer                                                        |
-| help_tags   | neovim help tags source                                                        |
+| source            | description                                                                                     |
+| ----------------- | ----------------------------------------------------------------------------------------------- |
+| files             | files in current dir                                                                            |
+| colorscheme       | all colorschemes                                                                                |
+| mru               | most recent used files, need [mru.nvim](https://github.com/wsdjeg/mru.nvim)                     |
+| project           | project history, need [rooter.nvim](https://github.com/wsdjeg/rooter.nvim)                      |
+| buftags           | ctags outline for current buffer                                                                |
+| buffers           | listed buffers                                                                                  |
+| bookmarks         | all bookmarks, need [bookmarks.nvim](https://github.com/wsdjeg/bookmarks.nvim)                  |
+| lines             | lines in current buffer                                                                         |
+| help_tags         | neovim help tags source                                                                         |
+| zettelkasten      | zettelkasten notes source from [zettelkasten.nvim](https://github.com/wsdjeg/zettelkasten.nvim) |
+| zettelkasten_tags | zettelkasten tags source from [zettelkasten.nvim](https://github.com/wsdjeg/zettelkasten.nvim)  |
+| git-branch        | git branch source from [git.nvim](https://github.com/wsdjeg/git.nvim)                           |
 
 ## Custom source
 

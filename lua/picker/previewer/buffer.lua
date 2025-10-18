@@ -10,7 +10,11 @@ local preview_winid
 local preview_bufnr
 
 local function preview_timer(t)
-	if vim.api.nvim_buf_line_count(preview_bufnr) < #M.buflines then
+	if
+		preview_bufnr
+		and vim.api.nvim_buf_is_valid(preview_bufnr)
+		and vim.api.nvim_buf_line_count(preview_bufnr) < #M.buflines
+	then
 		vim.api.nvim_buf_set_lines(preview_bufnr, 0, -1, false, M.buflines)
 		vim.api.nvim_set_option_value("filetype", M.filetype, { buf = preview_bufnr })
 		if vim.api.nvim_win_is_valid(preview_winid) then

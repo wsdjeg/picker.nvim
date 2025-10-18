@@ -1,6 +1,8 @@
 # picker.nvim
 
-_picker.nvim_ is a fuzzy finder for neovim.
+picker.nvim is a highly customizable and extensible Neovim fuzzy finder plugin
+
+[![GPLv3 License](https://img.spacevim.org/license-GPLv3-blue.svg)](LICENSE)
 
 ![picker-neovim](https://wsdjeg.net/images/picker-neovim.png)
 
@@ -76,6 +78,20 @@ run `:Picker` command with a name of source.
 :Picker <name>
 ```
 
+3. specific default input
+
+with `--input` option, users also can specific default input text.
+
+```
+:Picker file --input=foo
+```
+
+or use `<cword>` for word under cursor.
+
+```
+:Picker help_tags --input=<cword>
+```
+
 ## Key bindings
 
 | key binding | description    |
@@ -102,7 +118,7 @@ run `:Picker` command with a name of source.
 ## Custom source
 
 a source main module should be `picker.sources.<name>`,
-that means you can create a custom source in `lua/picker/sources/` directly in your plugin.
+that means you can create a custom source in `lua/picker/sources/` directory in your plugin.
 
 ```lua
 --- @class PickerSource

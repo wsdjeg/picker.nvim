@@ -120,6 +120,7 @@ or use `<cword>` for word under cursor.
 | music-player      | music-player source form [music-player.nvim](https://github.com/wsdjeg/music-player.nvim)       |
 | plug              | plugins source for [nvim-plug](https://github.com/wsdjeg/nvim-plug)                             |
 | qflist            | quickfix source                                                                                 |
+| registers         | registers context                                                                               |
 
 ## Custom source
 

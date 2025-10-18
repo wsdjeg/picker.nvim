@@ -103,24 +103,31 @@ or use `<cword>` for word under cursor.
 
 ## Available sources
 
+builtin sources:
+
 | source            | description                                                                                     |
 | ----------------- | ----------------------------------------------------------------------------------------------- |
 | files             | files in current dir                                                                            |
 | colorscheme       | all colorschemes                                                                                |
-| mru               | most recent used files, need [mru.nvim](https://github.com/wsdjeg/mru.nvim)                     |
-| project           | project history, need [rooter.nvim](https://github.com/wsdjeg/rooter.nvim)                      |
 | buftags           | ctags outline for current buffer                                                                |
 | buffers           | listed buffers                                                                                  |
-| bookmarks         | all bookmarks, need [bookmarks.nvim](https://github.com/wsdjeg/bookmarks.nvim)                  |
 | lines             | lines in current buffer                                                                         |
 | help_tags         | neovim help tags source                                                                         |
+| qflist            | quickfix source                                                                                 |
+| registers         | registers context                                                                               |
+
+third party sources:
+
+| source            | description                                                                                     |
+| ----------------- | ----------------------------------------------------------------------------------------------- |
+| mru               | most recent used files, need [mru.nvim](https://github.com/wsdjeg/mru.nvim)                     |
+| project           | project history, need [rooter.nvim](https://github.com/wsdjeg/rooter.nvim)                      |
+| bookmarks         | all bookmarks, need [bookmarks.nvim](https://github.com/wsdjeg/bookmarks.nvim)                  |
 | zettelkasten      | zettelkasten notes source from [zettelkasten.nvim](https://github.com/wsdjeg/zettelkasten.nvim) |
 | zettelkasten_tags | zettelkasten tags source from [zettelkasten.nvim](https://github.com/wsdjeg/zettelkasten.nvim)  |
 | git-branch        | git branch source from [git.nvim](https://github.com/wsdjeg/git.nvim)                           |
 | music-player      | music-player source form [music-player.nvim](https://github.com/wsdjeg/music-player.nvim)       |
 | plug              | plugins source for [nvim-plug](https://github.com/wsdjeg/nvim-plug)                             |
-| qflist            | quickfix source                                                                                 |
-| registers         | registers context                                                                               |
 
 ## Custom source
 

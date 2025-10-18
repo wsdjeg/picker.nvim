@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.2.0](https://github.com/wsdjeg/picker.nvim/compare/v1.1.0...v1.2.0) (2025-10-18)
+
+
+### Features
+
+* add `lines` source ([8e35736](https://github.com/wsdjeg/picker.nvim/commit/8e35736771af35abb0c7e0550c2168b7ff6464cf))
+* add help_tags source ([5aa6aab](https://github.com/wsdjeg/picker.nvim/commit/5aa6aabcd4affb1f73920cdc156912dcbb5ecfa4))
+* add PickerItem.highlight ([b90c922](https://github.com/wsdjeg/picker.nvim/commit/b90c9223bc72912188f45767a48e6899be8f0ae2))
+* add qflist source ([5ed603d](https://github.com/wsdjeg/picker.nvim/commit/5ed603dd91b0477bba7d0a77a01d603bf571f2c2))
+* add registers source ([545f6eb](https://github.com/wsdjeg/picker.nvim/commit/545f6eb0aeffd9bb981e08578d311151eee0c3ec))
+* enable preview for buffers source ([83599fd](https://github.com/wsdjeg/picker.nvim/commit/83599fd5b143d53b3bb48dd578550f3df0f4e2e0))
+* enable preview of registers source ([8841e71](https://github.com/wsdjeg/picker.nvim/commit/8841e718c8710ba6d83184568d6dff36f3c519ee))
+* support `<cword>` input ([7b7dc4d](https://github.com/wsdjeg/picker.nvim/commit/7b7dc4d398b43b1af38949b3b30663b9188f76ca))
+* support multiple actions ([6442cd5](https://github.com/wsdjeg/picker.nvim/commit/6442cd5e9263d8f1265429612de068843121529c))
+* support preview_file pattern ([322512c](https://github.com/wsdjeg/picker.nvim/commit/322512cd83949c5466d48ffc90a5dd3e9b9f8e4a))
+
+
+### Bug Fixes
+
+* check win_is_valid before set win opt ([9e3f232](https://github.com/wsdjeg/picker.nvim/commit/9e3f232b48a1af8c6114b353caba293565f0b0d0))
+* fix default_action of register source ([b0ffd07](https://github.com/wsdjeg/picker.nvim/commit/b0ffd0731169cf8e493546ba456b3400e1cd7fd4))
+* fix highlight col ([1b52577](https://github.com/wsdjeg/picker.nvim/commit/1b5257740b6fcc7ee4377e35b521b95c33e36af4))
+* make sure preview_bufnr is valid ([03b753a](https://github.com/wsdjeg/picker.nvim/commit/03b753ac1777e9641702a6a8ae3154cc3f438fcc))
+* set preview_buf bufhidden to wipe ([f20e849](https://github.com/wsdjeg/picker.nvim/commit/f20e84912f3ab99e92e4e75ed473460bdc5789c7))
+* skip duplicate getreg func ([e9e418c](https://github.com/wsdjeg/picker.nvim/commit/e9e418c0faae274eb2972ae579ce8f68bb930073))
+* update highlight after toggle_preview ([36b0e6c](https://github.com/wsdjeg/picker.nvim/commit/36b0e6c81a758d29d2103731ab92f5fd2218e41b))
+
 ## [1.1.0](https://github.com/wsdjeg/picker.nvim/compare/v1.0.0...v1.1.0) (2025-10-11)
 
 

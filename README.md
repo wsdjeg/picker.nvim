@@ -105,16 +105,16 @@ or use `<cword>` for word under cursor.
 
 builtin sources:
 
-| source            | description                                                                                     |
-| ----------------- | ----------------------------------------------------------------------------------------------- |
-| files             | files in current dir                                                                            |
-| colorscheme       | all colorschemes                                                                                |
-| buftags           | ctags outline for current buffer                                                                |
-| buffers           | listed buffers                                                                                  |
-| lines             | lines in current buffer                                                                         |
-| help_tags         | neovim help tags source                                                                         |
-| qflist            | quickfix source                                                                                 |
-| registers         | registers context                                                                               |
+| source      | description                      |
+| ----------- | -------------------------------- |
+| files       | files in current dir             |
+| colorscheme | all colorschemes                 |
+| buftags     | ctags outline for current buffer |
+| buffers     | listed buffers                   |
+| lines       | lines in current buffer          |
+| help_tags   | neovim help tags source          |
+| qflist      | quickfix source                  |
+| registers   | registers context                |
 
 third party sources:
 

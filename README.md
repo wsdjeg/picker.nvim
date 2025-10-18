@@ -118,6 +118,8 @@ or use `<cword>` for word under cursor.
 | zettelkasten_tags | zettelkasten tags source from [zettelkasten.nvim](https://github.com/wsdjeg/zettelkasten.nvim)  |
 | git-branch        | git branch source from [git.nvim](https://github.com/wsdjeg/git.nvim)                           |
 | music-player      | music-player source form [music-player.nvim](https://github.com/wsdjeg/music-player.nvim)       |
+| plug              | plugins source for [nvim-plug](https://github.com/wsdjeg/nvim-plug)                             |
+| qflist            | quickfix source                                                                                 |
 
 ## Custom source
 

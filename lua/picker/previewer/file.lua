@@ -11,11 +11,6 @@ local function preview_timer(t)
 	if not vim.api.nvim_win_is_valid(preview_winid) then
 		return
 	end
-    -- if preview_file filename is empty then skipped and clear preview_buf
-    if #preview_file == 0 then
-        vim.api.nvim_buf_set_lines(preview_bufid, 0, -1, false, {})
-        return
-    end
 	local fd = vim.uv.fs_open(preview_file, "r", 438)
 	local stat = vim.uv.fs_fstat(fd)
 	local context = vim.split(vim.uv.fs_read(fd, stat.size, 0), "[\r]?\n", { trimempty = true })
@@ -76,6 +71,7 @@ function M.preview(path, win, buf, opts)
 		preview_pattern = opts.pattern
 		preview_syntax = opts.syntax
 	end
+	vim.api.nvim_buf_set_lines(buf, 0, -1, false, {})
 	if preview_file and vim.fn.filereadable(preview_file) == 1 then
 		preview_timer_id = vim.fn.timer_start(timerout, preview_timer, { ["repeat"] = 1 })
 	end

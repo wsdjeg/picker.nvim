@@ -5,22 +5,13 @@ local previewer = require("picker.previewer.file")
 function M.get()
 	return vim.tbl_map(function(t)
 		t.filename = vim.api.nvim_buf_get_name(t.bufnr)
-		--- if the buf is not loaded the context is nil
-		--- @todo skip this?
-		if vim.fn.bufloaded(t.bufnr) == 0 then
-			vim.fn.bufload(t.bufnr)
-			t.context = vim.api.nvim_buf_get_lines(t.bufnr, t.lnum - 1, t.lnum, false)[1] or ""
-			vim.cmd.bdelete(t.bufnr)
-		else
-			t.context = vim.api.nvim_buf_get_lines(t.bufnr, t.lnum - 1, t.lnum, false)[1] or ""
-		end
 		return {
 			value = t,
-			str = string.format("%s:%d:%d:%s", t.filename, t.lnum, t.col, t.context),
+			str = string.format("%s:%d:%d", t.filename, t.lnum, t.col),
 			highlight = {
 				{
-					0,
-					#t.filename + #tostring(t.lnum) + #tostring(t.col) + 3,
+                    #t.filename,
+					#t.filename + #tostring(t.lnum) + #tostring(t.col) + 2,
 					"Comment",
 				},
 			},

@@ -11,6 +11,11 @@ local function preview_timer(t)
 	if not vim.api.nvim_win_is_valid(preview_winid) then
 		return
 	end
+    -- if preview_file filename is empty then skipped and clear preview_buf
+    if #preview_file == 0 then
+        vim.api.nvim_buf_set_lines(preview_bufid, 0, -1, false, {})
+        return
+    end
 	local fd = vim.uv.fs_open(preview_file, "r", 438)
 	local stat = vim.uv.fs_fstat(fd)
 	local context = vim.split(vim.uv.fs_read(fd, stat.size, 0), "[\r]?\n", { trimempty = true })

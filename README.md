@@ -115,6 +115,8 @@ builtin sources:
 | help_tags   | neovim help tags source          |
 | qflist      | quickfix source                  |
 | registers   | registers context                |
+| jumps       | jump list                        |
+| marks       | marks list                       |
 
 third party sources:
 

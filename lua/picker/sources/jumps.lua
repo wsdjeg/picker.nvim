@@ -4,19 +4,16 @@ local previewer = require("picker.previewer.file")
 
 function M.get()
 	return vim.tbl_map(function(t)
-		local filename = vim.api.nvim_buf_get_name(t.bufnr)
-		local context = vim.api.nvim_buf_get_lines(t.bufnr, t.lnum - 1, t.lnum, false)[1] or ''
-		t.filename = t.filename or filename
-		if #filename == 0 then
-			filename = "No Name"
-		end
+		t.filename = vim.api.nvim_buf_get_name(t.bufnr)
+        --- if the buf is not loaded the context is nil
+		t.context = vim.api.nvim_buf_get_lines(t.bufnr, t.lnum - 1, t.lnum, false)[1] or ''
 		return {
 			value = t,
-			str = string.format("%s:%d:%d:%s", filename, t.lnum, t.col, context),
+			str = string.format("%s:%d:%d:%s", t.filename, t.lnum, t.col, t.context),
 			highlight = {
 				{
 					0,
-					#filename + #tostring(t.lnum) + #tostring(t.col) + 3,
+					#t.filename + #tostring(t.lnum) + #tostring(t.col) + 3,
 					"Comment",
 				},
 			},

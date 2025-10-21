@@ -32,6 +32,8 @@ local prompt_count_id
 
 local current_icon_extmark
 
+local winhighlight = "NormalFloat:Normal,FloatBorder:WinSeparator,Search:None,CurSearch:None"
+
 local function update_result_count()
 	local count = vim.api.nvim_buf_line_count(list_bufnr)
 	local line = vim.api.nvim_win_get_cursor(list_winid)[1]
@@ -81,7 +83,6 @@ end
 --- @class PickerSource
 --- @field get function
 --- @field default_action function
---- @field __results nil | table<string>
 --- @field preview_win boolean
 --- @field preview function
 --- @field set function
@@ -130,7 +131,7 @@ function M.open(source, opt)
 				})
 				vim.api.nvim_set_option_value(
 					"winhighlight",
-					"NormalFloat:Normal,FloatBorder:WinSeparator,Search:None",
+					winhighlight,
 					{ win = preview_winid }
 				)
 				vim.api.nvim_set_option_value("number", false, { win = preview_winid })
@@ -199,11 +200,7 @@ function M.open(source, opt)
 					focusable = false,
 					border = "rounded",
 				})
-				vim.api.nvim_set_option_value(
-					"winhighlight",
-					"NormalFloat:Normal,FloatBorder:WinSeparator,Search:None",
-					{ win = preview_winid }
-				)
+				vim.api.nvim_set_option_value("winhighlight", winhighlight, { win = preview_winid })
 				vim.api.nvim_set_option_value("number", false, { win = preview_winid })
 				vim.api.nvim_set_option_value("relativenumber", false, { win = preview_winid })
 				vim.api.nvim_set_option_value("cursorline", false, { win = preview_winid })
@@ -255,12 +252,12 @@ function M.open(source, opt)
 	end
 	vim.api.nvim_set_option_value(
 		"winhighlight",
-		"NormalFloat:Normal,FloatBorder:WinSeparator,Search:None",
+		winhighlight,
 		{ win = list_winid }
 	)
 	vim.api.nvim_set_option_value(
 		"winhighlight",
-		"NormalFloat:Normal,FloatBorder:WinSeparator,Search:None",
+		winhighlight,
 		{ win = promot_winid }
 	)
 	vim.api.nvim_set_option_value("buftype", "nowrite", { buf = promot_bufnr })
@@ -430,7 +427,7 @@ function M.open(source, opt)
 					})
 					vim.api.nvim_set_option_value(
 						"winhighlight",
-						"NormalFloat:Normal,FloatBorder:WinSeparator,Search:None",
+						winhighlight,
 						{ win = preview_winid }
 					)
 					vim.api.nvim_set_option_value("number", false, { win = preview_winid })
@@ -472,7 +469,7 @@ function M.open(source, opt)
 					})
 					vim.api.nvim_set_option_value(
 						"winhighlight",
-						"NormalFloat:Normal,FloatBorder:WinSeparator,Search:None",
+						winhighlight,
 						{ win = preview_winid }
 					)
 					vim.api.nvim_set_option_value("number", false, { win = preview_winid })

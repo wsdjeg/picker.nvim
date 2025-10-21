@@ -34,8 +34,8 @@ local function on_stderr(id, data) end
 local function on_exit(id, data, singin)
 	if id == jobid then
 		jobid = -1
+		vim.cmd("doautocmd TextChangedI")
 	end
-	vim.cmd("doautocmd TextChangedI")
 end
 
 local function async_run()

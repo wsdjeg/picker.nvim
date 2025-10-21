@@ -1,14 +1,21 @@
 local M = {}
 
 local previewer = require("picker.previewer.file")
+local util = require("picker.util")
 
-local job = require("job")
+local ok, job = pcall(require, "job")
+
+function M.enabled()
+	if not ok then
+		util.notify("async_files source require wsdjeg/job.nvim")
+	end
+	return ok
+end
 
 ---@type PickerItem[]
 local items = {}
 
 local cmd = { "rg", "--files" }
-
 
 local jobid = -1
 
@@ -28,7 +35,7 @@ local function on_exit(id, data, singin)
 	if id == jobid then
 		jobid = -1
 	end
-		vim.cmd("doautocmd TextChangedI")
+	vim.cmd("doautocmd TextChangedI")
 end
 
 local function async_run()
@@ -49,7 +56,6 @@ function M.set(opt)
 	items = {}
 
 	async_run()
-
 end
 
 function M.get()

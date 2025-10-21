@@ -86,7 +86,8 @@ end
 --- @field preview_win boolean
 --- @field preview function
 --- @field set function
---- @field actions? table
+--- @field actions? table action tables <key binding> - <function>
+--- @field enabled? function returning false means source can not be used.
 
 --- @param source PickerSource
 --- @param opt?

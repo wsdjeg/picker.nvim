@@ -39,6 +39,10 @@ require("plug").add({
 					enable_preview = false,
 					preview_timeout = 500,
 				},
+				filter = {
+					loop_timeout = 10,
+					loop_count = 5000,
+				},
 				highlight = {
 					matched = "Tag",
 				},

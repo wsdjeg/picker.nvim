@@ -284,24 +284,24 @@ function M.open(s, opt)
 			insert_timer_id = vim.fn.timer_start(config.prompt.insert_timeout, function()
 				local input = vim.api.nvim_buf_get_lines(promot_bufnr, 0, 1, false)[1]
 				vim.api.nvim_win_set_cursor(list_winid, { 1, 1 })
-				filter.filter(input, source)
-
-				vim.api.nvim_buf_set_lines(
-					list_bufnr,
-					0,
-					-1,
-					false,
-					vim.tbl_map(function(t)
-						return t[4].str
-					end, source.filter_items)
-				)
-				if #source.filter_items > 0 then
-					highlight_list_windows()
-					if config.window.enable_preview and source.preview then
-						source.preview(source.filter_items[1][4], preview_winid, preview_bufnr)
+				filter.async_filter(input, source, function()
+					vim.api.nvim_buf_set_lines(
+						list_bufnr,
+						0,
+						-1,
+						false,
+						vim.tbl_map(function(t)
+							return t[4].str
+						end, source.filter_items)
+					)
+					if #source.filter_items > 0 then
+						highlight_list_windows()
+						if config.window.enable_preview and source.preview then
+							source.preview(source.filter_items[1][4], preview_winid, preview_bufnr)
+						end
 					end
-				end
-				update_result_count()
+					update_result_count()
+				end)
 			end)
 		end,
 	})

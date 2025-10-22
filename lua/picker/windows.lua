@@ -285,6 +285,9 @@ function M.open(s, opt)
 				local input = vim.api.nvim_buf_get_lines(promot_bufnr, 0, 1, false)[1]
 				vim.api.nvim_win_set_cursor(list_winid, { 1, 1 })
 				filter.filter(input, source, function()
+					if not vim.api.nvim_buf_is_valid(list_bufnr) then
+						return
+					end
 					vim.api.nvim_buf_set_lines(
 						list_bufnr,
 						0,

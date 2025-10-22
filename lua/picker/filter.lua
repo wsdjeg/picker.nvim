@@ -58,7 +58,7 @@ function M.async_filter(input, source, callback)
 	vim.fn.timer_stop(tid)
 	local function async_task()
 		-- 每次取 5000 个 进行匹配排序
-		local count = 5000
+		local count = 100
 		if #input == 0 then
 			source.filter_items = {}
 			source.state.filter_count = 0

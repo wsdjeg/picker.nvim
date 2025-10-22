@@ -30,6 +30,8 @@ local config
 
 local prompt_count_id
 
+local insert_timer_id = -1
+
 local current_icon_extmark
 
 local winhighlight = "NormalFloat:Normal,FloatBorder:WinSeparator,Search:None,CurSearch:None"
@@ -94,14 +96,14 @@ end
 --- @param s PickerSource
 --- @param opt?
 function M.open(s, opt)
-    source = s
+	source = s
 	opt = opt or {}
 	config = require("picker.config").get()
 	if source.set then
 		source.set(opt)
 	end
-    source.state = {}
-    source.state.items = source.get()
+	source.state = {}
+	source.state.items = source.get()
 	-- 窗口位置
 	-- 宽度： columns 的 80%
 	local screen_width = math.floor(vim.o.columns * config.window.width)
@@ -135,11 +137,7 @@ function M.open(s, opt)
 					focusable = false,
 					border = "rounded",
 				})
-				vim.api.nvim_set_option_value(
-					"winhighlight",
-					winhighlight,
-					{ win = preview_winid }
-				)
+				vim.api.nvim_set_option_value("winhighlight", winhighlight, { win = preview_winid })
 				vim.api.nvim_set_option_value("number", false, { win = preview_winid })
 				vim.api.nvim_set_option_value("relativenumber", false, { win = preview_winid })
 				vim.api.nvim_set_option_value("cursorline", false, { win = preview_winid })
@@ -256,16 +254,8 @@ function M.open(s, opt)
 			})
 		end
 	end
-	vim.api.nvim_set_option_value(
-		"winhighlight",
-		winhighlight,
-		{ win = list_winid }
-	)
-	vim.api.nvim_set_option_value(
-		"winhighlight",
-		winhighlight,
-		{ win = promot_winid }
-	)
+	vim.api.nvim_set_option_value("winhighlight", winhighlight, { win = list_winid })
+	vim.api.nvim_set_option_value("winhighlight", winhighlight, { win = promot_winid })
 	vim.api.nvim_set_option_value("buftype", "nowrite", { buf = promot_bufnr })
 	vim.api.nvim_set_option_value("buftype", "nowrite", { buf = list_bufnr })
 	vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = promot_bufnr })
@@ -290,26 +280,29 @@ function M.open(s, opt)
 		group = augroup,
 		buffer = promot_bufnr,
 		callback = function(_)
-			local input = vim.api.nvim_buf_get_lines(promot_bufnr, 0, 1, false)[1]
-			vim.api.nvim_win_set_cursor(list_winid, { 1, 1 })
-			filter.filter(input, source)
+			vim.fn.timer_stop(insert_timer_id)
+			insert_timer_id = vim.fn.timer_start(config.prompt.insert_timeout, function()
+				local input = vim.api.nvim_buf_get_lines(promot_bufnr, 0, 1, false)[1]
+				vim.api.nvim_win_set_cursor(list_winid, { 1, 1 })
+				filter.filter(input, source)
 
-			vim.api.nvim_buf_set_lines(
-				list_bufnr,
-				0,
-				-1,
-				false,
-				vim.tbl_map(function(t)
-					return t[4].str
-				end, source.filter_items)
-			)
-			if #source.filter_items > 0 then
-				highlight_list_windows()
-				if config.window.enable_preview and source.preview then
-					source.preview(source.filter_items[1][4], preview_winid, preview_bufnr)
+				vim.api.nvim_buf_set_lines(
+					list_bufnr,
+					0,
+					-1,
+					false,
+					vim.tbl_map(function(t)
+						return t[4].str
+					end, source.filter_items)
+				)
+				if #source.filter_items > 0 then
+					highlight_list_windows()
+					if config.window.enable_preview and source.preview then
+						source.preview(source.filter_items[1][4], preview_winid, preview_bufnr)
+					end
 				end
-			end
-			update_result_count()
+				update_result_count()
+			end)
 		end,
 	})
 	-- disable this key binding in promot buffer
@@ -317,6 +310,7 @@ function M.open(s, opt)
 		vim.keymap.set("i", k, "<Nop>", { buffer = promot_bufnr })
 	end
 	vim.keymap.set("i", config.mappings.close, function()
+		vim.fn.timer_stop(insert_timer_id)
 		vim.cmd("noautocmd stopinsert")
 		vim.api.nvim_win_close(promot_winid, true)
 		vim.api.nvim_win_close(list_winid, true)
@@ -327,6 +321,7 @@ function M.open(s, opt)
 	if type(source.actions) == "function" then
 		for key, action in pairs(source.actions()) do
 			vim.keymap.set("i", key, function()
+				vim.fn.timer_stop(insert_timer_id)
 				vim.cmd("noautocmd stopinsert")
 				local cursor = vim.api.nvim_win_get_cursor(list_winid)
 				vim.api.nvim_win_close(promot_winid, true)
@@ -339,6 +334,7 @@ function M.open(s, opt)
 		end
 	else
 		vim.keymap.set("i", config.mappings.open_item, function()
+			vim.fn.timer_stop(insert_timer_id)
 			vim.cmd("noautocmd stopinsert")
 			local cursor = vim.api.nvim_win_get_cursor(list_winid)
 			vim.api.nvim_win_close(promot_winid, true)
@@ -430,11 +426,7 @@ function M.open(s, opt)
 						focusable = false,
 						border = "rounded",
 					})
-					vim.api.nvim_set_option_value(
-						"winhighlight",
-						winhighlight,
-						{ win = preview_winid }
-					)
+					vim.api.nvim_set_option_value("winhighlight", winhighlight, { win = preview_winid })
 					vim.api.nvim_set_option_value("number", false, { win = preview_winid })
 					vim.api.nvim_set_option_value("relativenumber", false, { win = preview_winid })
 					vim.api.nvim_set_option_value("cursorline", false, { win = preview_winid })
@@ -472,11 +464,7 @@ function M.open(s, opt)
 						focusable = false,
 						border = "rounded",
 					})
-					vim.api.nvim_set_option_value(
-						"winhighlight",
-						winhighlight,
-						{ win = preview_winid }
-					)
+					vim.api.nvim_set_option_value("winhighlight", winhighlight, { win = preview_winid })
 					vim.api.nvim_set_option_value("number", false, { win = preview_winid })
 					vim.api.nvim_set_option_value("relativenumber", false, { win = preview_winid })
 					vim.api.nvim_set_option_value("cursorline", false, { win = preview_winid })

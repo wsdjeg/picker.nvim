@@ -11,6 +11,10 @@ local default = {
 		enable_preview = false,
 		preview_timeout = 500,
 	},
+	filter = {
+		loop_timeout = 10,
+		loop_count = 5000,
+	},
 	highlight = {
 		matched = "Tag",
 	},
@@ -18,7 +22,7 @@ local default = {
 		position = "bottom", --- bottom or top
 		icon = ">",
 		icon_hl = "Error",
-        insert_timeout = 100,
+		insert_timeout = 100,
 	},
 	mappings = {
 		close = "<Esc>",

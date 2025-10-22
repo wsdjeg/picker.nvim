@@ -10,7 +10,7 @@ end
 
 local filter = require("picker.filter")
 
-local filter_rst
+local source -- global source
 
 local list_winid = -1
 
@@ -53,19 +53,19 @@ local function highlight_list_windows()
 	local info = vim.fn.getwininfo(list_winid)[1]
 	local from = info.topline
 	local to = info.botline
-	if #filter_rst > 0 then
+	if #source.filter_items > 0 then
 		local ns = vim.api.nvim_create_namespace("picker-matched-chars")
 		for x = from, to do
-			for y = 1, #filter_rst[x][2] do
-				local col = filter_rst[x][2][y]
+			for y = 1, #source.filter_items[x][2] do
+				local col = source.filter_items[x][2][y]
 				vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, col - 1, {
 					end_col = col,
 					hl_group = config.highlight.matched,
 				})
 			end
-			if filter_rst[x][4].highlight then
-				for y = 1, #filter_rst[x][4].highlight do
-					local col_a, col_b, hl = unpack(filter_rst[x][4].highlight[y])
+			if source.filter_items[x][4].highlight then
+				for y = 1, #source.filter_items[x][4].highlight do
+					local col_a, col_b, hl = unpack(source.filter_items[x][4].highlight[y])
 					vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, col_a, {
 						end_col = col_b,
 						hl_group = hl,
@@ -88,15 +88,20 @@ end
 --- @field set function
 --- @field actions? table action tables <key binding> - <function>
 --- @field enabled? function returning false means source can not be used.
+--- @field state? table filter state
+--- @field filter_items table
 
---- @param source PickerSource
+--- @param s PickerSource
 --- @param opt?
-function M.open(source, opt)
+function M.open(s, opt)
+    source = s
 	opt = opt or {}
 	config = require("picker.config").get()
 	if source.set then
 		source.set(opt)
 	end
+    source.state = {}
+    source.state.items = source.get()
 	-- 窗口位置
 	-- 宽度： columns 的 80%
 	local screen_width = math.floor(vim.o.columns * config.window.width)
@@ -284,11 +289,10 @@ function M.open(source, opt)
 	vim.api.nvim_create_autocmd({ "TextChangedI" }, {
 		group = augroup,
 		buffer = promot_bufnr,
-		callback = function(ev)
+		callback = function(_)
 			local input = vim.api.nvim_buf_get_lines(promot_bufnr, 0, 1, false)[1]
 			vim.api.nvim_win_set_cursor(list_winid, { 1, 1 })
-			local results = source.get()
-			filter_rst = filter.filter(input, results)
+			filter.filter(input, source)
 
 			vim.api.nvim_buf_set_lines(
 				list_bufnr,
@@ -296,13 +300,13 @@ function M.open(source, opt)
 				-1,
 				false,
 				vim.tbl_map(function(t)
-					return results[t[1]].str
-				end, filter_rst)
+					return t[4].str
+				end, source.filter_items)
 			)
-			if #filter_rst > 0 then
+			if #source.filter_items > 0 then
 				highlight_list_windows()
 				if config.window.enable_preview and source.preview then
-					source.preview(filter_rst[1][4], preview_winid, preview_bufnr)
+					source.preview(source.filter_items[1][4], preview_winid, preview_bufnr)
 				end
 			end
 			update_result_count()
@@ -330,7 +334,7 @@ function M.open(source, opt)
 				if vim.api.nvim_win_is_valid(preview_winid) then
 					vim.api.nvim_win_close(preview_winid, true)
 				end
-				action(filter_rst[cursor[1]][4])
+				action(source.filter_items[cursor[1]][4])
 			end, { buffer = promot_bufnr })
 		end
 	else
@@ -342,7 +346,7 @@ function M.open(source, opt)
 			if vim.api.nvim_win_is_valid(preview_winid) then
 				vim.api.nvim_win_close(preview_winid, true)
 			end
-			source.default_action(filter_rst[cursor[1]][4])
+			source.default_action(source.filter_items[cursor[1]][4])
 		end, { buffer = promot_bufnr })
 	end
 	vim.keymap.set("i", config.mappings.next_item, function()
@@ -354,8 +358,8 @@ function M.open(source, opt)
 		end
 		vim.api.nvim_win_set_cursor(list_winid, cursor)
 		highlight_list_windows()
-		if config.window.enable_preview and source.preview and #filter_rst > 0 then
-			source.preview(filter_rst[cursor[1]][4], preview_winid, preview_bufnr)
+		if config.window.enable_preview and source.preview and #source.filter_items > 0 then
+			source.preview(source.filter_items[cursor[1]][4], preview_winid, preview_bufnr)
 		end
 		update_result_count()
 	end, { buffer = promot_bufnr })
@@ -368,8 +372,8 @@ function M.open(source, opt)
 		end
 		vim.api.nvim_win_set_cursor(list_winid, cursor)
 		highlight_list_windows()
-		if config.window.enable_preview and source.preview and #filter_rst > 0 then
-			source.preview(filter_rst[cursor[1]][4], preview_winid, preview_bufnr)
+		if config.window.enable_preview and source.preview and #source.filter_items > 0 then
+			source.preview(source.filter_items[cursor[1]][4], preview_winid, preview_bufnr)
 		end
 		update_result_count()
 	end, { buffer = promot_bufnr })
@@ -437,7 +441,7 @@ function M.open(source, opt)
 					vim.api.nvim_set_option_value("signcolumn", "yes", { win = preview_winid })
 				end
 				local cursor = vim.api.nvim_win_get_cursor(list_winid)
-				source.preview(filter_rst[cursor[1]][4], preview_winid, preview_bufnr)
+				source.preview(source.filter_items[cursor[1]][4], preview_winid, preview_bufnr)
 				vim.api.nvim_win_set_config(list_winid, {
 
 					relative = "editor",
@@ -479,7 +483,7 @@ function M.open(source, opt)
 					vim.api.nvim_set_option_value("signcolumn", "yes", { win = preview_winid })
 				end
 				local cursor = vim.api.nvim_win_get_cursor(list_winid)
-				source.preview(filter_rst[cursor[1]][4], preview_winid, preview_bufnr)
+				source.preview(source.filter_items[cursor[1]][4], preview_winid, preview_bufnr)
 				vim.api.nvim_win_set_config(list_winid, {
 
 					relative = "editor",

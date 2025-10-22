@@ -2,31 +2,50 @@ local M = {}
 
 local fzy = require("picker.matchers.fzy")
 
----@param input string 输入值
----@param items table<PickerItem> 候选列表
-function M.filter(input, items)
-	local result = {}
-
+---@param input string
+---@param source PickerSource
+function M.filter(input, source)
 	if #input == 0 then
-		for i, item in ipairs(items) do
-			table.insert(result, { i, {}, 0, item })
-		end
+		local i = 1
+		source.filter_items = vim.tbl_map(function(t)
+			i = i + 1
+			return { i, {}, 0, t }
+		end, source.state.items)
 	else
-		for i, item in ipairs(items) do
-			if fzy.has_match(input, item.str) then
-				local p, s = fzy.positions(input, item.str)
-				table.insert(result, { i, p, s, item })
+		if
+			source.state.previous_input
+			and #source.state.previous_input > 0
+			and fzy.has_match(source.state.previous_input, input)
+		then
+			local rst = {}
+			for _, v in ipairs(source.filter_items) do
+				if fzy.has_match(input, v[4].str) then
+					local p, s = fzy.positions(input, v[4].str)
+					table.insert(rst, { _, p, s, v[4] })
+				end
 			end
+			if source.state.filter_count < #source.state.items then
+				for i = source.state.filter_count, #source.state.items do
+					if fzy.has_match(input, source.state.items[i].str) then
+						local p, s = fzy.positions(input, source.state.items[i].str)
+						table.insert(rst, { _, p, s, source.state.items[i] })
+					end
+				end
+			end
+			source.filter_items = rst
+		else
+			local rst = {}
+			for i = 1, #source.state.items do
+				if fzy.has_match(input, source.state.items[i].str) then
+					local p, s = fzy.positions(input, source.state.items[i].str)
+					table.insert(rst, { _, p, s, source.state.items[i] })
+				end
+			end
+			source.filter_items = rst
 		end
-
-		--- sort by scope?
-
-		table.sort(result, function(a, b)
-			return a[3] > b[3]
-		end)
 	end
-
-	return result
+	source.state.previous_input = input
+	source.state.filter_count = #source.state.items
 end
 
 return M

@@ -46,6 +46,7 @@ require("plug").add({
 					position = "bottom", --- bottom or top
 					icon = ">",
 					icon_hl = "Error",
+					insert_timeout = 100,
 				},
 				mappings = {
 					close = "<Esc>",

@@ -177,6 +177,8 @@ function M.open(s, opt)
 				row = start_row + screen_height - 3,
 				focusable = true,
 				border = "rounded",
+				title = config.prompt.title and string.format(" %s ", source.name),
+				title_pos = "center",
 				-- noautocmd = true,
 			})
 		end

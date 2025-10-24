@@ -102,6 +102,11 @@ function M.open(s, opt)
 	if source.set then
 		source.set(opt)
 	end
+    -- 初始化 source state
+    --- @class PickerSourceState
+    --- @field items PickerItem[]
+    --- @field filter_count integer 已匹配数量，最大等于 #items
+    --- @field previous_input string 上一次排序输入的内容
 	source.state = {}
 	source.state.items = source.get()
 	-- 窗口位置

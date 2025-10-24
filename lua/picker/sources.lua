@@ -1,5 +1,7 @@
 local M = {}
 
+M.name = 'picker sources'
+
 function M.get()
 	return vim.tbl_map(function(t)
 		t = vim.fn.fnamemodify(t, ":t:r")

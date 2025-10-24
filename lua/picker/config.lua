@@ -18,7 +18,8 @@ local default = {
 		position = "bottom", --- bottom or top
 		icon = ">",
 		icon_hl = "Error",
-        insert_timeout = 100,
+		insert_timeout = 100,
+		title = true,
 	},
 	mappings = {
 		close = "<Esc>",

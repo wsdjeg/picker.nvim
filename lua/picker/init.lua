@@ -13,8 +13,10 @@ function M.open(argv, opt)
 		util.notify(string.format('can not found source "%s" for picker.nvim', argv[1]))
 	else
 		if not source.enabled then
+            source.name = source.name or argv[1]
 			require("picker.windows").open(source, opt)
         elseif source.enabled and source.enabled() then
+            source.name = source.name or argv[1]
 			require("picker.windows").open(source, opt)
 		end
 	end

@@ -31,7 +31,7 @@ require("plug").add({
 		config = function()
 			require("picker").setup({
 				window = {
-					width = 0.8,
+					width = 0.8, -- set picker screen width, default is 0.8 * vim.o.columns
 					height = 0.8,
 					col = 0.1,
 					row = 0.1,
@@ -44,10 +44,11 @@ require("plug").add({
 					matched = "Tag",
 				},
 				prompt = {
-					position = "bottom", --- bottom or top
+					position = "bottom", -- set prompt position, bottom or top
 					icon = ">",
 					icon_hl = "Error",
 					insert_timeout = 100,
+					title = true, -- display/hide source name
 				},
 				mappings = {
 					close = "<Esc>",

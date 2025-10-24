@@ -213,9 +213,6 @@ function M.open(s, opt)
 					row = start_row + 3,
 					focusable = false,
 					border = "rounded",
-					-- title = 'Result',
-					-- title_pos = 'center',
-					-- noautocmd = true,
 				})
 			end
 		else
@@ -229,9 +226,6 @@ function M.open(s, opt)
 					row = start_row + 3,
 					focusable = false,
 					border = "rounded",
-					-- title = 'Result',
-					-- title_pos = 'center',
-					-- noautocmd = true,
 				})
 			end
 		end
@@ -244,6 +238,8 @@ function M.open(s, opt)
 				row = start_row,
 				focusable = true,
 				border = "rounded",
+				title = config.prompt.title and string.format(" %s ", source.name),
+				title_pos = "center",
 				-- noautocmd = true,
 			})
 		end
@@ -383,9 +379,6 @@ function M.open(s, opt)
 					row = start_row,
 					focusable = false,
 					border = "rounded",
-					-- title = 'Result',
-					-- title_pos = 'center',
-					-- noautocmd = true,
 				})
 			else
 				vim.api.nvim_win_set_config(list_winid, {
@@ -397,9 +390,6 @@ function M.open(s, opt)
 					row = start_row + 3,
 					focusable = false,
 					border = "rounded",
-					-- title = 'Result',
-					-- title_pos = 'center',
-					-- noautocmd = true,
 				})
 			end
 		elseif config.window.enable_preview and source.preview_win then
@@ -437,9 +427,6 @@ function M.open(s, opt)
 					row = start_row + math.floor((screen_height - 5) / 2) + 2,
 					focusable = false,
 					border = "rounded",
-					-- title = 'Result',
-					-- title_pos = 'center',
-					-- noautocmd = true,
 				})
 			else
 				if not vim.api.nvim_buf_is_valid(preview_bufnr) then

@@ -6,6 +6,15 @@ local config = require("picker.config").get()
 local tid = -1
 
 function M.filter(input, source, callback)
+	if
+		source.state
+		and source.state.previous_input
+		and source.state.previous_input == input
+		and #input > 0
+		and source.state.filter_count == #source.state.items
+	then
+		return
+	end
 	vim.fn.timer_stop(tid)
 	local function async_task()
 		local count = config.filter.loop_count
@@ -79,7 +88,7 @@ function M.filter(input, source, callback)
 		table.sort(source.filter_items, function(a, b)
 			return a[3] > b[3]
 		end)
-		callback()
+		source.state.callback()
 	end
 
 	tid = vim.fn.timer_start(config.filter.loop_timeout, loop, { ["repeat"] = -1 })

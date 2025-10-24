@@ -19,6 +19,13 @@ local cmd = { "rg", "--files" }
 
 local jobid = -1
 
+local function callback()
+	if 	M.state
+		and M.state.previous_input
+        require('picker.filter').filter(M.state.previous_input, source)
+    end
+end
+
 local function on_stdout(id, data)
 	if id == jobid then
 		vim.tbl_map(function(t)
@@ -27,14 +34,14 @@ local function on_stdout(id, data)
 				str = t,
 			})
 		end, data)
-		vim.cmd("doautocmd TextChangedI")
+        callback()
 	end
 end
 local function on_stderr(id, data) end
 local function on_exit(id, data, singin)
 	if id == jobid then
 		jobid = -1
-		vim.cmd("doautocmd TextChangedI")
+        callback()
 	end
 end
 

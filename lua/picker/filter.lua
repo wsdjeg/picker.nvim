@@ -6,15 +6,6 @@ local config = require("picker.config").get()
 local tid = -1
 
 function M.filter(input, source)
-	if
-		source.state
-		and source.state.previous_input
-		and source.state.previous_input == input
-		and #input > 0
-		and source.state.filter_count == #source.state.items
-	then
-		return
-	end
 	vim.fn.timer_stop(tid)
 	local function async_task()
 		local count = config.filter.loop_count

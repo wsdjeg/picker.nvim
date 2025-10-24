@@ -5,7 +5,7 @@ local config = require("picker.config").get()
 
 local tid = -1
 
-function M.filter(input, source, callback)
+function M.filter(input, source)
 	if
 		source.state
 		and source.state.previous_input

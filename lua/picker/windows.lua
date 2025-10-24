@@ -1,13 +1,5 @@
 local M = {}
 
---- what the fuck?
---- 没办法禁用 cmp，只能 require 后 setup？？
-local ok, cmp = pcall(require, "cmp")
-if not ok then
-	vim.cmd("doautocmd InsertEnter")
-	ok, cmp = pcall(require, "cmp")
-end
-
 local filter = require("picker.filter")
 
 local source -- global source
@@ -116,7 +108,9 @@ function M.open(s, opt)
 		list_bufnr = vim.api.nvim_create_buf(false, false)
 	end
 	if not vim.api.nvim_buf_is_valid(promot_bufnr) then
+		-- 初始化 prompt buffer
 		promot_bufnr = vim.api.nvim_create_buf(false, false)
+		vim.api.nvim_set_option_value("filetype", "picker-prompt", { buf = promot_bufnr })
 	end
 	if config.prompt.position == "bottom" then
 		-- 启用预览，并且source需要预览窗口，则初始化预览窗口
@@ -489,13 +483,6 @@ function M.open(s, opt)
 		end
 		highlight_list_windows()
 	end, { buffer = promot_bufnr })
-	if ok then
-		cmp.setup.buffer({
-			completion = {
-				autocomplete = false,
-			},
-		})
-	end
 	if opt.input then
 		vim.api.nvim_buf_set_lines(promot_bufnr, 0, -1, false, { opt.input })
 	end

@@ -13,6 +13,7 @@ picker.nvim is a highly customizable and extensible Neovim fuzzy finder plugin
 - [Key bindings](#key-bindings)
 - [Available sources](#available-sources)
 - [Custom source](#custom-source)
+- [FAQ](#faq)
 - [Self-Promotion](#self-promotion)
 - [Feedback](#feedback)
 - [Credits](#credits)
@@ -147,6 +148,22 @@ that means you can create a custom source in `lua/picker/sources/` directory in 
 --- @field preview function
 --- @field set function
 --- @field actions? table
+```
+
+## FAQ
+
+how to disable nvim-cmp in picker.nvim buffer?
+
+
+```lua
+require("cmp").setup({
+	enabled = function()
+		if vim.bo.filetype == "picker-prompt" then
+			return false
+		end
+		return true
+	end,
+})
 ```
 
 ## Self-Promotion

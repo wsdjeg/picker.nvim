@@ -21,8 +21,9 @@ local jobid = -1
 
 local function callback()
 	if 	M.state
-		and M.state.previous_input then
-        require('picker.filter').filter(M.state.previous_input, source)
+		and M.state.previous_input
+        and M.state.callback then
+        require('picker.filter').filter(M.state.previous_input, M)
     end
 end
 

@@ -122,7 +122,8 @@ builtin sources:
 | registers             | registers context                                                          |
 | jumps                 | jump list                                                                  |
 | marks                 | marks list                                                                 |
-| lsp_document_symbols | document symbols result from lsp client                                    |
+| lsp_document_symbols  | document symbols result from lsp client                                    |
+| lsp_workspace_symbols | workspace symbols                                                          |
 
 third party sources:
 

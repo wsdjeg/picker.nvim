@@ -108,20 +108,21 @@ or use `<cword>` for word under cursor.
 
 builtin sources:
 
-| source      | description                                                                |
-| ----------- | -------------------------------------------------------------------------- |
-| files       | files in current dir                                                       |
-| async_files | async files source, require [job.nvim](https://github.com/wsdjeg/job.nvim) |
-| colorscheme | all colorschemes                                                           |
-| buftags     | ctags outline for current buffer                                           |
-| buffers     | listed buffers                                                             |
-| lines       | lines in current buffer                                                    |
-| help_tags   | neovim help tags source                                                    |
-| qflist      | quickfix source                                                            |
-| loclist     | location list source                                                       |
-| registers   | registers context                                                          |
-| jumps       | jump list                                                                  |
-| marks       | marks list                                                                 |
+| source                | description                                                                |
+| --------------------- | -------------------------------------------------------------------------- |
+| files                 | files in current dir                                                       |
+| async_files           | async files source, require [job.nvim](https://github.com/wsdjeg/job.nvim) |
+| colorscheme           | all colorschemes                                                           |
+| buftags               | ctags outline for current buffer                                           |
+| buffers               | listed buffers                                                             |
+| lines                 | lines in current buffer                                                    |
+| help_tags             | neovim help tags source                                                    |
+| qflist                | quickfix source                                                            |
+| loclist               | location list source                                                       |
+| registers             | registers context                                                          |
+| jumps                 | jump list                                                                  |
+| marks                 | marks list                                                                 |
+| lsp_document_symbols | document symbols result from lsp client                                    |
 
 third party sources:
 

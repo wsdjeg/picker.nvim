@@ -27,4 +27,24 @@ function M.info(msg)
 	log.info(msg)
 end
 
+local kinds = {}
+for k, v in pairs(vim.lsp.protocol.SymbolKind) do
+	if type(v) == "number" then
+		kinds[v] = k
+	end
+end
+function M.symbol_kind(kind)
+	return kinds[kind]
+end
+M.feature_map = {
+	document_symbols = "textDocument/documentSymbol",
+	references = "textDocument/references",
+	definitions = "textDocument/definition",
+	type_definitions = "textDocument/typeDefinition",
+	implementations = "textDocument/implementation",
+	workspace_symbols = "workspace/symbol",
+	incoming_calls = "callHierarchy/incomingCalls",
+	outgoing_calls = "callHierarchy/outgoingCalls",
+}
+
 return M

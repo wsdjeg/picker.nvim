@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.3.0](https://github.com/wsdjeg/picker.nvim/compare/v1.2.0...v1.3.0) (2025-10-25)
+
+
+### Features
+
+* add async_files source ([#8](https://github.com/wsdjeg/picker.nvim/issues/8)) ([9a45081](https://github.com/wsdjeg/picker.nvim/commit/9a450813ae54b6af8ee704da6925ca1abaad53a4))
+* add loclist ([a70bc6c](https://github.com/wsdjeg/picker.nvim/commit/a70bc6c5d1ecb8e3e4ac8e603c3b2a303518722f))
+* add lsp_document_symbols source ([76333ec](https://github.com/wsdjeg/picker.nvim/commit/76333ecd8fd7d9700904ffd844f7603e2bddca0a))
+* add lsp_workspace_symbols source ([5a49b17](https://github.com/wsdjeg/picker.nvim/commit/5a49b17ad172d4885d88a1d6ba19e8536a715e41))
+* add option for displaying source name ([4dbd190](https://github.com/wsdjeg/picker.nvim/commit/4dbd1908f54f8aa6ae3ce0ba5624869440fc92ad))
+* add prompt filetype to disable cmp ([7ca2e74](https://github.com/wsdjeg/picker.nvim/commit/7ca2e7471dab9372109f93c0ad347f5a8d32845c))
+* implement filter state ([95e0ece](https://github.com/wsdjeg/picker.nvim/commit/95e0ece274afb62d80460a814d6c0d096d2f57c4))
+* support insert_timeout feature ([58088ec](https://github.com/wsdjeg/picker.nvim/commit/58088eca2d52cb796d2544cdcb8a5f958142dbee))
+
+
+### Bug Fixes
+
+* fix bottom prompt source name ([fa3e660](https://github.com/wsdjeg/picker.nvim/commit/fa3e660e70e1fea93bf7d2d3b6ad76fb27af1796))
+* fix winhighlight opt ([ea8bb13](https://github.com/wsdjeg/picker.nvim/commit/ea8bb137ef81e80489cbd748b0fa316f15c27b73))
+* trigger TextChangedI only in same job ([a4d0370](https://github.com/wsdjeg/picker.nvim/commit/a4d037098ead433a49bd88eb1c87c076ef6babb9))
+
 ## [1.2.0](https://github.com/wsdjeg/picker.nvim/compare/v1.1.0...v1.2.0) (2025-10-19)
 
 

@@ -118,6 +118,7 @@ builtin sources:
 | lines       | lines in current buffer                                                    |
 | help_tags   | neovim help tags source                                                    |
 | qflist      | quickfix source                                                            |
+| loclist     | location list source                                                       |
 | registers   | registers context                                                          |
 | jumps       | jump list                                                                  |
 | marks       | marks list                                                                 |
@@ -154,7 +155,6 @@ that means you can create a custom source in `lua/picker/sources/` directory in 
 ## FAQ
 
 how to disable nvim-cmp in picker.nvim buffer?
-
 
 ```lua
 require("cmp").setup({

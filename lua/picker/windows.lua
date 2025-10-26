@@ -310,6 +310,20 @@ function M.open(s, opt)
 			vim.api.nvim_win_close(preview_winid, true)
 		end
 	end, { buffer = promot_bufnr })
+	vim.keymap.set("i", config.mappings.open_item, function()
+		vim.fn.timer_stop(insert_timer_id)
+		vim.cmd("noautocmd stopinsert")
+		local cursor = vim.api.nvim_win_get_cursor(list_winid)
+		vim.api.nvim_win_close(promot_winid, true)
+		vim.api.nvim_win_close(list_winid, true)
+		if vim.api.nvim_win_is_valid(preview_winid) then
+			vim.api.nvim_win_close(preview_winid, true)
+		end
+		-- if there is no item under cursor
+		if #source.filter_items >= 1 then
+			source.default_action(source.filter_items[cursor[1]][4])
+		end
+	end, { buffer = promot_bufnr })
 	if type(source.actions) == "function" then
 		for key, action in pairs(source.actions()) do
 			vim.keymap.set("i", key, function()
@@ -327,21 +341,6 @@ function M.open(s, opt)
 				end
 			end, { buffer = promot_bufnr })
 		end
-	else
-		vim.keymap.set("i", config.mappings.open_item, function()
-			vim.fn.timer_stop(insert_timer_id)
-			vim.cmd("noautocmd stopinsert")
-			local cursor = vim.api.nvim_win_get_cursor(list_winid)
-			vim.api.nvim_win_close(promot_winid, true)
-			vim.api.nvim_win_close(list_winid, true)
-			if vim.api.nvim_win_is_valid(preview_winid) then
-				vim.api.nvim_win_close(preview_winid, true)
-			end
-			-- if there is no item under cursor
-			if #source.filter_items >= 1 then
-				source.default_action(source.filter_items[cursor[1]][4])
-			end
-		end, { buffer = promot_bufnr })
 	end
 	vim.keymap.set("i", config.mappings.next_item, function()
 		local cursor = vim.api.nvim_win_get_cursor(list_winid)

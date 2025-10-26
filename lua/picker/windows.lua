@@ -321,7 +321,10 @@ function M.open(s, opt)
 				if vim.api.nvim_win_is_valid(preview_winid) then
 					vim.api.nvim_win_close(preview_winid, true)
 				end
-				action(source.filter_items[cursor[1]][4])
+				-- make sure filter_items is not empty
+				if #source.filter_items >= 1 then
+					action(source.filter_items[cursor[1]][4])
+				end
 			end, { buffer = promot_bufnr })
 		end
 	else
@@ -334,7 +337,10 @@ function M.open(s, opt)
 			if vim.api.nvim_win_is_valid(preview_winid) then
 				vim.api.nvim_win_close(preview_winid, true)
 			end
-			source.default_action(source.filter_items[cursor[1]][4])
+			-- if there is no item under cursor
+			if #source.filter_items >= 1 then
+				source.default_action(source.filter_items[cursor[1]][4])
+			end
 		end, { buffer = promot_bufnr })
 	end
 	vim.keymap.set("i", config.mappings.next_item, function()

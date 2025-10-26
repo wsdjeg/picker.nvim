@@ -50,9 +50,9 @@ function M.set(opt)
 		for _, symbol in ipairs(result) do
 			table.insert(items, {
 				value = symbol,
-				str = string.format("[%s] %s", util.symbol_kind(symbol.kind), symbol.name),
+				str = string.format("%s %s", util.symbol_kind(symbol.kind), symbol.name),
 				highlight = {
-					{ 0, #util.symbol_kind(symbol.kind) + 2, "Comment" },
+					{ 0, #util.symbol_kind(symbol.kind) + 1, "Comment" },
 				},
 			})
 		end

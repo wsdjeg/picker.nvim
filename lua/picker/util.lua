@@ -27,6 +27,47 @@ function M.info(msg)
 	log.info(msg)
 end
 
+local kind_icons = {
+	Array = " ",
+	Boolean = "󰨙 ",
+	Class = " ",
+	Color = " ",
+	Control = " ",
+	Collapsed = " ",
+	Constant = "󰏿 ",
+	Constructor = " ",
+	Copilot = " ",
+	Enum = " ",
+	EnumMember = " ",
+	Event = " ",
+	Field = " ",
+	File = " ",
+	Folder = " ",
+	Function = "󰊕 ",
+	Interface = " ",
+	Key = " ",
+	Keyword = " ",
+	Method = "󰊕 ",
+	Module = " ",
+	Namespace = "󰦮 ",
+	Null = " ",
+	Number = "󰎠 ",
+	Object = " ",
+	Operator = " ",
+	Package = " ",
+	Property = " ",
+	Reference = " ",
+	Snippet = "󱄽 ",
+	String = " ",
+	Struct = "󰆼 ",
+	Text = " ",
+	TypeParameter = " ",
+	Unit = " ",
+	Unknown = " ",
+	Value = " ",
+	Variable = "󰀫 ",
+}
+
 local kinds = {}
 for k, v in pairs(vim.lsp.protocol.SymbolKind) do
 	if type(v) == "number" then
@@ -34,7 +75,7 @@ for k, v in pairs(vim.lsp.protocol.SymbolKind) do
 	end
 end
 function M.symbol_kind(kind)
-	return kinds[kind]
+	return kind_icons[kinds[kind]] or kinds[kind]
 end
 M.feature_map = {
 	document_symbols = "textDocument/documentSymbol",

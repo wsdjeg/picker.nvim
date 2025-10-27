@@ -12,6 +12,7 @@ picker.nvim is a highly customizable and extensible Neovim fuzzy finder plugin
 - [Usage](#usage)
 - [Key bindings](#key-bindings)
 - [Available sources](#available-sources)
+    - [cmd_history](#cmd_history)
 - [Custom source](#custom-source)
 - [FAQ](#faq)
 - [Self-Promotion](#self-promotion)
@@ -124,6 +125,15 @@ builtin sources:
 | marks                 | marks list                                                                 |
 | lsp_document_symbols  | document symbols result from lsp client                                    |
 | lsp_workspace_symbols | workspace symbols                                                          |
+| lsp_references        | lsp references                                                             |
+| cmd_history           | results from `:history :`                                                  |
+
+### cmd_history
+
+| key binding | description                   |
+| ----------- | ----------------------------- |
+| `<Enter>`   | execute select command        |
+| `<C-d>`     | delete select command history |
 
 third party sources:
 

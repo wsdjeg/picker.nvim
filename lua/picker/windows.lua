@@ -47,7 +47,7 @@ local function highlight_list_windows()
 	local info = vim.fn.getwininfo(list_winid)[1]
 	local from = info.topline
 	local to = info.botline
-	if #source.filter_items > 0 then
+	if source.filter_items and #source.filter_items > 0 then
 		local ns = vim.api.nvim_create_namespace("picker-matched-chars")
 		for x = from, to do
 			for y = 1, #source.filter_items[x][2] do

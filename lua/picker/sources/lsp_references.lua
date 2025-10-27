@@ -66,7 +66,7 @@ function M.set(opt)
 			local filename = vim.uri_to_fname(ref.uri)
 			local file_bufnr = vim.uri_to_bufnr(ref.uri)
 			local context =
-				vim.api.nvim_buf_get_lines(file_bufnr, ref.range.start.line, ref.range.start.line + 1, false)[1]
+				vim.api.nvim_buf_get_lines(file_bufnr, ref.range.start.line, ref.range.start.line + 1, false)[1] or ''
 			table.insert(items, {
 				value = ref,
 				str = string.format("%s:%d:%s", vim.fn.fnamemodify(filename, ":."), ref.range.start.line, context),

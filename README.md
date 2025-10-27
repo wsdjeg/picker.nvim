@@ -12,6 +12,7 @@ picker.nvim is a highly customizable and extensible Neovim fuzzy finder plugin
 - [Usage](#usage)
 - [Key bindings](#key-bindings)
 - [Available sources](#available-sources)
+    - [files](#files)
     - [cmd_history](#cmd_history)
 - [Custom source](#custom-source)
 - [FAQ](#faq)
@@ -128,6 +129,14 @@ builtin sources:
 | lsp_references        | lsp references                                                             |
 | cmd_history           | results from `:history :`                                                  |
 
+### files
+
+| key binding | description                        |
+| ----------- | ---------------------------------- |
+| `<Enter>`   | open select file                   |
+| `<C-v>`     | open select file in vertical split |
+| `<C-t>`     | open select file in new tabpage    |
+
 ### cmd_history
 
 | key binding | description                   |
@@ -193,4 +202,5 @@ If you encounter any bugs or have suggestions, please file an issue in the [issu
 
 ## Credits
 
+- [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)

@@ -11,6 +11,17 @@ function M.get()
 	end, vim.split(vim.system({ "rg", "--files" }, { text = true }):wait().stdout, "\n", { trimempty = true }))
 end
 
+function M.actions()
+	return {
+		["<C-v>"] = function(entry)
+			vim.cmd("vsplit " .. entry.value)
+		end,
+		["<C-t>"] = function(entry)
+			vim.cmd("tabedit " .. entry.value)
+		end,
+	}
+end
+
 ---@field item PickerItem
 function M.default_action(item)
 	vim.cmd("edit " .. item.value)

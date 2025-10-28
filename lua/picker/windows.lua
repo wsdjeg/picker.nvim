@@ -276,7 +276,7 @@ function M.open(s, opt)
 			insert_timer_id = vim.fn.timer_start(config.prompt.insert_timeout, function()
 				local input = vim.api.nvim_buf_get_lines(promot_bufnr, 0, 1, false)[1]
 				vim.api.nvim_win_set_cursor(list_winid, { 1, 1 })
-				filter.filter(input, source)
+				filter.filter(input, source, config.filter.ignorecase)
 
 				vim.api.nvim_buf_set_lines(
 					list_bufnr,

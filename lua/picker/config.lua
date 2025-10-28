@@ -1,6 +1,9 @@
 local M = {}
 
 local default = {
+	filter = {
+		ignorecase = false,
+	},
 	window = {
 		width = 0.8,
 		height = 0.8,

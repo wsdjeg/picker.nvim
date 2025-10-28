@@ -14,6 +14,28 @@ local configs = {
 		end,
 	},
 	{
+		name = "ignrecase",
+		desc = "change filter ignrecase to true",
+		func = function()
+			require("picker").setup({
+				filter = {
+					ignorecase = true, --- bottom or top
+				},
+			})
+		end,
+	},
+	{
+		name = "noignrecase",
+		desc = "change filter ignrecase to false",
+		func = function()
+			require("picker").setup({
+				filter = {
+					ignorecase = false, --- bottom or top
+				},
+			})
+		end,
+	},
+	{
 		name = "prompt-bottom",
 		desc = "change the prompt position to bottom",
 		func = function()

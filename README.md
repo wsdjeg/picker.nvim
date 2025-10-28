@@ -220,5 +220,3 @@ If you encounter any bugs or have suggestions, please file an issue in the [issu
 ## Credits
 
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
-- [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
-- [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)

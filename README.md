@@ -1,6 +1,6 @@
 # picker.nvim
 
-picker.nvim is a highly customizable and extensible Neovim fuzzy finder plugin
+picker.nvim is a highly customizable and extensible Neovim fuzzy finder plugin written in lua.
 
 [![GPLv3 License](https://img.spacevim.org/license-GPLv3-blue.svg)](LICENSE)
 
@@ -8,12 +8,15 @@ picker.nvim is a highly customizable and extensible Neovim fuzzy finder plugin
 
 <!-- vim-markdown-toc GFM -->
 
+- [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Key bindings](#key-bindings)
-- [Available sources](#available-sources)
+- [Builtin sources](#builtin-sources)
     - [files](#files)
     - [cmd_history](#cmd_history)
+    - [picker_config](#picker_config)
+- [Third party sources](#third-party-sources)
 - [Custom source](#custom-source)
 - [FAQ](#faq)
 - [Self-Promotion](#self-promotion)
@@ -21,6 +24,12 @@ picker.nvim is a highly customizable and extensible Neovim fuzzy finder plugin
 - [Credits](#credits)
 
 <!-- vim-markdown-toc -->
+
+## Features
+
+- 15+ builtin sources.
+- simple, fast fuzzy match engine powered by fzy.
+- simple API for creating custom source
 
 ## Installation
 
@@ -32,6 +41,9 @@ require("plug").add({
 		"wsdjeg/picker.nvim",
 		config = function()
 			require("picker").setup({
+				filter = {
+					ignorecase = false, -- ignorecase (boolean): defaults to false
+				},
 				window = {
 					width = 0.8, -- set picker screen width, default is 0.8 * vim.o.columns
 					height = 0.8,
@@ -106,9 +118,7 @@ or use `<cword>` for word under cursor.
 | `Enter`     | default action |
 | `Esc`       | close picker   |
 
-## Available sources
-
-builtin sources:
+## Builtin sources
 
 | source                | description                                                                |
 | --------------------- | -------------------------------------------------------------------------- |
@@ -128,6 +138,7 @@ builtin sources:
 | lsp_workspace_symbols | workspace symbols                                                          |
 | lsp_references        | lsp references                                                             |
 | cmd_history           | results from `:history :`                                                  |
+| picker_config         | picker config source                                                       |
 
 ### files
 
@@ -144,7 +155,13 @@ builtin sources:
 | `<Enter>`   | execute select command        |
 | `<C-d>`     | delete select command history |
 
-third party sources:
+### picker_config
+
+| key binding | description                |
+| ----------- | -------------------------- |
+| `<Enter>`   | set selected picker config |
+
+## Third party sources
 
 | source            | description                                                                                     |
 | ----------------- | ----------------------------------------------------------------------------------------------- |
@@ -202,5 +219,6 @@ If you encounter any bugs or have suggestions, please file an issue in the [issu
 
 ## Credits
 
+- [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)

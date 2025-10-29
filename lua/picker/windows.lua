@@ -320,7 +320,7 @@ function M.open(s, opt)
 			vim.api.nvim_win_close(preview_winid, true)
 		end
 		-- if there is no item under cursor
-		if #source.filter_items >= 1 then
+		if source.filter_items and #source.filter_items >= 1 then
 			source.default_action(source.filter_items[cursor[1]][4])
 		end
 	end, { buffer = promot_bufnr })
@@ -336,7 +336,7 @@ function M.open(s, opt)
 					vim.api.nvim_win_close(preview_winid, true)
 				end
 				-- make sure filter_items is not empty
-				if #source.filter_items >= 1 then
+				if source.filter_items and #source.filter_items >= 1 then
 					action(source.filter_items[cursor[1]][4])
 				end
 			end, { buffer = promot_bufnr })

@@ -14,7 +14,8 @@ picker.nvim is a highly customizable and extensible Neovim fuzzy finder plugin w
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Key bindings](#key-bindings)
+    - [Picker Command](#picker-command)
+    - [Key bindings](#key-bindings)
 - [Builtin sources](#builtin-sources)
     - [files](#files)
     - [cmd_history](#cmd_history)
@@ -97,6 +98,8 @@ require("plug").add({
 
 ## Usage
 
+### Picker Command
+
 1. fuzzy finder picker source.
 
 run `:Picker` command without source name.
@@ -127,7 +130,9 @@ or use `<cword>` for word under cursor.
 :Picker help_tags --input=<cword>
 ```
 
-## Key bindings
+### Key bindings
+
+In picker prompt window, the these mappings are defined by default.
 
 | key binding | description    |
 | ----------- | -------------- |

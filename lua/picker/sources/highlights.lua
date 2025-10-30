@@ -20,7 +20,9 @@ function M.get()
 	return items
 end
 
-function M.default_action(entry) end
+function M.default_action(entry)
+	vim.fn.setreg('"', entry.str)
+end
 
 M.preview_win = true
 
@@ -30,7 +32,7 @@ local function format(hl)
 			hl[v] = string.format("#%06X", hl[v])
 		end
 	end
-    return hl
+	return hl
 end
 
 ---@field item PickerItem

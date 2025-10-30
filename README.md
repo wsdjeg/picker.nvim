@@ -16,6 +16,7 @@ picker.nvim is a highly customizable and extensible Neovim fuzzy finder plugin w
     - [files](#files)
     - [cmd_history](#cmd_history)
     - [picker_config](#picker_config)
+    - [highlights](#highlights)
 - [Third party sources](#third-party-sources)
 - [Custom source](#custom-source)
 - [FAQ](#faq)
@@ -139,6 +140,7 @@ or use `<cword>` for word under cursor.
 | lsp_references        | lsp references                                                             |
 | cmd_history           | results from `:history :`                                                  |
 | picker_config         | picker config source                                                       |
+| highlights            | highlight group source                                                     |
 
 ### files
 
@@ -160,6 +162,12 @@ or use `<cword>` for word under cursor.
 | key binding | description                |
 | ----------- | -------------------------- |
 | `<Enter>`   | set selected picker config |
+
+### highlights
+
+| key binding | description                        |
+| ----------- | ---------------------------------- |
+| `<Enter>`   | yank selected highlight group name |
 
 ## Third party sources
 
@@ -192,7 +200,7 @@ that means you can create a custom source in `lua/picker/sources/` directory in 
 
 ## FAQ
 
-how to disable nvim-cmp in picker.nvim buffer?
+1. how to disable nvim-cmp in picker.nvim buffer?
 
 ```lua
 require("cmp").setup({
@@ -203,6 +211,45 @@ require("cmp").setup({
 		return true
 	end,
 })
+```
+
+2. how to use picker.nvim as `vim.ui.select`?
+
+```lua
+vim.ui.select = function(items, opt, callback)
+	local source = {}
+	if opt.prompt then
+		source.name = opt.prompt
+	else
+		source.name = "Select one of:"
+	end
+
+	source.get = function()
+		local entrys = {}
+		for idx, item in ipairs(items) do
+			local entry = {
+				value = item,
+				idx = idx, -- this also can be nil
+			}
+
+			if opt.format_item then
+				entry.str = opt.format_item(item)
+			else
+				entry.str = item
+			end
+		end
+		return entrys
+	end
+
+	source.default_action = function(entry)
+		callback(entry.value, entry.idx)
+	end
+
+	require("picker.windows").open(source, {
+		buf = vim.api.nvim_get_current_buf(),
+		input = input,
+	})
+end
 ```
 
 ## Self-Promotion

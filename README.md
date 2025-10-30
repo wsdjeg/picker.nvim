@@ -20,6 +20,20 @@ picker.nvim is a highly customizable and extensible Neovim fuzzy finder plugin w
     - [cmd_history](#cmd_history)
     - [picker_config](#picker_config)
     - [highlights](#highlights)
+    - [async_files](#async_files)
+    - [colorscheme](#colorscheme)
+    - [buftags](#buftags)
+    - [buffers](#buffers)
+    - [lines](#lines)
+    - [help_tags](#help_tags)
+    - [qflist](#qflist)
+    - [loclist](#loclist)
+    - [registers](#registers)
+    - [jumps](#jumps)
+    - [marks](#marks)
+    - [lsp_document_symbols](#lsp_document_symbols)
+    - [lsp_workspace_symbols](#lsp_workspace_symbols)
+    - [lsp_references](#lsp_references)
 - [Third party sources](#third-party-sources)
 - [Custom source](#custom-source)
 - [FAQ](#faq)
@@ -124,26 +138,25 @@ or use `<cword>` for word under cursor.
 
 ## Builtin sources
 
-| source                | description                                                                |
-| --------------------- | -------------------------------------------------------------------------- |
-| files                 | files in current dir                                                       |
-| async_files           | async files source, require [job.nvim](https://github.com/wsdjeg/job.nvim) |
-| colorscheme           | all colorschemes                                                           |
-| buftags               | ctags outline for current buffer                                           |
-| buffers               | listed buffers                                                             |
-| lines                 | lines in current buffer                                                    |
-| help_tags             | neovim help tags source                                                    |
-| qflist                | quickfix source                                                            |
-| loclist               | location list source                                                       |
-| registers             | registers context                                                          |
-| jumps                 | jump list                                                                  |
-| marks                 | marks list                                                                 |
-| lsp_document_symbols  | document symbols result from lsp client                                    |
-| lsp_workspace_symbols | workspace symbols                                                          |
-| lsp_references        | lsp references                                                             |
-| cmd_history           | results from `:history :`                                                  |
-| picker_config         | picker config source                                                       |
-| highlights            | highlight group source                                                     |
+| source                | description                             |
+| --------------------- | --------------------------------------- |
+| buffers               | listed buffers                          |
+| buftags               | ctags outline for current buffer        |
+| cmd_history           | results from `:history :`               |
+| colorscheme           | all colorschemes                        |
+| files                 | files in current dir                    |
+| help_tags             | neovim help tags source                 |
+| highlights            | highlight group source                  |
+| jumps                 | jump list                               |
+| lines                 | lines in current buffer                 |
+| loclist               | location list source                    |
+| lsp_document_symbols  | document symbols result from lsp client |
+| lsp_references        | lsp references                          |
+| lsp_workspace_symbols | workspace symbols                       |
+| marks                 | marks list                              |
+| picker_config         | picker config source                    |
+| qflist                | quickfix source                         |
+| registers             | registers context                       |
 
 ### files
 
@@ -172,6 +185,86 @@ or use `<cword>` for word under cursor.
 | ----------- | ---------------------------------- |
 | `<Enter>`   | yank selected highlight group name |
 
+### async_files
+
+### colorscheme
+
+| key binding | description                    |
+| ----------- | ------------------------------ |
+| `<Enter>`   | change to selected colorscheme |
+
+### buftags
+
+| key binding | description        |
+| ----------- | ------------------ |
+| `<Enter>`   | jump to select tag |
+
+### buffers
+
+| key binding | description             |
+| ----------- | ----------------------- |
+| `<Enter>`   | switch to select buffer |
+
+### lines
+
+| key binding | description           |
+| ----------- | --------------------- |
+| `<Enter>`   | jump to selected line |
+
+### help_tags
+
+| key binding | description            |
+| ----------- | ---------------------- |
+| `<Enter>`   | jump selected help tag |
+
+### qflist
+
+| key binding | description                      |
+| ----------- | -------------------------------- |
+| `<Enter>`   | jump selected quickfix list item |
+
+### loclist
+
+| key binding | description                |
+| ----------- | -------------------------- |
+| `<Enter>`   | jump selected loclist item |
+
+### registers
+
+| key binding | description            |
+| ----------- | ---------------------- |
+| `<Enter>`   | paste selected context |
+
+### jumps
+
+| key binding | description            |
+| ----------- | ---------------------- |
+| `<Enter>`   | jump selected position |
+
+### marks
+
+| key binding | description            |
+| ----------- | ---------------------- |
+| `<Enter>`   | jump selected position |
+
+### lsp_document_symbols
+
+| key binding | description          |
+| ----------- | -------------------- |
+| `<Enter>`   | jump selected symbol |
+
+### lsp_workspace_symbols
+
+| key binding | description          |
+| ----------- | -------------------- |
+| `<Enter>`   | jump selected symbol |
+
+### lsp_references
+
+| key binding | description             |
+| ----------- | ----------------------- |
+| `<Enter>`   | jump selected reference |
+
 ## Third party sources
 
 | source            | description                                                                                     |
@@ -184,6 +277,7 @@ or use `<cword>` for word under cursor.
 | git-branch        | git branch source from [git.nvim](https://github.com/wsdjeg/git.nvim)                           |
 | music-player      | music-player source form [music-player.nvim](https://github.com/wsdjeg/music-player.nvim)       |
 | plug              | plugins source for [nvim-plug](https://github.com/wsdjeg/nvim-plug)                             |
+| async_files       | async files source, require [job.nvim](https://github.com/wsdjeg/job.nvim)                      |
 
 ## Custom source
 

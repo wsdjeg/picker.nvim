@@ -298,7 +298,21 @@ function M.open(s, opt)
 		end,
 	})
 	-- disable this key binding in promot buffer
-	for _, k in ipairs({ "<C-c>" }) do
+	for _, k in ipairs({
+		"<C-c>",
+		"<F1>",
+		"<F2>",
+		"<F3>",
+		"<F4>",
+		"<F5>",
+		"<F6>",
+		"<F7>",
+		"<F8>",
+		"<F9>",
+		"<F10>",
+		"<F11>",
+		"<F12>",
+	}) do
 		vim.keymap.set("i", k, "<Nop>", { buffer = promot_bufnr })
 	end
 	vim.keymap.set("i", config.mappings.close, function()

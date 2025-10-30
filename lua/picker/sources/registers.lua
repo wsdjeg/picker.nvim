@@ -41,10 +41,15 @@ function M.get()
 	for _, reg in ipairs(registers) do
 		local context = vim.fn.getreg(reg)
 		if context ~= "" then
+			-- if the context is `\n\+`
+			local lines = vim.split(context, "\n")
+
+			local text = #lines > 1 and lines[1] .. "\\n" or lines[1]
+
 			table.insert(entrys, {
 
 				value = { name = reg, context = context },
-				str = string.format("[%s] %s", reg, vim.split(context, "\n", { trimempty = true })[1]),
+				str = string.format("[%s] %s", reg, text),
 				highlight = {
 					{
 						0,
@@ -65,7 +70,8 @@ end
 M.preview_win = true
 
 function M.preview(item, win, buf)
-	previewer.buflines = vim.split(item.value.context, "[\r]?\n", { trimempty = true })
+	previewer.buflines = vim.split(item.value.context, "[\r]?\n")
+	vim.api.nvim_set_option_value("number", true, { win = win })
 	vim.api.nvim_buf_set_lines(buf, 0, -1, false, previewer.buflines)
 	previewer.filetype = nil
 	previewer.preview(1, win, buf)

@@ -2,7 +2,10 @@
 
 picker.nvim is a highly customizable and extensible Neovim fuzzy finder plugin written in lua.
 
-[![GPLv3 License](https://img.spacevim.org/license-GPLv3-blue.svg)](LICENSE)
+[![GitHub License](https://img.shields.io/github/license/wsdjeg/picker.nvim)](LICENSE)
+[![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/wsdjeg/picker.nvim)](https://github.com/wsdjeg/picker.nvim/issues)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/wsdjeg/picker.nvim)](https://github.com/wsdjeg/picker.nvim/commits/master/)
+[![GitHub Release](https://img.shields.io/github/v/release/wsdjeg/picker.nvim)](https://github.com/wsdjeg/picker.nvim/releases)
 
 ![picker-neovim](https://wsdjeg.net/images/picker-neovim.png)
 

@@ -165,6 +165,12 @@ In picker prompt window, the these mappings are defined by default.
 
 ### files
 
+The default commands for listing files is `{'rg', '--files'}`. this can be changed via:
+
+```lua
+require("picker.sources.files").set({ cmd = { "rg", "--files" } })
+```
+
 | key binding | description                        |
 | ----------- | ---------------------------------- |
 | `<Enter>`   | open select file                   |

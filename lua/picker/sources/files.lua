@@ -2,13 +2,23 @@ local M = {}
 
 local previewer = require("picker.previewer.file")
 
+local list_files_cmd = { "rg", "--files" }
+
+function M.set(opt)
+	opt = opt or {}
+
+	if opt.cmd then
+		list_files_cmd = opt.cmd
+	end
+end
+
 function M.get()
 	return vim.tbl_map(function(t)
 		return {
 			value = t,
 			str = t,
 		}
-	end, vim.split(vim.system({ "rg", "--files" }, { text = true }):wait().stdout, "\n", { trimempty = true }))
+	end, vim.split(vim.system(list_files_cmd, { text = true }):wait().stdout, "\n", { trimempty = true }))
 end
 
 function M.actions()

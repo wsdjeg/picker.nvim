@@ -13,9 +13,11 @@ local default = {
 		current_icon_hl = "CursorLine",
 		enable_preview = false,
 		preview_timeout = 500,
+		show_score = false,
 	},
 	highlight = {
 		matched = "Tag",
+        score = 'Comment'
 	},
 	prompt = {
 		position = "bottom", --- bottom or top

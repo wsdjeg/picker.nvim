@@ -43,27 +43,48 @@ local function update_result_count()
 	})
 end
 
+local extmars = {}
+local ns = vim.api.nvim_create_namespace("picker-matched-chars")
+
+local function clear_highlight()
+	if #extmars > 0 then
+		for _, id in ipairs(extmars) do
+			vim.api.nvim_buf_del_extmark(list_bufnr, ns, id)
+		end
+		extmars = {}
+	end
+end
+
 local function highlight_list_windows()
+	clear_highlight()
 	local info = vim.fn.getwininfo(list_winid)[1]
 	local from = info.topline
 	local to = info.botline
 	if source.filter_items and #source.filter_items > 0 then
-		local ns = vim.api.nvim_create_namespace("picker-matched-chars")
 		for x = from, to do
 			for y = 1, #source.filter_items[x][2] do
 				local col = source.filter_items[x][2][y]
-				vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, col - 1, {
+				local id = vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, col - 1, {
 					end_col = col,
 					hl_group = config.highlight.matched,
 				})
+				table.insert(extmars, id)
+			end
+			if config.window.show_score then
+				local id = vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, 0, {
+					virt_text = { { tostring(source.filter_items[x][3]), config.highlight.score } },
+					virt_text_pos = "eol_right_align",
+				})
+				table.insert(extmars, id)
 			end
 			if source.filter_items[x][4].highlight then
 				for y = 1, #source.filter_items[x][4].highlight do
 					local col_a, col_b, hl = unpack(source.filter_items[x][4].highlight[y])
-					vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, col_a, {
+					local id = vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, col_a, {
 						end_col = col_b,
 						hl_group = hl,
 					})
+					table.insert(extmars, id)
 				end
 			end
 		end
@@ -292,6 +313,8 @@ function M.open(s, opt)
 					if config.window.enable_preview and source.preview then
 						source.preview(source.filter_items[1][4], preview_winid, preview_bufnr)
 					end
+				else
+					clear_highlight()
 				end
 				update_result_count()
 			end)

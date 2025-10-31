@@ -72,9 +72,11 @@ require("plug").add({
 					current_icon_hl = "CursorLine",
 					enable_preview = false,
 					preview_timeout = 500,
+					show_score = true,
 				},
 				highlight = {
 					matched = "Tag",
+					score = "Comment",
 				},
 				prompt = {
 					position = "bottom", -- set prompt position, bottom or top

@@ -181,6 +181,8 @@ require("picker.sources.files").set({ cmd = { "rg", "--files" } })
 
 ### cmd_history
 
+filter results from `:history cmd`.
+
 | key binding | description                   |
 | ----------- | ----------------------------- |
 | `<Enter>`   | execute select command        |
@@ -188,11 +190,24 @@ require("picker.sources.files").set({ cmd = { "rg", "--files" } })
 
 ### picker_config
 
+filter and setup picker.nvim without changing configuration file.
+
+| items         | description                          |
+| ------------- | ------------------------------------ |
+| prompt-top    | change the prompt position to top    |
+| prompt-bottom | change the prompt position to bottom |
+| show-score    | display matched score                |
+| hide-score    | hide matched score                   |
+| ignrecase     | change filter ignrecase to true      |
+| noignrecase   | change filter ignrecase to false     |
+
 | key binding | description                |
 | ----------- | -------------------------- |
 | `<Enter>`   | set selected picker config |
 
 ### highlights
+
+filter results from `:highlight`
 
 | key binding | description                        |
 | ----------- | ---------------------------------- |
@@ -200,7 +215,15 @@ require("picker.sources.files").set({ cmd = { "rg", "--files" } })
 
 ### async_files
 
+same as `files` source, but require job.nvim.
+
+| key binding | description                        |
+| ----------- | ---------------------------------- |
+| `<Enter>`   | open select file                   |
+
 ### colorscheme
+
+filter colorschemes.
 
 | key binding | description                    |
 | ----------- | ------------------------------ |
@@ -208,11 +231,15 @@ require("picker.sources.files").set({ cmd = { "rg", "--files" } })
 
 ### buftags
 
+filter ctags outline, require ctags command.
+
 | key binding | description        |
 | ----------- | ------------------ |
 | `<Enter>`   | jump to select tag |
 
 ### buffers
+
+file results from `nvim_list_bufs()`
 
 | key binding | description             |
 | ----------- | ----------------------- |

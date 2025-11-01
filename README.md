@@ -309,7 +309,9 @@ file results from `nvim_list_bufs()`
 
 ### emoji
 
-filter emoji entries from [muan/unicode-emoji-json](https://github.com/muan/unicode-emoji-json)
+filter emoji entries from [muan/unicode-emoji-json](https://github.com/muan/unicode-emoji-json).
+
+This source will try to use job.nvim to download emoji json data, if job.nvim is not installed, `vim.fn.system()` will be used.
 
 | key binding | description           |
 | ----------- | --------------------- |

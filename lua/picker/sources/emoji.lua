@@ -9,16 +9,7 @@ local url =
     'https://raw.githubusercontent.com/muan/unicode-emoji-json/refs/heads/main/data-by-emoji.json'
 local file = vim.fn.stdpath('cache') .. '/picker.nvim/data-by-emoji.json'
 
-function M.set()
-    if vim.fn.filereadable(file) == 0 then
-        vim.fn.mkdir(vim.fn.fnamemodify(file, ':h'), 'p')
-        vim.system({ 'curl', '-fLo', file, '--create-dirs', url }, {}, function(obj)
-            require('picker.windows').handle_prompt_changed()
-        end)
-    end
-end
-
-function M.get()
+local function load()
     if #emojis == 0 and vim.fn.filereadable(file) == 1 then
         local data = vim.json.decode(table.concat(vim.fn.readfile(file, ''), '\n'))
         for icon, info in pairs(data) do
@@ -29,6 +20,29 @@ function M.get()
             })
         end
     end
+end
+
+function M.set()
+    if vim.fn.filereadable(file) == 0 then
+        vim.fn.mkdir(vim.fn.fnamemodify(file, ':h'), 'p')
+        local ok, job = pcall(require, 'job')
+        if ok then
+            job.start({ 'curl', '-fLo', file, '--create-dirs', url }, {
+                on_exit = function(id, data, single)
+                    if data == 0 and single == 0 then
+                        load()
+                        require('picker.windows').handle_prompt_changed()
+                    end
+                end,
+            })
+        else
+            vim.fn.system({ 'curl', '-fLo', file, '--create-dirs', url })
+        end
+    end
+end
+
+function M.get()
+    load()
     return emojis
 end
 

@@ -72,7 +72,7 @@ require("plug").add({
 					current_icon_hl = "CursorLine",
 					enable_preview = false,
 					preview_timeout = 500,
-					show_score = true,
+					show_score = false,  -- display/hide match score at the end of each item.
 				},
 				highlight = {
 					matched = "Tag",

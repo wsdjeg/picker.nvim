@@ -1,6 +1,6 @@
 local M = {}
 
-local filter = require("picker.filter")
+local filter = require('picker.filter')
 
 local source -- global source
 
@@ -16,7 +16,7 @@ local preview_bufnr = -1
 
 local preview_winid = -1
 
-local extns = vim.api.nvim_create_namespace("picker.nvim")
+local extns = vim.api.nvim_create_namespace('picker.nvim')
 
 local config
 
@@ -26,69 +26,69 @@ local insert_timer_id = -1
 
 local current_icon_extmark
 
-local winhighlight = "NormalFloat:Normal,FloatBorder:WinSeparator,Search:None,CurSearch:None"
+local winhighlight = 'NormalFloat:Normal,FloatBorder:WinSeparator,Search:None,CurSearch:None'
 
 local function update_result_count()
-	local count = vim.api.nvim_buf_line_count(list_bufnr)
-	local line = vim.api.nvim_win_get_cursor(list_winid)[1]
-	prompt_count_id = vim.api.nvim_buf_set_extmark(promot_bufnr, extns, 0, 0, {
-		id = prompt_count_id,
-		virt_text = { { string.format("%d/%d", line, count), "Comment" } },
-		virt_text_pos = "right_align",
-	})
-	current_icon_extmark = vim.api.nvim_buf_set_extmark(list_bufnr, extns, line - 1, 0, {
-		id = current_icon_extmark,
-		sign_text = config.window.current_icon,
-		sign_hl_group = config.window.current_icon_hl,
-	})
+    local count = vim.api.nvim_buf_line_count(list_bufnr)
+    local line = vim.api.nvim_win_get_cursor(list_winid)[1]
+    prompt_count_id = vim.api.nvim_buf_set_extmark(promot_bufnr, extns, 0, 0, {
+        id = prompt_count_id,
+        virt_text = { { string.format('%d/%d', line, count), 'Comment' } },
+        virt_text_pos = 'right_align',
+    })
+    current_icon_extmark = vim.api.nvim_buf_set_extmark(list_bufnr, extns, line - 1, 0, {
+        id = current_icon_extmark,
+        sign_text = config.window.current_icon,
+        sign_hl_group = config.window.current_icon_hl,
+    })
 end
 
 local extmars = {}
-local ns = vim.api.nvim_create_namespace("picker-matched-chars")
+local ns = vim.api.nvim_create_namespace('picker-matched-chars')
 
 local function clear_highlight()
-	if #extmars > 0 then
-		for _, id in ipairs(extmars) do
-			vim.api.nvim_buf_del_extmark(list_bufnr, ns, id)
-		end
-		extmars = {}
-	end
+    if #extmars > 0 then
+        for _, id in ipairs(extmars) do
+            vim.api.nvim_buf_del_extmark(list_bufnr, ns, id)
+        end
+        extmars = {}
+    end
 end
 
 local function highlight_list_windows()
-	clear_highlight()
-	local info = vim.fn.getwininfo(list_winid)[1]
-	local from = info.topline
-	local to = info.botline
-	if source.filter_items and #source.filter_items > 0 then
-		for x = from, to do
-			for y = 1, #source.filter_items[x][2] do
-				local col = source.filter_items[x][2][y]
-				local id = vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, col - 1, {
-					end_col = col,
-					hl_group = config.highlight.matched,
-				})
-				table.insert(extmars, id)
-			end
-			if config.window.show_score then
-				local id = vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, 0, {
-					virt_text = { { tostring(source.filter_items[x][3]), config.highlight.score } },
-					virt_text_pos = "eol_right_align",
-				})
-				table.insert(extmars, id)
-			end
-			if source.filter_items[x][4].highlight then
-				for y = 1, #source.filter_items[x][4].highlight do
-					local col_a, col_b, hl = unpack(source.filter_items[x][4].highlight[y])
-					local id = vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, col_a, {
-						end_col = col_b,
-						hl_group = hl,
-					})
-					table.insert(extmars, id)
-				end
-			end
-		end
-	end
+    clear_highlight()
+    local info = vim.fn.getwininfo(list_winid)[1]
+    local from = info.topline
+    local to = info.botline
+    if source.filter_items and #source.filter_items > 0 then
+        for x = from, to do
+            for y = 1, #source.filter_items[x][2] do
+                local col = source.filter_items[x][2][y]
+                local id = vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, col - 1, {
+                    end_col = col,
+                    hl_group = config.highlight.matched,
+                })
+                table.insert(extmars, id)
+            end
+            if config.window.show_score then
+                local id = vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, 0, {
+                    virt_text = { { tostring(source.filter_items[x][3]), config.highlight.score } },
+                    virt_text_pos = 'eol_right_align',
+                })
+                table.insert(extmars, id)
+            end
+            if source.filter_items[x][4].highlight then
+                for y = 1, #source.filter_items[x][4].highlight do
+                    local col_a, col_b, hl = unpack(source.filter_items[x][4].highlight[y])
+                    local id = vim.api.nvim_buf_set_extmark(list_bufnr, ns, x - 1, col_a, {
+                        end_col = col_b,
+                        hl_group = hl,
+                    })
+                    table.insert(extmars, id)
+                end
+            end
+        end
+    end
 end
 
 --- @class PickerItem
@@ -109,416 +109,426 @@ end
 --- @param s PickerSource
 --- @param opt?
 function M.open(s, opt)
-	source = s
-	opt = opt or {}
-	config = require("picker.config").get()
-	if source.set then
-		source.set(opt)
-	end
-	source.state = {}
-	source.state.items = source.get()
-	-- 窗口位置
-	-- 宽度： columns 的 80%
-	local screen_width = math.floor(vim.o.columns * config.window.width)
-	-- 起始位位置： lines * 10%, columns * 10%
-	local start_col = math.floor(vim.o.columns * config.window.col)
-	local start_row = math.floor(vim.o.lines * config.window.row)
-	-- 整体高度：lines 的 80%
-	local screen_height = math.floor(vim.o.lines * config.window.height)
-	if not vim.api.nvim_buf_is_valid(list_bufnr) then
-		list_bufnr = vim.api.nvim_create_buf(false, false)
-	end
-	if not vim.api.nvim_buf_is_valid(promot_bufnr) then
-		-- 初始化 prompt buffer
-		promot_bufnr = vim.api.nvim_create_buf(false, false)
-		vim.api.nvim_set_option_value("filetype", "picker-prompt", { buf = promot_bufnr })
-	end
-	if config.prompt.position == "bottom" then
-		-- 启用预览，并且source需要预览窗口，则初始化预览窗口
-		if config.window.enable_preview and source.preview_win then
-			if not vim.api.nvim_buf_is_valid(preview_bufnr) then
-				preview_bufnr = vim.api.nvim_create_buf(false, true)
-				vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = preview_bufnr })
-			end
-			-- 初始化时，清空 preview 窗口内容
-			vim.api.nvim_buf_set_lines(preview_bufnr, 0, -1, false, {})
-			if not vim.api.nvim_win_is_valid(preview_winid) then
-				preview_winid = vim.api.nvim_open_win(preview_bufnr, false, {
-					relative = "editor",
-					width = screen_width,
-					height = math.floor((screen_height - 5) / 2),
-					col = start_col,
-					row = start_row,
-					focusable = false,
-					border = "rounded",
-				})
-				vim.api.nvim_set_option_value("winhighlight", winhighlight, { win = preview_winid })
-				vim.api.nvim_set_option_value("number", false, { win = preview_winid })
-				vim.api.nvim_set_option_value("relativenumber", false, { win = preview_winid })
-				vim.api.nvim_set_option_value("cursorline", false, { win = preview_winid })
-				vim.api.nvim_set_option_value("signcolumn", "yes", { win = preview_winid })
-			end
-			if not vim.api.nvim_win_is_valid(list_winid) then
-				list_winid = vim.api.nvim_open_win(list_bufnr, false, {
-					relative = "editor",
-					width = screen_width,
-					height = screen_height - 5 - math.floor((screen_height - 5) / 2) - 2,
-					col = start_col,
-					row = start_row + math.floor((screen_height - 5) / 2) + 2,
-					focusable = false,
-					border = "rounded",
-					-- title = 'Result',
-					-- title_pos = 'center',
-					-- noautocmd = true,
-				})
-			end
-		else
-			if not vim.api.nvim_win_is_valid(list_winid) then
-				list_winid = vim.api.nvim_open_win(list_bufnr, false, {
+    source = s
+    opt = opt or {}
+    config = require('picker.config').get()
+    if source.set then
+        source.set(opt)
+    end
+    source.state = {}
+    source.state.items = source.get()
+    -- 窗口位置
+    -- 宽度： columns 的 80%
+    local screen_width = math.floor(vim.o.columns * config.window.width)
+    -- 起始位位置： lines * 10%, columns * 10%
+    local start_col = math.floor(vim.o.columns * config.window.col)
+    local start_row = math.floor(vim.o.lines * config.window.row)
+    -- 整体高度：lines 的 80%
+    local screen_height = math.floor(vim.o.lines * config.window.height)
+    if not vim.api.nvim_buf_is_valid(list_bufnr) then
+        list_bufnr = vim.api.nvim_create_buf(false, false)
+    end
+    if not vim.api.nvim_buf_is_valid(promot_bufnr) then
+        -- 初始化 prompt buffer
+        promot_bufnr = vim.api.nvim_create_buf(false, false)
+        vim.api.nvim_set_option_value('filetype', 'picker-prompt', { buf = promot_bufnr })
+    end
+    if config.prompt.position == 'bottom' then
+        -- 启用预览，并且source需要预览窗口，则初始化预览窗口
+        if config.window.enable_preview and source.preview_win then
+            if not vim.api.nvim_buf_is_valid(preview_bufnr) then
+                preview_bufnr = vim.api.nvim_create_buf(false, true)
+                vim.api.nvim_set_option_value('bufhidden', 'wipe', { buf = preview_bufnr })
+            end
+            -- 初始化时，清空 preview 窗口内容
+            vim.api.nvim_buf_set_lines(preview_bufnr, 0, -1, false, {})
+            if not vim.api.nvim_win_is_valid(preview_winid) then
+                preview_winid = vim.api.nvim_open_win(preview_bufnr, false, {
+                    relative = 'editor',
+                    width = screen_width,
+                    height = math.floor((screen_height - 5) / 2),
+                    col = start_col,
+                    row = start_row,
+                    focusable = false,
+                    border = 'rounded',
+                })
+                vim.api.nvim_set_option_value('winhighlight', winhighlight, { win = preview_winid })
+                vim.api.nvim_set_option_value('number', false, { win = preview_winid })
+                vim.api.nvim_set_option_value('relativenumber', false, { win = preview_winid })
+                vim.api.nvim_set_option_value('cursorline', false, { win = preview_winid })
+                vim.api.nvim_set_option_value('signcolumn', 'yes', { win = preview_winid })
+            end
+            if not vim.api.nvim_win_is_valid(list_winid) then
+                list_winid = vim.api.nvim_open_win(list_bufnr, false, {
+                    relative = 'editor',
+                    width = screen_width,
+                    height = screen_height - 5 - math.floor((screen_height - 5) / 2) - 2,
+                    col = start_col,
+                    row = start_row + math.floor((screen_height - 5) / 2) + 2,
+                    focusable = false,
+                    border = 'rounded',
+                    -- title = 'Result',
+                    -- title_pos = 'center',
+                    -- noautocmd = true,
+                })
+            end
+        else
+            if not vim.api.nvim_win_is_valid(list_winid) then
+                list_winid = vim.api.nvim_open_win(list_bufnr, false, {
 
-					relative = "editor",
-					width = screen_width,
-					height = screen_height - 5,
-					col = start_col,
-					row = start_row,
-					focusable = false,
-					border = "rounded",
-					-- title = 'Result',
-					-- title_pos = 'center',
-					-- noautocmd = true,
-				})
-			end
-		end
-		if not vim.api.nvim_win_is_valid(promot_winid) then
-			promot_winid = vim.api.nvim_open_win(promot_bufnr, true, {
-				relative = "editor",
-				width = screen_width,
-				height = 1,
-				col = start_col,
-				row = start_row + screen_height - 3,
-				focusable = true,
-				border = "rounded",
-				title = config.prompt.title and string.format(" %s ", source.name),
-				title_pos = "center",
-				-- noautocmd = true,
-			})
-		end
-	else
-		if config.window.enable_preview and source.preview_win then
-			if not vim.api.nvim_buf_is_valid(preview_bufnr) then
-				preview_bufnr = vim.api.nvim_create_buf(false, true)
-				vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = preview_bufnr })
-			end
-			-- 初始化时，清空 preview 窗口内容
-			vim.api.nvim_buf_set_lines(preview_bufnr, 0, -1, false, {})
-			if not vim.api.nvim_win_is_valid(preview_winid) then
-				preview_winid = vim.api.nvim_open_win(preview_bufnr, false, {
-					relative = "editor",
-					width = screen_width,
-					height = math.floor((screen_height - 5) / 2),
-					col = start_col,
-					row = start_row + math.floor((screen_height - 5) / 2) + 4,
-					focusable = false,
-					border = "rounded",
-				})
-				vim.api.nvim_set_option_value("winhighlight", winhighlight, { win = preview_winid })
-				vim.api.nvim_set_option_value("number", false, { win = preview_winid })
-				vim.api.nvim_set_option_value("relativenumber", false, { win = preview_winid })
-				vim.api.nvim_set_option_value("cursorline", false, { win = preview_winid })
-				vim.api.nvim_set_option_value("signcolumn", "yes", { win = preview_winid })
-			end
-			if not vim.api.nvim_win_is_valid(list_winid) then
-				list_winid = vim.api.nvim_open_win(list_bufnr, false, {
-					relative = "editor",
-					width = screen_width,
-					height = screen_height - 5 - math.floor((screen_height - 5) / 2) - 2,
-					col = start_col,
-					row = start_row + 3,
-					focusable = false,
-					border = "rounded",
-				})
-			end
-		else
-			if not vim.api.nvim_win_is_valid(list_winid) then
-				list_winid = vim.api.nvim_open_win(list_bufnr, false, {
+                    relative = 'editor',
+                    width = screen_width,
+                    height = screen_height - 5,
+                    col = start_col,
+                    row = start_row,
+                    focusable = false,
+                    border = 'rounded',
+                    -- title = 'Result',
+                    -- title_pos = 'center',
+                    -- noautocmd = true,
+                })
+            end
+        end
+        if not vim.api.nvim_win_is_valid(promot_winid) then
+            promot_winid = vim.api.nvim_open_win(promot_bufnr, true, {
+                relative = 'editor',
+                width = screen_width,
+                height = 1,
+                col = start_col,
+                row = start_row + screen_height - 3,
+                focusable = true,
+                border = 'rounded',
+                title = config.prompt.title and string.format(' %s ', source.name),
+                title_pos = 'center',
+                -- noautocmd = true,
+            })
+        end
+    else
+        if config.window.enable_preview and source.preview_win then
+            if not vim.api.nvim_buf_is_valid(preview_bufnr) then
+                preview_bufnr = vim.api.nvim_create_buf(false, true)
+                vim.api.nvim_set_option_value('bufhidden', 'wipe', { buf = preview_bufnr })
+            end
+            -- 初始化时，清空 preview 窗口内容
+            vim.api.nvim_buf_set_lines(preview_bufnr, 0, -1, false, {})
+            if not vim.api.nvim_win_is_valid(preview_winid) then
+                preview_winid = vim.api.nvim_open_win(preview_bufnr, false, {
+                    relative = 'editor',
+                    width = screen_width,
+                    height = math.floor((screen_height - 5) / 2),
+                    col = start_col,
+                    row = start_row + math.floor((screen_height - 5) / 2) + 4,
+                    focusable = false,
+                    border = 'rounded',
+                })
+                vim.api.nvim_set_option_value('winhighlight', winhighlight, { win = preview_winid })
+                vim.api.nvim_set_option_value('number', false, { win = preview_winid })
+                vim.api.nvim_set_option_value('relativenumber', false, { win = preview_winid })
+                vim.api.nvim_set_option_value('cursorline', false, { win = preview_winid })
+                vim.api.nvim_set_option_value('signcolumn', 'yes', { win = preview_winid })
+            end
+            if not vim.api.nvim_win_is_valid(list_winid) then
+                list_winid = vim.api.nvim_open_win(list_bufnr, false, {
+                    relative = 'editor',
+                    width = screen_width,
+                    height = screen_height - 5 - math.floor((screen_height - 5) / 2) - 2,
+                    col = start_col,
+                    row = start_row + 3,
+                    focusable = false,
+                    border = 'rounded',
+                })
+            end
+        else
+            if not vim.api.nvim_win_is_valid(list_winid) then
+                list_winid = vim.api.nvim_open_win(list_bufnr, false, {
 
-					relative = "editor",
-					width = screen_width,
-					height = screen_height - 5,
-					col = start_col,
-					row = start_row + 3,
-					focusable = false,
-					border = "rounded",
-				})
-			end
-		end
-		if not vim.api.nvim_win_is_valid(promot_winid) then
-			promot_winid = vim.api.nvim_open_win(promot_bufnr, true, {
-				relative = "editor",
-				width = screen_width,
-				height = 1,
-				col = start_col,
-				row = start_row,
-				focusable = true,
-				border = "rounded",
-				title = config.prompt.title and string.format(" %s ", source.name),
-				title_pos = "center",
-				-- noautocmd = true,
-			})
-		end
-	end
-	vim.api.nvim_set_option_value("winhighlight", winhighlight, { win = list_winid })
-	vim.api.nvim_set_option_value("winhighlight", winhighlight, { win = promot_winid })
-	vim.api.nvim_set_option_value("buftype", "nowrite", { buf = promot_bufnr })
-	vim.api.nvim_set_option_value("buftype", "nowrite", { buf = list_bufnr })
-	vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = promot_bufnr })
-	vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = list_bufnr })
-	vim.api.nvim_set_option_value("number", false, { win = list_winid })
-	vim.api.nvim_set_option_value("relativenumber", false, { win = list_winid })
-	vim.api.nvim_set_option_value("cursorline", true, { win = list_winid })
-	vim.api.nvim_set_option_value("signcolumn", "yes", { win = list_winid })
-	vim.api.nvim_set_option_value("number", false, { win = promot_winid })
-	vim.api.nvim_set_option_value("relativenumber", false, { win = promot_winid })
-	vim.api.nvim_set_option_value("cursorline", false, { win = promot_winid })
-	vim.api.nvim_set_option_value("signcolumn", "yes", { win = promot_winid })
-	vim.api.nvim_buf_set_extmark(promot_bufnr, extns, 0, 0, {
-		sign_text = config.prompt.icon,
-		sign_hl_group = config.prompt.icon_hl,
-	})
-	local augroup = vim.api.nvim_create_augroup("picker.nvim", {
-		clear = true,
-	})
+                    relative = 'editor',
+                    width = screen_width,
+                    height = screen_height - 5,
+                    col = start_col,
+                    row = start_row + 3,
+                    focusable = false,
+                    border = 'rounded',
+                })
+            end
+        end
+        if not vim.api.nvim_win_is_valid(promot_winid) then
+            promot_winid = vim.api.nvim_open_win(promot_bufnr, true, {
+                relative = 'editor',
+                width = screen_width,
+                height = 1,
+                col = start_col,
+                row = start_row,
+                focusable = true,
+                border = 'rounded',
+                title = config.prompt.title and string.format(' %s ', source.name),
+                title_pos = 'center',
+                -- noautocmd = true,
+            })
+        end
+    end
+    vim.api.nvim_set_option_value('winhighlight', winhighlight, { win = list_winid })
+    vim.api.nvim_set_option_value('winhighlight', winhighlight, { win = promot_winid })
+    vim.api.nvim_set_option_value('buftype', 'nowrite', { buf = promot_bufnr })
+    vim.api.nvim_set_option_value('buftype', 'nowrite', { buf = list_bufnr })
+    vim.api.nvim_set_option_value('bufhidden', 'wipe', { buf = promot_bufnr })
+    vim.api.nvim_set_option_value('bufhidden', 'wipe', { buf = list_bufnr })
+    vim.api.nvim_set_option_value('number', false, { win = list_winid })
+    vim.api.nvim_set_option_value('relativenumber', false, { win = list_winid })
+    vim.api.nvim_set_option_value('cursorline', true, { win = list_winid })
+    vim.api.nvim_set_option_value('signcolumn', 'yes', { win = list_winid })
+    vim.api.nvim_set_option_value('number', false, { win = promot_winid })
+    vim.api.nvim_set_option_value('relativenumber', false, { win = promot_winid })
+    vim.api.nvim_set_option_value('cursorline', false, { win = promot_winid })
+    vim.api.nvim_set_option_value('signcolumn', 'yes', { win = promot_winid })
+    vim.api.nvim_buf_set_extmark(promot_bufnr, extns, 0, 0, {
+        sign_text = config.prompt.icon,
+        sign_hl_group = config.prompt.icon_hl,
+    })
+    local augroup = vim.api.nvim_create_augroup('picker.nvim', {
+        clear = true,
+    })
 
-	vim.api.nvim_create_autocmd({ "TextChangedI" }, {
-		group = augroup,
-		buffer = promot_bufnr,
-		callback = function(_)
-			vim.fn.timer_stop(insert_timer_id)
-			insert_timer_id = vim.fn.timer_start(config.prompt.insert_timeout, function()
-				local input = vim.api.nvim_buf_get_lines(promot_bufnr, 0, 1, false)[1]
-				vim.api.nvim_win_set_cursor(list_winid, { 1, 1 })
-				filter.filter(input, source, config.filter.ignorecase)
+    vim.api.nvim_create_autocmd({ 'TextChangedI' }, {
+        group = augroup,
+        buffer = promot_bufnr,
+        callback = M.handle_prompt_changed,
+    })
+    -- disable this key binding in promot buffer
+    for _, k in ipairs({
+        '<C-c>',
+        '<F1>',
+        '<F2>',
+        '<F3>',
+        '<F4>',
+        '<F5>',
+        '<F6>',
+        '<F7>',
+        '<F8>',
+        '<F9>',
+        '<F10>',
+        '<F11>',
+        '<F12>',
+    }) do
+        vim.keymap.set('i', k, '<Nop>', { buffer = promot_bufnr })
+    end
+    vim.keymap.set('i', config.mappings.close, function()
+        vim.fn.timer_stop(insert_timer_id)
+        vim.cmd('noautocmd stopinsert')
+        vim.api.nvim_win_close(promot_winid, true)
+        vim.api.nvim_win_close(list_winid, true)
+        if vim.api.nvim_win_is_valid(preview_winid) then
+            vim.api.nvim_win_close(preview_winid, true)
+        end
+    end, { buffer = promot_bufnr })
+    vim.keymap.set('i', config.mappings.open_item, function()
+        vim.fn.timer_stop(insert_timer_id)
+        vim.cmd('noautocmd stopinsert')
+        local cursor = vim.api.nvim_win_get_cursor(list_winid)
+        vim.api.nvim_win_close(promot_winid, true)
+        vim.api.nvim_win_close(list_winid, true)
+        if vim.api.nvim_win_is_valid(preview_winid) then
+            vim.api.nvim_win_close(preview_winid, true)
+        end
+        -- if there is no item under cursor
+        if source.filter_items and #source.filter_items >= 1 then
+            source.default_action(source.filter_items[cursor[1]][4])
+        end
+    end, { buffer = promot_bufnr })
+    if type(source.actions) == 'function' then
+        for key, action in pairs(source.actions()) do
+            vim.keymap.set('i', key, function()
+                vim.fn.timer_stop(insert_timer_id)
+                vim.cmd('noautocmd stopinsert')
+                local cursor = vim.api.nvim_win_get_cursor(list_winid)
+                vim.api.nvim_win_close(promot_winid, true)
+                vim.api.nvim_win_close(list_winid, true)
+                if vim.api.nvim_win_is_valid(preview_winid) then
+                    vim.api.nvim_win_close(preview_winid, true)
+                end
+                -- make sure filter_items is not empty
+                if source.filter_items and #source.filter_items >= 1 then
+                    action(source.filter_items[cursor[1]][4])
+                end
+            end, { buffer = promot_bufnr })
+        end
+    end
+    vim.keymap.set('i', config.mappings.next_item, function()
+        local cursor = vim.api.nvim_win_get_cursor(list_winid)
+        if cursor[1] < vim.api.nvim_buf_line_count(list_bufnr) then
+            cursor[1] = cursor[1] + 1
+        else
+            cursor[1] = 1
+        end
+        vim.api.nvim_win_set_cursor(list_winid, cursor)
+        highlight_list_windows()
+        if config.window.enable_preview and source.preview and #source.filter_items > 0 then
+            source.preview(source.filter_items[cursor[1]][4], preview_winid, preview_bufnr)
+        end
+        update_result_count()
+    end, { buffer = promot_bufnr })
+    vim.keymap.set('i', config.mappings.previous_item, function()
+        local cursor = vim.api.nvim_win_get_cursor(list_winid)
+        if cursor[1] > 1 then
+            cursor[1] = cursor[1] - 1
+        else
+            cursor[1] = vim.api.nvim_buf_line_count(list_bufnr)
+        end
+        vim.api.nvim_win_set_cursor(list_winid, cursor)
+        highlight_list_windows()
+        if config.window.enable_preview and source.preview and #source.filter_items > 0 then
+            source.preview(source.filter_items[cursor[1]][4], preview_winid, preview_bufnr)
+        end
+        update_result_count()
+    end, { buffer = promot_bufnr })
+    vim.keymap.set('i', config.mappings.toggle_preview, function()
+        config.window.enable_preview = not config.window.enable_preview
+        if not config.window.enable_preview then
+            if vim.api.nvim_win_is_valid(preview_winid) then
+                vim.api.nvim_win_close(preview_winid, true)
+            end
+            if config.prompt.position == 'bottom' then
+                vim.api.nvim_win_set_config(list_winid, {
 
-				vim.api.nvim_buf_set_lines(
-					list_bufnr,
-					0,
-					-1,
-					false,
-					vim.tbl_map(function(t)
-						return t[4].str
-					end, source.filter_items)
-				)
-				if #source.filter_items > 0 then
-					highlight_list_windows()
-					if config.window.enable_preview and source.preview then
-						source.preview(source.filter_items[1][4], preview_winid, preview_bufnr)
-					end
-				else
-					clear_highlight()
-				end
-				update_result_count()
-			end)
-		end,
-	})
-	-- disable this key binding in promot buffer
-	for _, k in ipairs({
-		"<C-c>",
-		"<F1>",
-		"<F2>",
-		"<F3>",
-		"<F4>",
-		"<F5>",
-		"<F6>",
-		"<F7>",
-		"<F8>",
-		"<F9>",
-		"<F10>",
-		"<F11>",
-		"<F12>",
-	}) do
-		vim.keymap.set("i", k, "<Nop>", { buffer = promot_bufnr })
-	end
-	vim.keymap.set("i", config.mappings.close, function()
-		vim.fn.timer_stop(insert_timer_id)
-		vim.cmd("noautocmd stopinsert")
-		vim.api.nvim_win_close(promot_winid, true)
-		vim.api.nvim_win_close(list_winid, true)
-		if vim.api.nvim_win_is_valid(preview_winid) then
-			vim.api.nvim_win_close(preview_winid, true)
-		end
-	end, { buffer = promot_bufnr })
-	vim.keymap.set("i", config.mappings.open_item, function()
-		vim.fn.timer_stop(insert_timer_id)
-		vim.cmd("noautocmd stopinsert")
-		local cursor = vim.api.nvim_win_get_cursor(list_winid)
-		vim.api.nvim_win_close(promot_winid, true)
-		vim.api.nvim_win_close(list_winid, true)
-		if vim.api.nvim_win_is_valid(preview_winid) then
-			vim.api.nvim_win_close(preview_winid, true)
-		end
-		-- if there is no item under cursor
-		if source.filter_items and #source.filter_items >= 1 then
-			source.default_action(source.filter_items[cursor[1]][4])
-		end
-	end, { buffer = promot_bufnr })
-	if type(source.actions) == "function" then
-		for key, action in pairs(source.actions()) do
-			vim.keymap.set("i", key, function()
-				vim.fn.timer_stop(insert_timer_id)
-				vim.cmd("noautocmd stopinsert")
-				local cursor = vim.api.nvim_win_get_cursor(list_winid)
-				vim.api.nvim_win_close(promot_winid, true)
-				vim.api.nvim_win_close(list_winid, true)
-				if vim.api.nvim_win_is_valid(preview_winid) then
-					vim.api.nvim_win_close(preview_winid, true)
-				end
-				-- make sure filter_items is not empty
-				if source.filter_items and #source.filter_items >= 1 then
-					action(source.filter_items[cursor[1]][4])
-				end
-			end, { buffer = promot_bufnr })
-		end
-	end
-	vim.keymap.set("i", config.mappings.next_item, function()
-		local cursor = vim.api.nvim_win_get_cursor(list_winid)
-		if cursor[1] < vim.api.nvim_buf_line_count(list_bufnr) then
-			cursor[1] = cursor[1] + 1
-		else
-			cursor[1] = 1
-		end
-		vim.api.nvim_win_set_cursor(list_winid, cursor)
-		highlight_list_windows()
-		if config.window.enable_preview and source.preview and #source.filter_items > 0 then
-			source.preview(source.filter_items[cursor[1]][4], preview_winid, preview_bufnr)
-		end
-		update_result_count()
-	end, { buffer = promot_bufnr })
-	vim.keymap.set("i", config.mappings.previous_item, function()
-		local cursor = vim.api.nvim_win_get_cursor(list_winid)
-		if cursor[1] > 1 then
-			cursor[1] = cursor[1] - 1
-		else
-			cursor[1] = vim.api.nvim_buf_line_count(list_bufnr)
-		end
-		vim.api.nvim_win_set_cursor(list_winid, cursor)
-		highlight_list_windows()
-		if config.window.enable_preview and source.preview and #source.filter_items > 0 then
-			source.preview(source.filter_items[cursor[1]][4], preview_winid, preview_bufnr)
-		end
-		update_result_count()
-	end, { buffer = promot_bufnr })
-	vim.keymap.set("i", config.mappings.toggle_preview, function()
-		config.window.enable_preview = not config.window.enable_preview
-		if not config.window.enable_preview then
-			if vim.api.nvim_win_is_valid(preview_winid) then
-				vim.api.nvim_win_close(preview_winid, true)
-			end
-			if config.prompt.position == "bottom" then
-				vim.api.nvim_win_set_config(list_winid, {
+                    relative = 'editor',
+                    width = screen_width,
+                    height = screen_height - 5,
+                    col = start_col,
+                    row = start_row,
+                    focusable = false,
+                    border = 'rounded',
+                })
+            else
+                vim.api.nvim_win_set_config(list_winid, {
 
-					relative = "editor",
-					width = screen_width,
-					height = screen_height - 5,
-					col = start_col,
-					row = start_row,
-					focusable = false,
-					border = "rounded",
-				})
-			else
-				vim.api.nvim_win_set_config(list_winid, {
+                    relative = 'editor',
+                    width = screen_width,
+                    height = screen_height - 5,
+                    col = start_col,
+                    row = start_row + 3,
+                    focusable = false,
+                    border = 'rounded',
+                })
+            end
+        elseif config.window.enable_preview and source.preview_win then
+            if config.prompt.position == 'bottom' then
+                if not vim.api.nvim_buf_is_valid(preview_bufnr) then
+                    preview_bufnr = vim.api.nvim_create_buf(false, true)
+                    vim.api.nvim_set_option_value('bufhidden', 'wipe', { buf = preview_bufnr })
+                end
+                -- 初始化时，清空 preview 窗口内容
+                vim.api.nvim_buf_set_lines(preview_bufnr, 0, -1, false, {})
+                if not vim.api.nvim_win_is_valid(preview_winid) then
+                    preview_winid = vim.api.nvim_open_win(preview_bufnr, false, {
+                        relative = 'editor',
+                        width = screen_width,
+                        height = math.floor((screen_height - 5) / 2),
+                        col = start_col,
+                        row = start_row,
+                        focusable = false,
+                        border = 'rounded',
+                    })
+                    vim.api.nvim_set_option_value(
+                        'winhighlight',
+                        winhighlight,
+                        { win = preview_winid }
+                    )
+                    vim.api.nvim_set_option_value('number', false, { win = preview_winid })
+                    vim.api.nvim_set_option_value('relativenumber', false, { win = preview_winid })
+                    vim.api.nvim_set_option_value('cursorline', false, { win = preview_winid })
+                    vim.api.nvim_set_option_value('signcolumn', 'yes', { win = preview_winid })
+                end
+                local cursor = vim.api.nvim_win_get_cursor(list_winid)
+                source.preview(source.filter_items[cursor[1]][4], preview_winid, preview_bufnr)
+                vim.api.nvim_win_set_config(list_winid, {
 
-					relative = "editor",
-					width = screen_width,
-					height = screen_height - 5,
-					col = start_col,
-					row = start_row + 3,
-					focusable = false,
-					border = "rounded",
-				})
-			end
-		elseif config.window.enable_preview and source.preview_win then
-			if config.prompt.position == "bottom" then
-				if not vim.api.nvim_buf_is_valid(preview_bufnr) then
-					preview_bufnr = vim.api.nvim_create_buf(false, true)
-					vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = preview_bufnr })
-				end
-				-- 初始化时，清空 preview 窗口内容
-				vim.api.nvim_buf_set_lines(preview_bufnr, 0, -1, false, {})
-				if not vim.api.nvim_win_is_valid(preview_winid) then
-					preview_winid = vim.api.nvim_open_win(preview_bufnr, false, {
-						relative = "editor",
-						width = screen_width,
-						height = math.floor((screen_height - 5) / 2),
-						col = start_col,
-						row = start_row,
-						focusable = false,
-						border = "rounded",
-					})
-					vim.api.nvim_set_option_value("winhighlight", winhighlight, { win = preview_winid })
-					vim.api.nvim_set_option_value("number", false, { win = preview_winid })
-					vim.api.nvim_set_option_value("relativenumber", false, { win = preview_winid })
-					vim.api.nvim_set_option_value("cursorline", false, { win = preview_winid })
-					vim.api.nvim_set_option_value("signcolumn", "yes", { win = preview_winid })
-				end
-				local cursor = vim.api.nvim_win_get_cursor(list_winid)
-				source.preview(source.filter_items[cursor[1]][4], preview_winid, preview_bufnr)
-				vim.api.nvim_win_set_config(list_winid, {
+                    relative = 'editor',
+                    width = screen_width,
+                    height = screen_height - 5 - math.floor((screen_height - 5) / 2) - 2,
+                    col = start_col,
+                    row = start_row + math.floor((screen_height - 5) / 2) + 2,
+                    focusable = false,
+                    border = 'rounded',
+                })
+            else
+                if not vim.api.nvim_buf_is_valid(preview_bufnr) then
+                    preview_bufnr = vim.api.nvim_create_buf(false, true)
+                    vim.api.nvim_set_option_value('bufhidden', 'wipe', { buf = preview_bufnr })
+                end
+                -- 初始化时，清空 preview 窗口内容
+                vim.api.nvim_buf_set_lines(preview_bufnr, 0, -1, false, {})
+                if not vim.api.nvim_win_is_valid(preview_winid) then
+                    preview_winid = vim.api.nvim_open_win(preview_bufnr, false, {
+                        relative = 'editor',
+                        width = screen_width,
+                        height = math.floor((screen_height - 5) / 2),
+                        col = start_col,
+                        row = start_row + math.floor((screen_height - 5) / 2) + 4,
+                        focusable = false,
+                        border = 'rounded',
+                    })
+                    vim.api.nvim_set_option_value(
+                        'winhighlight',
+                        winhighlight,
+                        { win = preview_winid }
+                    )
+                    vim.api.nvim_set_option_value('number', false, { win = preview_winid })
+                    vim.api.nvim_set_option_value('relativenumber', false, { win = preview_winid })
+                    vim.api.nvim_set_option_value('cursorline', false, { win = preview_winid })
+                    vim.api.nvim_set_option_value('signcolumn', 'yes', { win = preview_winid })
+                end
+                local cursor = vim.api.nvim_win_get_cursor(list_winid)
+                source.preview(source.filter_items[cursor[1]][4], preview_winid, preview_bufnr)
+                vim.api.nvim_win_set_config(list_winid, {
 
-					relative = "editor",
-					width = screen_width,
-					height = screen_height - 5 - math.floor((screen_height - 5) / 2) - 2,
-					col = start_col,
-					row = start_row + math.floor((screen_height - 5) / 2) + 2,
-					focusable = false,
-					border = "rounded",
-				})
-			else
-				if not vim.api.nvim_buf_is_valid(preview_bufnr) then
-					preview_bufnr = vim.api.nvim_create_buf(false, true)
-					vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = preview_bufnr })
-				end
-				-- 初始化时，清空 preview 窗口内容
-				vim.api.nvim_buf_set_lines(preview_bufnr, 0, -1, false, {})
-				if not vim.api.nvim_win_is_valid(preview_winid) then
-					preview_winid = vim.api.nvim_open_win(preview_bufnr, false, {
-						relative = "editor",
-						width = screen_width,
-						height = math.floor((screen_height - 5) / 2),
-						col = start_col,
-						row = start_row + math.floor((screen_height - 5) / 2) + 4,
-						focusable = false,
-						border = "rounded",
-					})
-					vim.api.nvim_set_option_value("winhighlight", winhighlight, { win = preview_winid })
-					vim.api.nvim_set_option_value("number", false, { win = preview_winid })
-					vim.api.nvim_set_option_value("relativenumber", false, { win = preview_winid })
-					vim.api.nvim_set_option_value("cursorline", false, { win = preview_winid })
-					vim.api.nvim_set_option_value("signcolumn", "yes", { win = preview_winid })
-				end
-				local cursor = vim.api.nvim_win_get_cursor(list_winid)
-				source.preview(source.filter_items[cursor[1]][4], preview_winid, preview_bufnr)
-				vim.api.nvim_win_set_config(list_winid, {
+                    relative = 'editor',
+                    width = screen_width,
+                    height = screen_height - 5 - math.floor((screen_height - 5) / 2) - 2,
+                    col = start_col,
+                    row = start_row + 3,
+                    focusable = false,
+                    border = 'rounded',
+                    -- title = 'Result',
+                    -- title_pos = 'center',
+                    -- noautocmd = true,
+                })
+            end
+        end
+        highlight_list_windows()
+    end, { buffer = promot_bufnr })
+    if opt.input then
+        vim.api.nvim_buf_set_lines(promot_bufnr, 0, -1, false, { opt.input })
+    end
+    vim.api.nvim_input('A')
+    M.handle_prompt_changed()
+end
 
-					relative = "editor",
-					width = screen_width,
-					height = screen_height - 5 - math.floor((screen_height - 5) / 2) - 2,
-					col = start_col,
-					row = start_row + 3,
-					focusable = false,
-					border = "rounded",
-					-- title = 'Result',
-					-- title_pos = 'center',
-					-- noautocmd = true,
-				})
-			end
-		end
-		highlight_list_windows()
-	end, { buffer = promot_bufnr })
-	if opt.input then
-		vim.api.nvim_buf_set_lines(promot_bufnr, 0, -1, false, { opt.input })
-	end
-	vim.api.nvim_input("A")
-	vim.cmd("doautocmd TextChangedI")
+function M.handle_prompt_changed()
+    vim.fn.timer_stop(insert_timer_id)
+    insert_timer_id = vim.fn.timer_start(config.prompt.insert_timeout, function()
+        local input = vim.api.nvim_buf_get_lines(promot_bufnr, 0, 1, false)[1]
+        vim.api.nvim_win_set_cursor(list_winid, { 1, 1 })
+        filter.filter(input, source, config.filter.ignorecase)
+
+        vim.api.nvim_buf_set_lines(
+            list_bufnr,
+            0,
+            -1,
+            false,
+            vim.tbl_map(function(t)
+                return t[4].str
+            end, source.filter_items)
+        )
+        if #source.filter_items > 0 then
+            highlight_list_windows()
+            if config.window.enable_preview and source.preview then
+                source.preview(source.filter_items[1][4], preview_winid, preview_bufnr)
+            end
+        else
+            clear_highlight()
+        end
+        update_result_count()
+    end)
 end
 
 return M

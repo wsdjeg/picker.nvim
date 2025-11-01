@@ -27,6 +27,9 @@ function M.set()
         vim.fn.mkdir(vim.fn.fnamemodify(file, ':h'), 'p')
         local ok, job = pcall(require, 'job')
         if ok then
+            --- vim.system on_exit must be called in fast event context
+            --- and can not use vim.fn.timerstop which is used in handle_prompt_changed
+            --- function.
             job.start({ 'curl', '-fLo', file, '--create-dirs', url }, {
                 on_exit = function(id, data, single)
                     if data == 0 and single == 0 then

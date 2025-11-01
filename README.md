@@ -380,3 +380,4 @@ If you encounter any bugs or have suggestions, please file an issue in the [issu
 ## Credits
 
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
+- [denite.nvim](https://github.com/Shougo/denite.nvim)

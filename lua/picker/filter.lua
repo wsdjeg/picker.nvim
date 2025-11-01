@@ -44,10 +44,10 @@ function M.filter(input, source, ignorecase)
 			end
 			source.filter_items = rst
 		end
+		table.sort(source.filter_items, function(a, b)
+			return a[3] > b[3]
+		end)
 	end
-    table.sort(source.filter_items, function(a, b)
-        return a[3] > b[3]
-    end)
 	source.state.previous_input = input
 	source.state.filter_count = #source.state.items
 end

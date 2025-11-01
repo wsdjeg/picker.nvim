@@ -309,6 +309,7 @@ function M.open(s, opt)
         '<F10>',
         '<F11>',
         '<F12>',
+        '<C-j>',  -- disable ctrl-j by default
     }) do
         vim.keymap.set('i', k, '<Nop>', { buffer = promot_bufnr })
     end

@@ -38,6 +38,7 @@ picker.nvim is a highly customizable and extensible Neovim fuzzy finder plugin w
     - [emoji](#emoji)
 - [Third party sources](#third-party-sources)
 - [Custom source](#custom-source)
+- [Custom layout](#custom-layout)
 - [FAQ](#faq)
 - [Self-Promotion](#self-promotion)
 - [Feedback](#feedback)
@@ -345,6 +346,16 @@ that means you can create a custom source in `lua/picker/sources/` directory in 
 --- @field preview function
 --- @field set function
 --- @field actions? table
+```
+
+## Custom layout
+
+picker.nvim use `default` layout by default. a layout should provide following public functions:
+
+```lua
+local layout = {}
+
+return layout
 ```
 
 ## FAQ

@@ -353,9 +353,23 @@ that means you can create a custom source in `lua/picker/sources/` directory in 
 picker.nvim use `default` layout by default. a layout should provide following public functions:
 
 ```lua
-local layout = {}
+local M = {}
 
-return layout
+---@class PickerLayout
+---@field prompt_buf integer
+---@field prompt_win integer
+---@field list_buf integer
+---@field list_win integer
+---@field preview_buf integer
+---@field preview_win integer
+
+---@param source PickerSource
+---@param config PickerConfig
+---@return PickerLayout
+function M.render_windows(source, config)
+end
+
+return M
 ```
 
 ## FAQ

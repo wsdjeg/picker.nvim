@@ -1,5 +1,50 @@
 # Changelog
 
+## [1.3.0](https://github.com/wsdjeg/picker.nvim/compare/v1.2.0...v1.3.0) (2025-11-02)
+
+
+### Features
+
+* add `ignorecase` option ([569d57a](https://github.com/wsdjeg/picker.nvim/commit/569d57a5cb60d12160cf749027ac5e4df0903372))
+* add `picker_config` source ([d7658ee](https://github.com/wsdjeg/picker.nvim/commit/d7658ee3bbb78943c1c83c9f0a4e1d788e6ff00e))
+* add async_files source ([#8](https://github.com/wsdjeg/picker.nvim/issues/8)) ([9a45081](https://github.com/wsdjeg/picker.nvim/commit/9a450813ae54b6af8ee704da6925ca1abaad53a4))
+* add cmd_history source ([12102f0](https://github.com/wsdjeg/picker.nvim/commit/12102f0be6ea1ca03240caf6905d199eed6f72c3))
+* add ctrl-v/t actions for files ([1f58fd7](https://github.com/wsdjeg/picker.nvim/commit/1f58fd715aa64c1688203432926a0bfd112f4fc9))
+* add emoji source ([4b758c5](https://github.com/wsdjeg/picker.nvim/commit/4b758c501bce7e572bf3b05789b8716e0b022f57))
+* add highlights source ([13bfd86](https://github.com/wsdjeg/picker.nvim/commit/13bfd86346d76a526bcfb2fdfc139974fb95d4e1))
+* add loclist ([a70bc6c](https://github.com/wsdjeg/picker.nvim/commit/a70bc6c5d1ecb8e3e4ac8e603c3b2a303518722f))
+* add lsp kind icons ([d40ee9a](https://github.com/wsdjeg/picker.nvim/commit/d40ee9af3d004d015ea5eace0946926566a6de2b))
+* add lsp_document_symbols source ([76333ec](https://github.com/wsdjeg/picker.nvim/commit/76333ecd8fd7d9700904ffd844f7603e2bddca0a))
+* add lsp_references source ([0d401f0](https://github.com/wsdjeg/picker.nvim/commit/0d401f07e7357bc1965ebe834e171383fd777508))
+* add lsp_workspace_symbols source ([5a49b17](https://github.com/wsdjeg/picker.nvim/commit/5a49b17ad172d4885d88a1d6ba19e8536a715e41))
+* add opt to change list_files_cmd ([3ccd2eb](https://github.com/wsdjeg/picker.nvim/commit/3ccd2eb0c2643aefdaa7a63b6cc8a3893a78f30c))
+* add option for displaying source name ([4dbd190](https://github.com/wsdjeg/picker.nvim/commit/4dbd1908f54f8aa6ae3ce0ba5624869440fc92ad))
+* add option to display matched score ([3e51ddd](https://github.com/wsdjeg/picker.nvim/commit/3e51ddd76f09f88aa6e34b3453274b2245345a7f))
+* add prompt filetype to disable cmp ([7ca2e74](https://github.com/wsdjeg/picker.nvim/commit/7ca2e7471dab9372109f93c0ad347f5a8d32845c))
+* implement filter state ([95e0ece](https://github.com/wsdjeg/picker.nvim/commit/95e0ece274afb62d80460a814d6c0d096d2f57c4))
+* support custom layout ([d970367](https://github.com/wsdjeg/picker.nvim/commit/d970367e4a4f93afb14197b23e0750a784e374d8))
+* support force update context ([525295d](https://github.com/wsdjeg/picker.nvim/commit/525295d0321b6273a53787db3ed7c9242dad4420))
+* support insert_timeout feature ([58088ec](https://github.com/wsdjeg/picker.nvim/commit/58088eca2d52cb796d2544cdcb8a5f958142dbee))
+
+
+### Bug Fixes
+
+* avoid getting length of nil ([6427dfe](https://github.com/wsdjeg/picker.nvim/commit/6427dfeb93d68d3e0109b0b05d2ccf2fd603a18c))
+* disable ctrl-j in insert mode ([1cdb6bf](https://github.com/wsdjeg/picker.nvim/commit/1cdb6bfe2b7fd69ed1df55e32a47caf8929bdb21))
+* disable F1-F12 in promot windows ([30701f4](https://github.com/wsdjeg/picker.nvim/commit/30701f44066619e012cde6d125977563dd9bbcd1))
+* display newline and enable number ([0a0066c](https://github.com/wsdjeg/picker.nvim/commit/0a0066c8c78a05e5412b16e16af9cb4caba11c03))
+* fix bottom prompt source name ([fa3e660](https://github.com/wsdjeg/picker.nvim/commit/fa3e660e70e1fea93bf7d2d3b6ad76fb27af1796))
+* fix default_action ([7f05cff](https://github.com/wsdjeg/picker.nvim/commit/7f05cff08620ec051cff680a333c05d58670ab9b))
+* fix winhighlight opt ([ea8bb13](https://github.com/wsdjeg/picker.nvim/commit/ea8bb137ef81e80489cbd748b0fa316f15c27b73))
+* handle layout error ([01657e9](https://github.com/wsdjeg/picker.nvim/commit/01657e9c784d1feab69510c33fb6d1023d3b3cd7))
+* skip action on nil ([12b7b1a](https://github.com/wsdjeg/picker.nvim/commit/12b7b1a31b055258a752cb2747f4f9c5c852b1b6))
+* skip highlight if filter_items is nil ([a9b2220](https://github.com/wsdjeg/picker.nvim/commit/a9b222077095fb15b6f1282d62c07e87de41a10d))
+* sort filter_items only when input ~= nil ([e6f58ad](https://github.com/wsdjeg/picker.nvim/commit/e6f58adb42f6d677150ed8c1c16dcb3b0ae1f52d))
+* trigger TextChangedI only in same job ([a4d0370](https://github.com/wsdjeg/picker.nvim/commit/a4d037098ead433a49bd88eb1c87c076ef6babb9))
+* use `job.nvim` instead of vim.system ([4501676](https://github.com/wsdjeg/picker.nvim/commit/450167625384f5d2d05d0a9dbd6f263835b57f36))
+* use empty string for unloaded buf ([ce115d7](https://github.com/wsdjeg/picker.nvim/commit/ce115d724ee0eb9e27f5f0da3fce7bfb68ff8607))
+* use handle func instead of doautocmd ([55b49cb](https://github.com/wsdjeg/picker.nvim/commit/55b49cb43e75f4d179d2d67a1522940bd38ec850))
+
 ## [1.2.0](https://github.com/wsdjeg/picker.nvim/compare/v1.1.0...v1.2.0) (2025-10-19)
 
 

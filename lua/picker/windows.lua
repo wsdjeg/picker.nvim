@@ -1,6 +1,7 @@
 local M = {}
 
 local filter = require('picker.filter')
+local util = require('picker.util')
 
 local source -- global source
 
@@ -107,7 +108,16 @@ function M.open(s, opt)
     source.state = {}
     source.state.items = source.get()
 
-    layout = require('picker.layout.' .. config.window.layout).render_windows(source, config)
+    local ok, err = pcall(function()
+        layout = require('picker.layout.' .. config.window.layout).render_windows(source, config)
+    end)
+
+    if not ok then
+        util.notify(
+            string.format('can not found layout "%s" for picker.nvim', config.window.layout)
+        )
+        return
+    end
 
     local augroup = vim.api.nvim_create_augroup('picker.nvim', {
         clear = true,

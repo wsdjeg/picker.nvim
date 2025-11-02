@@ -48,9 +48,10 @@ picker.nvim is a highly customizable and extensible Neovim fuzzy finder plugin w
 
 ## Features
 
-- 15+ builtin sources.
+- 18 built-in extensions and some third-party extensions
 - simple, fast fuzzy match engine powered by fzy.
 - simple API for creating custom source
+- support custom layout.
 
 ## Installation
 

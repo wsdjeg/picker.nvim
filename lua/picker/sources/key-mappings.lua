@@ -11,7 +11,7 @@ M.get = function()
 
         item.str = item.str
             .. string.rep(' ', 50 - #item.str)
-            .. (map.desc or map.rhs or tostring(map.callback))
+            .. (map.desc or map.rhs or (map.callback and 'callback'))
         table.insert(items, item)
     end
 
@@ -23,11 +23,17 @@ M.default_action = function(entry)
 end
 
 M.preview_win = true
-local previewer = require('picker.previewer.buffer')
+local b_previewer = require('picker.previewer.buffer')
+local f_previewer = require("picker.previewer.file")
 
 function M.preview(item, win, buf)
-    previewer.buflines = vim.split(vim.inspect(item.value), '[\r]?\n')
-    previewer.filetype = 'lua'
-    previewer.preview(1, win, buf, true)
+    if item.value.callback then
+        local info = debug.getinfo(item.value.callback, 'S')
+        f_previewer.preview(info.source:sub(2), win, buf, info.linedefined)
+    else
+        b_previewer.buflines = vim.split(vim.inspect(item.value), '[\r]?\n')
+        b_previewer.filetype = 'lua'
+        b_previewer.preview(1, win, buf, true)
+    end
 end
 return M

@@ -4,6 +4,7 @@ M.get = function()
     local items = {}
 
     local maps = vim.api.nvim_get_keymap('n')
+    vim.list_extend(maps, vim.api.nvim_buf_get_keymap(0, 'n'))
 
     for _, map in ipairs(maps) do
         local item = { value = map }
@@ -24,7 +25,7 @@ end
 
 M.preview_win = true
 local b_previewer = require('picker.previewer.buffer')
-local f_previewer = require("picker.previewer.file")
+local f_previewer = require('picker.previewer.file')
 
 function M.preview(item, win, buf)
     if item.value.callback then

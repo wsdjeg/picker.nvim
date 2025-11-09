@@ -36,6 +36,7 @@ picker.nvim is a highly customizable and extensible Neovim fuzzy finder plugin w
     - [lsp_workspace_symbols](#lsp_workspace_symbols)
     - [lsp_references](#lsp_references)
     - [emoji](#emoji)
+    - [key-mappings](#key-mappings)
 - [Third party sources](#third-party-sources)
 - [Custom source](#custom-source)
 - [Custom layout](#custom-layout)
@@ -168,6 +169,7 @@ In picker prompt window, the these mappings are defined by default.
 | qflist                | quickfix source                         |
 | registers             | registers context                       |
 | emoji                 | emoji entries                           |
+| key-mappings          | key mappings                            |
 
 ### files
 
@@ -318,6 +320,12 @@ This source will try to use job.nvim to download emoji json data, if job.nvim is
 | key binding | description           |
 | ----------- | --------------------- |
 | `<Enter>`   | insert selected emoji |
+
+### key-mappings
+
+| key binding | description                  |
+| ----------- | ---------------------------- |
+| `<Enter>`   | trigger selected key mapping |
 
 ## Third party sources
 

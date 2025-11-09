@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.4.0](https://github.com/wsdjeg/picker.nvim/compare/v1.3.0...v1.4.0) (2025-11-09)
+
+
+### Features
+
+* add `key-mappings` source ([18b7c2e](https://github.com/wsdjeg/picker.nvim/commit/18b7c2e7e64f494b828d74f38e5becb6d6604ebb))
+
+
+### Bug Fixes
+
+* fix key-mappings preview file ([9765fe3](https://github.com/wsdjeg/picker.nvim/commit/9765fe3beca12fab56912267e423dfc7a863a4dc))
+* fix windows height ([fc60c6c](https://github.com/wsdjeg/picker.nvim/commit/fc60c6c50ec7288a1c77b5cd1c9daa644c7afb01))
+* include buffer local key mappings ([c0b4659](https://github.com/wsdjeg/picker.nvim/commit/c0b4659ea8e1d744c6cb1b0be7dcfaa53fb4f42e))
+
 ## [1.3.0](https://github.com/wsdjeg/picker.nvim/compare/v1.2.0...v1.3.0) (2025-11-02)
 
 

@@ -194,7 +194,7 @@ function M.render_windows(source, config)
                 layout.list_win = vim.api.nvim_open_win(layout.list_buf, false, {
                     relative = 'editor',
                     width = screen_width,
-                    height = screen_height - 5 - math.floor((screen_height - 5) / 2) - 2,
+                    height = screen_height - 5 - math.floor((screen_height - 5) / 2 + 0.5) - 1,
                     col = start_col,
                     row = start_row + 3,
                     focusable = false,
@@ -204,7 +204,7 @@ function M.render_windows(source, config)
                 vim.api.nvim_win_set_config(layout.list_win, {
                     relative = 'editor',
                     width = screen_width,
-                    height = screen_height - 5 - math.floor((screen_height - 5) / 2) - 2,
+                    height = screen_height - 5 - math.floor((screen_height - 5) / 2 + 0.5) - 1,
                     col = start_col,
                     row = start_row + 3,
                     focusable = false,

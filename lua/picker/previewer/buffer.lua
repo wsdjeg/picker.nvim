@@ -10,7 +10,7 @@ local preview_winid
 local preview_bufnr
 local update_context = false
 
-local function preview_timer(t)
+local function preview_timer(_)
 	if
 		preview_bufnr
 		and vim.api.nvim_buf_is_valid(preview_bufnr)
@@ -35,6 +35,8 @@ M.buflines = {}
 M.filetype = ""
 
 ---@param linenr integer
+---@param win integer
+---@param buf integer
 ---@param redraw boolean force update context
 function M.preview(linenr, win, buf, redraw)
 	vim.fn.timer_stop(preview_timer_id)

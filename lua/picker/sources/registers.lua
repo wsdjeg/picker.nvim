@@ -71,9 +71,7 @@ M.preview_win = true
 
 function M.preview(item, win, buf)
 	previewer.buflines = vim.split(item.value.context, "[\r]?\n")
-	vim.api.nvim_set_option_value("number", true, { win = win })
-	vim.api.nvim_buf_set_lines(buf, 0, -1, false, previewer.buflines)
 	previewer.filetype = nil
-	previewer.preview(1, win, buf)
+	previewer.preview(1, win, buf, true)
 end
 return M

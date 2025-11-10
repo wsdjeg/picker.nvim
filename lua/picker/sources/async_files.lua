@@ -30,8 +30,7 @@ local function on_stdout(id, data)
         require('picker.windows').handle_prompt_changed()
     end
 end
-local function on_stderr(id, data) end
-local function on_exit(id, data, singin)
+local function on_exit(id)
     if id == jobid then
         jobid = -1
         require('picker.windows').handle_prompt_changed()
@@ -44,7 +43,6 @@ local function async_run()
     end
     jobid = job.start(cmd, {
         on_stdout = on_stdout,
-        on_stderr = on_stderr,
         on_exit = on_exit,
     })
     return items

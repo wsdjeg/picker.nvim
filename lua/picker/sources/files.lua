@@ -15,7 +15,7 @@ end
 function M.get()
 	return vim.tbl_map(function(t)
 		return {
-			value = t,
+			value = vim.fn.fnamemodify(t, ':p'),
 			str = t,
 		}
 	end, vim.split(vim.system(list_files_cmd, { text = true }):wait().stdout, "\n", { trimempty = true }))

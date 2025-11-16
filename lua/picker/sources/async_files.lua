@@ -3,9 +3,12 @@ local M = {}
 local previewer = require('picker.previewer.file')
 local util = require('picker.util')
 
-local ok, job = pcall(require, 'job')
+local job
+local get_icon
 
 function M.enabled()
+    local ok
+    ok, job = pcall(require, 'job')
     if not ok then
         util.notify('async_files source require wsdjeg/job.nvim')
     end
@@ -22,10 +25,21 @@ local jobid = -1
 local function on_stdout(id, data)
     if id == jobid then
         vim.tbl_map(function(t)
-            table.insert(items, {
-                value = t,
-                str = t,
-            })
+            if get_icon then
+                local icon, hl = get_icon(vim.fn.fnamemodify(t, ':t'))
+                table.insert(items, {
+                    str = (icon or '󰈔') .. ' ' .. t,
+                    value = t,
+                    highlight = {
+                        { 0, 2, hl },
+                    },
+                })
+            else
+                table.insert(items, {
+                    value = t,
+                    str = t,
+                })
+            end
         end, data)
         require('picker.windows').handle_prompt_changed()
     end
@@ -47,7 +61,12 @@ local function async_run()
     })
     return items
 end
+
 function M.set(opt)
+    local ok, devicon = pcall(require, 'nvim-web-devicons')
+    if ok then
+        get_icon = devicon.get_icon
+    end
     opt = opt or {}
 
     cmd = opt.cmd or cmd

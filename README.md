@@ -66,7 +66,41 @@ Whether you need file search, LSP symbols, diagnostics, or fully custom workflow
 
 ## 📦 Installation
 
-- use [nvim-plug](https://github.com/wsdjeg/nvim-plug)
+picker.nvim works with all major Neovim plugin managers.
+Neovim 0.11+ is recommended for best compatibility.
+
+- **Using [nvim-plug](https://github.com/wsdjeg/nvim-plug)**
+
+```lua
+require("plug").add({
+	{
+		"wsdjeg/picker.nvim",
+	},
+})
+```
+
+**Using [lazy.nvim](https://github.com/folke/lazy.nvim)**
+
+```lua
+{
+  "wsdjeg/picker.nvim",
+  event = "VeryLazy",
+  config = function()
+    require("picker").setup()
+  end,
+}
+```
+
+**Using [packer.nvim](https://github.com/wbthomason/packer.nvim)**
+
+```lua
+use({
+  "wsdjeg/picker.nvim",
+  config = function()
+    require("picker").setup()
+  end,
+})
+```
 
 ## 🔧 Configuration
 

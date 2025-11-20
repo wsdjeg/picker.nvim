@@ -46,6 +46,7 @@ local function clear_highlight()
 end
 
 local function highlight_list_windows()
+    util.info('highlight list_buf')
     clear_highlight()
     local info = vim.fn.getwininfo(layout.list_win)[1]
     local from = info.topline
@@ -97,7 +98,7 @@ end
 --- @field filter_items table
 
 --- @param s PickerSource
---- @param opt?
+--- @param opt? table
 function M.open(s, opt)
     source = s
     opt = opt or {}
@@ -107,8 +108,9 @@ function M.open(s, opt)
     end
     source.state = {}
     source.state.items = source.get()
+    source.filter_items = {}
 
-    local ok, err = pcall(function()
+    local ok, _ = pcall(function()
         layout = require('picker.layout.' .. config.window.layout).render_windows(source, config)
     end)
 
@@ -266,6 +268,7 @@ function M.handle_prompt_changed()
         vim.api.nvim_win_set_cursor(layout.list_win, { 1, 1 })
         filter.filter(input, source, config.filter.ignorecase)
 
+        util.info('update list_buf context')
         vim.api.nvim_buf_set_lines(
             layout.list_buf,
             0,

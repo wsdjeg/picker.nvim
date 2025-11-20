@@ -1,6 +1,11 @@
 # picker.nvim
 
-picker.nvim is a highly customizable and extensible Neovim fuzzy finder plugin written in lua.
+`picker.nvim` is a lightweight, high-performance fuzzy finder for Neovim,
+built around a simple and extensible design.
+It provides a fast fzy-based matcher, flexible UI layouts,
+and an easy-to-write source API that lets you create custom pickers with minimal code.
+Whether you need file search, LSP symbols, diagnostics, or fully custom workflows,
+`picker.nvim` offers a clean and composable approach without the overhead of larger frameworks.
 
 [![GitHub License](https://img.shields.io/github/license/wsdjeg/picker.nvim)](LICENSE)
 [![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/wsdjeg/picker.nvim)](https://github.com/wsdjeg/picker.nvim/issues)
@@ -11,12 +16,13 @@ picker.nvim is a highly customizable and extensible Neovim fuzzy finder plugin w
 
 <!-- vim-markdown-toc GFM -->
 
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
+- [✨ Features](#-features)
+- [📦 Installation](#-installation)
+- [🔧 Configuration](#-configuration)
+- [⚙️ Basic Usage](#-basic-usage)
     - [Picker Command](#picker-command)
     - [Key bindings](#key-bindings)
-- [Builtin sources](#builtin-sources)
+- [📚 Builtin sources](#-builtin-sources)
     - [files](#files)
     - [cmd_history](#cmd_history)
     - [picker_config](#picker_config)
@@ -37,26 +43,32 @@ picker.nvim is a highly customizable and extensible Neovim fuzzy finder plugin w
     - [lsp_references](#lsp_references)
     - [emoji](#emoji)
     - [key-mappings](#key-mappings)
-- [Third party sources](#third-party-sources)
-- [Custom source](#custom-source)
-- [Custom layout](#custom-layout)
-- [FAQ](#faq)
-- [Self-Promotion](#self-promotion)
-- [Feedback](#feedback)
-- [Credits](#credits)
+- [🔌 Third party sources](#-third-party-sources)
+- [🧩 Custom source](#-custom-source)
+- [🪟 Custom layout](#-custom-layout)
+- [❓ FAQ](#-faq)
+- [📣 Self-Promotion](#-self-promotion)
+- [💬 Feedback](#-feedback)
+- [🙏 Credits](#-credits)
+- [📄 License](#-license)
 
 <!-- vim-markdown-toc -->
 
-## Features
+## ✨ Features
 
-- 18 built-in extensions and some third-party extensions
-- simple, fast fuzzy match engine powered by fzy.
-- simple API for creating custom source
-- support custom layout.
+- ⚡ High-performance fuzzy matching powered by the fzy algorithm
+- 🔧 Simple yet extensible source API
+- 🪟 Flexible UI layouts (floating window, preview panel)
+- 🧩 built-in picker sources
+- 📦 Growing ecosystem of third-party extensions
+- ⌨️ Fully configurable actions & key mappings
+- 🔍 Live preview and asynchronous loading support
 
-## Installation
+## 📦 Installation
 
 - use [nvim-plug](https://github.com/wsdjeg/nvim-plug)
+
+## 🔧 Configuration
 
 ```lua
 require("plug").add({
@@ -102,7 +114,7 @@ require("plug").add({
 })
 ```
 
-## Usage
+## ⚙️ Basic Usage
 
 ### Picker Command
 
@@ -147,7 +159,7 @@ In picker prompt window, the these mappings are defined by default.
 | `Enter`     | default action |
 | `Esc`       | close picker   |
 
-## Builtin sources
+## 📚 Builtin sources
 
 | source                | description                             |
 | --------------------- | --------------------------------------- |
@@ -327,7 +339,7 @@ This source will try to use job.nvim to download emoji json data, if job.nvim is
 | ----------- | ---------------------------- |
 | `<Enter>`   | trigger selected key mapping |
 
-## Third party sources
+## 🔌 Third party sources
 
 | source            | description                                                                                     |
 | ----------------- | ----------------------------------------------------------------------------------------------- |
@@ -341,7 +353,7 @@ This source will try to use job.nvim to download emoji json data, if job.nvim is
 | plug              | plugins source for [nvim-plug](https://github.com/wsdjeg/nvim-plug)                             |
 | async_files       | async files source, require [job.nvim](https://github.com/wsdjeg/job.nvim)                      |
 
-## Custom source
+## 🧩 Custom source
 
 a source main module should be `picker.sources.<name>`,
 that means you can create a custom source in `lua/picker/sources/` directory in your plugin.
@@ -357,7 +369,7 @@ that means you can create a custom source in `lua/picker/sources/` directory in 
 --- @field actions? table
 ```
 
-## Custom layout
+## 🪟 Custom layout
 
 picker.nvim use `default` layout by default. a layout should provide following public functions:
 
@@ -381,7 +393,7 @@ end
 return M
 ```
 
-## FAQ
+## ❓ FAQ
 
 1. how to disable nvim-cmp in picker.nvim buffer?
 
@@ -438,7 +450,7 @@ vim.ui.select = function(items, opt, callback)
 end
 ```
 
-## Self-Promotion
+## 📣 Self-Promotion
 
 Like this plugin? Star the repository on
 GitHub.
@@ -446,11 +458,15 @@ GitHub.
 Love this plugin? Follow [me](https://wsdjeg.net/) on
 [GitHub](https://github.com/wsdjeg).
 
-## Feedback
+## 💬 Feedback
 
 If you encounter any bugs or have suggestions, please file an issue in the [issue tracker](https://github.com/wsdjeg/picker.nvim/issues)
 
-## Credits
+## 🙏 Credits
 
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
 - [denite.nvim](https://github.com/Shougo/denite.nvim)
+
+## 📄 License
+
+Licensed under GPL-3.0.

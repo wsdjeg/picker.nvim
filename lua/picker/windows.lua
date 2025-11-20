@@ -197,7 +197,12 @@ function M.open(s, opt)
         end
         vim.api.nvim_win_set_cursor(layout.list_win, cursor)
         highlight_list_windows()
-        if config.window.enable_preview and source.preview and #source.filter_items > 0 then
+        if
+            config.window.enable_preview
+            and source.preview
+            and source.filter_items
+            and #source.filter_items > 0
+        then
             source.preview(
                 source.filter_items[cursor[1]][4],
                 layout.preview_win,
@@ -215,7 +220,12 @@ function M.open(s, opt)
         end
         vim.api.nvim_win_set_cursor(layout.list_win, cursor)
         highlight_list_windows()
-        if config.window.enable_preview and source.preview and #source.filter_items > 0 then
+        if
+            config.window.enable_preview
+            and source.preview
+            and source.filter_items
+            and #source.filter_items > 0
+        then
             source.preview(
                 source.filter_items[cursor[1]][4],
                 layout.preview_win,
@@ -228,7 +238,12 @@ function M.open(s, opt)
         config.window.enable_preview = not config.window.enable_preview
         require('picker.layout.' .. config.window.layout).render_windows(source, config)
         local cursor = vim.api.nvim_win_get_cursor(layout.list_win)
-        if config.window.enable_preview and source.preview and #source.filter_items > 0 then
+        if
+            config.window.enable_preview
+            and source.preview
+            and source.filter_items
+            and #source.filter_items > 0
+        then
             source.preview(
                 source.filter_items[cursor[1]][4],
                 layout.preview_win,

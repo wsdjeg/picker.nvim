@@ -268,6 +268,7 @@ function M.render_windows(source, config)
     vim.api.nvim_set_option_value('relativenumber', false, { win = layout.prompt_win })
     vim.api.nvim_set_option_value('cursorline', false, { win = layout.prompt_win })
     vim.api.nvim_set_option_value('signcolumn', 'yes', { win = layout.prompt_win })
+    vim.api.nvim_set_option_value('scrolloff', 0, { win = layout.list_win })
     vim.api.nvim_buf_set_extmark(layout.prompt_buf, extns, 0, 0, {
         sign_text = config.prompt.icon,
         sign_hl_group = config.prompt.icon_hl,

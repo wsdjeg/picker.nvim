@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.5.0](https://github.com/wsdjeg/picker.nvim/compare/v1.4.0...v1.5.0) (2025-11-22)
+
+
+### Features
+
+* add devicons support for async_files ([649b4bd](https://github.com/wsdjeg/picker.nvim/commit/649b4bd302d214ff50a677ae159e7837bc95cbf0))
+* add devicons support for buffer source ([61764ce](https://github.com/wsdjeg/picker.nvim/commit/61764ce4989c1ace819889ce76a8e7a9e76e46ae))
+* add luarocks support ([831f117](https://github.com/wsdjeg/picker.nvim/commit/831f117029eff2e602015f059d88722a73f79214))
+* make files support devicon ([745a220](https://github.com/wsdjeg/picker.nvim/commit/745a22072d944cf86918fa60a5d886b4aa8ae955))
+
+
+### Bug Fixes
+
+* check filter_items nil ([a42589a](https://github.com/wsdjeg/picker.nvim/commit/a42589ae4f7f144b715d7e78282c1a4d5f712ac1))
+* clear filter_items on startup ([852a39c](https://github.com/wsdjeg/picker.nvim/commit/852a39c04d2c4e3bb1bb3755fef85795848295ff))
+* fix register source ([9f11821](https://github.com/wsdjeg/picker.nvim/commit/9f11821d69f6f7f89bdc191acc26daa92e4d1722))
+* keep scrolloff default to 0 ([096a249](https://github.com/wsdjeg/picker.nvim/commit/096a249caf89edcd4dd5c827a12a6ba61c8c8f81))
+* remove stderr and argv ([1756ceb](https://github.com/wsdjeg/picker.nvim/commit/1756ceb8e914b681d3740f3f48fb0a2e3cce9102))
+* use full path instead ([ae53103](https://github.com/wsdjeg/picker.nvim/commit/ae531034d986a9a1ad66df516ee3f96af1551d7a))
+
 ## [1.4.0](https://github.com/wsdjeg/picker.nvim/compare/v1.3.0...v1.4.0) (2025-11-09)
 
 

@@ -102,6 +102,12 @@ use({
 })
 ```
 
+**Using [luarocks](https://luarocks.org/)**
+
+```
+luarocks install picker.nvim
+```
+
 ## 🔧 Configuration
 
 ```lua

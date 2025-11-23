@@ -11,6 +11,7 @@ Whether you need file search, LSP symbols, diagnostics, or fully custom workflow
 [![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/wsdjeg/picker.nvim)](https://github.com/wsdjeg/picker.nvim/issues)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/m/wsdjeg/picker.nvim)](https://github.com/wsdjeg/picker.nvim/commits/master/)
 [![GitHub Release](https://img.shields.io/github/v/release/wsdjeg/picker.nvim)](https://github.com/wsdjeg/picker.nvim/releases)
+[![luarocks](https://img.shields.io/luarocks/v/wsdjeg/picker.nvim)](https://luarocks.org/modules/wsdjeg/picker.nvim)
 
 ![picker-neovim](https://wsdjeg.net/images/picker-neovim.png)
 

@@ -17,7 +17,7 @@ local function preview_timer(_)
         if ok then
             context = {}
             job.start(preview_cmd, {
-                on_stdou = function(id, data)
+                on_stdout = function(id, data)
                     for _, v in ipairs(data) do
                         table.insert(context, v)
                     end
@@ -26,14 +26,12 @@ local function preview_timer(_)
                     if data == 0 and single == 0 then
                         vim.api.nvim_set_option_value('modifiable', true, { buf = preview_bufnr })
                         vim.api.nvim_buf_set_lines(preview_bufnr, 0, -1, false, context)
-                        vim.api.nvim_set_option_value('modifiable', false, { buf = preview_bufnr })
                     end
                 end,
             })
         else
             vim.api.nvim_set_option_value('modifiable', true, { buf = preview_bufnr })
             vim.api.nvim_buf_set_lines(preview_bufnr, 0, -1, false, vim.fn.systemlist(preview_cmd))
-            vim.api.nvim_set_option_value('modifiable', false, { buf = preview_bufnr })
         end
     end
 end

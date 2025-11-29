@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.6.0](https://github.com/wsdjeg/picker.nvim/compare/v1.5.0...v1.6.0) (2025-11-29)
+
+
+### Features
+
+* add cmd previewer ([189730e](https://github.com/wsdjeg/picker.nvim/commit/189730e6f64911cd967664b47274979f46c1c49a))
+
+
+### Bug Fixes
+
+* fix cmd previewer ([dac5bc8](https://github.com/wsdjeg/picker.nvim/commit/dac5bc87abff26ede02168638ba871be1df6a143))
+* format help file ([90fa1d2](https://github.com/wsdjeg/picker.nvim/commit/90fa1d2340432cffeb7e5a2ba324dbbb14eb4323))
+* use unix fileformat ([b7dc3a8](https://github.com/wsdjeg/picker.nvim/commit/b7dc3a8eda4a8678860c24aa96ba0da5ac3c66d6))
+
 ## [1.5.0](https://github.com/wsdjeg/picker.nvim/compare/v1.4.0...v1.5.0) (2025-11-22)
 
 

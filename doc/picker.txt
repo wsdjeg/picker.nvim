@@ -15,6 +15,32 @@ CONTENTS                                                            *picker*
     5.2 Picker Key Bindings                               |picker-keybindings|
   6. Builtin Sources                                          |picker-sources|
     6.1 Files                                            |picker-source-files|
+    6.2 cmd_history                                |picker-source-cmd_history|
+    6.3 picker_config                            |picker-source-picker_config|
+    6.4 highlights                                  |picker-source-highlights|
+    6.5 async_files                                |picker-source-async_files|
+    6.6 colorscheme                                |picker-source-colorscheme|
+    6.7 buftags                                        |picker-source-buftags|
+    6.8 buffers                                        |picker-source-buffers|
+    6.9 lines                                            |picker-source-lines|
+    6.10 help_tags                                   |picker-source-help_tags|
+    6.11 qflist                                         |picker-source-qflist|
+    6.13 registers                                   |picker-source-registers|
+    6.14 jumps                                           |picker-source-jumps|
+    6.15 marks                                           |picker-source-marks|
+    6.16 lsp_document_symbols             |picker-source-lsp_document_symbols|
+    6.17 lsp_workspace_symbols           |picker-source-lsp_workspace_symbols|
+    6.18 lsp_references                         |picker-source-lsp_references|
+    6.19 emoji                                           |picker-source-emoji|
+    6.20 key-mappings                             |picker-source-key-mappings|
+  7. Third party sources                          |picker-third-party-sources|
+  8. Custom source                                      |picker-custom-source|
+  9. Custom layout                                      |picker-custom-layout|
+  10. FAQ                                                         |picker-faq|
+  11. Self-Promotion                                   |picker-self-promotion|
+  12. Feedback                                               |picker-feedback|
+  13. Credits                                                 |picker-credits|
+  14. License                                                 |picker-license|
 
 ==============================================================================
  1. INTRODUCTION                                       *picker-introduction*
@@ -92,10 +118,14 @@ Using luarocks <https://luarocks.org/>
             config = function()
                 require("picker").setup({
                     filter = {
-                        ignorecase = false, -- ignorecase (boolean): defaults to false
+                        -- ignorecase (boolean): defaults to false
+                        ignorecase = false,
                     },
                     window = {
-                        width = 0.8, -- set picker screen width, default is 0.8 * vim.o.columns
+                        -- set picker screen width, height, col and row
+                        -- default width is 0.8 * vim.o.columns
+                        width = 0.8,
+                        -- default height is 0.8 * vim.o.lines
                         height = 0.8,
                         col = 0.1,
                         row = 0.1,
@@ -103,14 +133,16 @@ Using luarocks <https://luarocks.org/>
                         current_icon_hl = "CursorLine",
                         enable_preview = false,
                         preview_timeout = 500,
-                        show_score = false,  -- display/hide match score at the end of each item.
+                        -- display/hide match score at the end of each item.
+                        show_score = false,
                     },
                     highlight = {
                         matched = "Tag",
                         score = "Comment",
                     },
                     prompt = {
-                        position = "bottom", -- set prompt position, bottom or top
+                        -- set prompt position, bottom or top
+                        position = "bottom",
                         icon = ">",
                         icon_hl = "Error",
                         insert_timeout = 100,
@@ -202,7 +234,7 @@ Using luarocks <https://luarocks.org/>
  | key-mappings          | key mappings                            |
 
 ------------------------------------------------------------------------------
- 6.1. files                                            *picker-source-files*
+ 6.1 files                                             *picker-source-files*
 
  The default commands for listing files is `{'rg', '--files'}`.
  this can be changed via:
@@ -214,3 +246,309 @@ Using luarocks <https://luarocks.org/>
  | `<Enter>`     | open select file                   |
  | `<C-v>`       | open select file in vertical split |
  | `<C-t>`       | open select file in new tabpage    |
+
+------------------------------------------------------------------------------
+ 6.2 cmd_history                                 *picker-source-cmd_history*
+
+ filter results from `:history cmd`.
+
+ | key binding | description                   |
+ | ----------- | ----------------------------- |
+ | `<Enter>`     | execute select command        |
+ | `<C-d>`       | delete select command history |
+
+------------------------------------------------------------------------------
+ 6.3 picker_config                             *picker-source-picker_config*
+
+ filter and setup picker.nvim without changing configuration file.
+
+ | items         | description                          |
+ | ------------- | ------------------------------------ |
+ | prompt-top    | change the prompt position to top    |
+ | prompt-bottom | change the prompt position to bottom |
+ | show-score    | display matched score                |
+ | hide-score    | hide matched score                   |
+ | ignrecase     | change filter ignrecase to true      |
+ | noignrecase   | change filter ignrecase to false     |
+
+ | key binding | description                |
+ | ----------- | -------------------------- |
+ | `<Enter>`     | set selected picker config |
+
+------------------------------------------------------------------------------
+ 6.4 highlights                                   *picker-source-highlights*
+
+ filter results from `:highlight`
+
+ | key binding | description                        |
+ | ----------- | ---------------------------------- |
+ | `<Enter>`     | yank selected highlight group name |
+
+------------------------------------------------------------------------------
+ 6.5 async_files                                 *picker-source-async_files*
+
+ same as `files` source, but require job.nvim.
+
+ | key binding | description      |
+ | ----------- | ---------------- |
+ | `<Enter>`     | open select file |
+
+------------------------------------------------------------------------------
+ 6.6 colorscheme                                 *picker-source-colorscheme*
+
+filter colorschemes.
+
+ | key binding | description                    |
+ | ----------- | ------------------------------ |
+ | `<Enter>`     | change to selected colorscheme |
+
+------------------------------------------------------------------------------
+ 6.7 buftags                                         *picker-source-buftags*
+
+ filter ctags outline, require ctags command.
+
+ | key binding | description        |
+ | ----------- | ------------------ |
+ | `<Enter>`     | jump to select tag |
+
+------------------------------------------------------------------------------
+ 6.8 buffers                                         *picker-source-buffers*
+
+ file results from `nvim_list_bufs()`
+
+ | key binding | description             |
+ | ----------- | ----------------------- |
+ | `<Enter>`     | switch to select buffer |
+
+------------------------------------------------------------------------------
+ 6.9 lines                                             *picker-source-lines*
+
+ | key binding | description           |
+ | ----------- | --------------------- |
+ | `<Enter>`     | jump to selected line |
+
+------------------------------------------------------------------------------
+ 6.10 help_tags                                    *picker-source-help_tags*
+
+| key binding | description            |
+| ----------- | ---------------------- |
+| `<Enter>`     | jump selected help tag |
+
+------------------------------------------------------------------------------
+ 6.11 qflist                                          *picker-source-qflist*
+
+| key binding | description                      |
+| ----------- | -------------------------------- |
+| `<Enter>`     | jump selected quickfix list item |
+
+------------------------------------------------------------------------------
+ 6.12 loclist                                        *picker-source-loclist*
+
+| key binding | description                |
+| ----------- | -------------------------- |
+| `<Enter>`     | jump selected loclist item |
+
+------------------------------------------------------------------------------
+ 6.13 registers                                    *picker-source-registers*
+
+| key binding | description            |
+| ----------- | ---------------------- |
+| `<Enter>`     | paste selected context |
+
+------------------------------------------------------------------------------
+ 6.14 jumps                                            *picker-source-jumps*
+
+ | key binding | description            |
+ | ----------- | ---------------------- |
+ | `<Enter>`     | jump selected position |
+
+------------------------------------------------------------------------------
+ 6.15 marks                                            *picker-source-marks*
+
+ | key binding | description            |
+ | ----------- | ---------------------- |
+ | `<Enter>`     | jump selected position |
+
+------------------------------------------------------------------------------
+ 6.16 lsp_document_symbols              *picker-source-lsp_document_symbols*
+
+| key binding | description          |
+| ----------- | -------------------- |
+| `<Enter>`     | jump selected symbol |
+
+------------------------------------------------------------------------------
+ 6.17 lsp_workspace_symbols            *picker-source-lsp_workspace_symbols*
+
+| key binding | description          |
+| ----------- | -------------------- |
+| `<Enter>`     | jump selected symbol |
+
+------------------------------------------------------------------------------
+ 6.18 lsp_references                          *picker-source-lsp_references*
+
+| key binding | description             |
+| ----------- | ----------------------- |
+| `<Enter>`     | jump selected reference |
+
+------------------------------------------------------------------------------
+ 6.19 emoji                                            *picker-source-emoji*
+
+filter emoji entries from muan/unicode-emoji-json <https://github.com/muan/unicode-emoji-json>
+
+This source will try to use job.nvim to download emoji json data, if job.nvim
+is not installed, `vim.fn.system()` will be used.
+
+| key binding | description           |
+| ----------- | --------------------- |
+| `<Enter>`     | insert selected emoji |
+
+------------------------------------------------------------------------------
+ 6.20 key-mappings                              *picker-source-key-mappings*
+
+| key binding | description                  |
+| ----------- | ---------------------------- |
+| `<Enter>`     | trigger selected key mapping |
+
+==============================================================================
+ 7. Third party sources                         *picker-third-party-sources*
+
+| source            | description                                                                                     |
+| ----------------- | ----------------------------------------------------------------------------------------------- |
+| mru               | most recent used files, need mru.nvim <https://github.com/wsdjeg/mru.nvim>                     |
+| project           | project history, need rooter.nvim <https://github.com/wsdjeg/rooter.nvim>                      |
+| bookmarks         | all bookmarks, need bookmarks.nvim <https://github.com/wsdjeg/bookmarks.nvim>                  |
+| zettelkasten      | zettelkasten notes source from zettelkasten.nvim <https://github.com/wsdjeg/zettelkasten.nvim> |
+| zettelkasten_tags | zettelkasten tags source from zettelkasten.nvim <https://github.com/wsdjeg/zettelkasten.nvim>  |
+| git-branch        | git branch source from git.nvim <https://github.com/wsdjeg/git.nvim>                           |
+| music-player      | music-player source form music-player.nvim <https://github.com/wsdjeg/music-player.nvim>       |
+| plug              | plugins source for nvim-plug <https://github.com/wsdjeg/nvim-plug>                             |
+| async_files       | async files source, require job.nvim <https://github.com/wsdjeg/job.nvim>                      |
+
+==============================================================================
+ 8. Custom source                                     *picker-custom-source*
+
+a source main module should be `picker.sources.<name>`,
+that means you can create a custom source in `lua/picker/sources/`
+directory in your plugin.
+
+>
+    --- @class PickerSource
+    --- @field get function
+    --- @field default_action function
+    --- @field __results nil | table<string>
+    --- @field preview_win boolean
+    --- @field preview function
+    --- @field set function
+    --- @field actions? table
+<
+
+==============================================================================
+ 9. Custom layout                                     *picker-custom-layout*
+
+picker.nvim use `default` layout by default. a layout should provide 
+following public functions:
+
+>
+    local M = {}
+
+    ---@class PickerLayout
+    ---@field prompt_buf integer
+    ---@field prompt_win integer
+    ---@field list_buf integer
+    ---@field list_win integer
+    ---@field preview_buf integer
+    ---@field preview_win integer
+
+    ---@param source PickerSource
+    ---@param config PickerConfig
+    ---@return PickerLayout
+    function M.render_windows(source, config)
+    end
+
+    return M
+<
+
+==============================================================================
+ 10. FAQ                                                        *picker-faq*
+
+1. how to disable nvim-cmp in picker.nvim buffer?
+
+>
+    require("cmp").setup({
+        enabled = function()
+            if vim.bo.filetype == "picker-prompt" then
+                return false
+            end
+            return true
+        end,
+    })
+<
+
+2. how to use picker.nvim as `vim.ui.select`?
+
+>
+    vim.ui.select = function(items, opt, callback)
+        local source = {}
+        opt = opt or {}
+        if opt.prompt then
+            source.name = opt.prompt
+        else
+            source.name = "Select one of:"
+        end
+
+        source.get = function()
+            local entrys = {}
+            for idx, item in ipairs(items) do
+                local entry = {
+                    value = item,
+                    idx = idx, -- this also can be nil
+                }
+
+                if opt.format_item then
+                    entry.str = opt.format_item(item)
+                else
+                    entry.str = item
+                end
+                table.insert(entrys, entry)
+            end
+            return entrys
+        end
+
+        source.default_action = function(entry)
+            if callback then
+                callback(entry.value, entry.idx)
+            end
+        end
+
+        require("picker.windows").open(source, {
+            buf = vim.api.nvim_get_current_buf(),
+        })
+    end
+<
+
+==============================================================================
+ 11. Self-Promotion                                  *picker-self-promotion*
+
+Like this plugin? Star the repository on
+GitHub.
+
+Love this plugin? Follow [me](https://wsdjeg.net/) on
+[GitHub](https://github.com/wsdjeg).
+
+==============================================================================
+ 12. Feedback                                              *picker-feedback*
+
+If you encounter any bugs or have suggestions, please file an issue in the [issue tracker](https://github.com/wsdjeg/picker.nvim/issues)
+
+==============================================================================
+ 13. Credits                                                *picker-credits*
+
+- [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
+- [denite.nvim](https://github.com/Shougo/denite.nvim)
+
+==============================================================================
+ 14. License                                                *picker-license*
+
+Licensed under GPL-3.0.
+
+ vim:cc=78:tw=78:ts=4:sw=4:et:ft=help:norl:

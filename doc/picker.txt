@@ -1,0 +1,78 @@
+*picker.nvim* A Fuzzy Finder For Neovim Written In Lua
+
+Author: Eric Wong <wsdjeg@outlook.com>
+Url: https://github.com/wsdjeg/picker.nvim
+
+==============================================================================
+CONTENTS                                                            *picker*
+
+  1. Introduction                                        |picker-introduction|
+  2. Features                                                |picker-features|
+  3. Installation                                        |picker-installation|
+
+==============================================================================
+ 1. INTRODUCTION                                       *picker-introduction*
+
+`picker.nvim` is a lightweight, high-performance fuzzy finder for Neovim,
+built around a simple and extensible design. It provides a fast fzy-based
+matcher, flexible UI layouts, and an easy-to-write source API that lets you
+create custom pickers with minimal code. Whether you need file search, LSP
+symbols, diagnostics, or fully custom workflows, `picker.nvim` offers a clean
+and composable approach without the overhead of larger frameworks.
+
+==============================================================================
+ 2. Features                                               *picker-features*
+
+- ⚡ High-performance fuzzy matching powered by the fzy algorithm
+- 🔧 Simple yet extensible source API
+- 🪟 Flexible UI layouts (floating window, preview panel)
+- 🧩 built-in picker sources
+- 📦 Growing ecosystem of third-party extensions
+- ⌨️ Fully configurable actions & key mappings
+- 🔍 Live preview and asynchronous loading support
+
+==============================================================================
+ 3. Installation                                       *picker-installation*
+
+
+picker.nvim works with all major Neovim plugin managers.
+Neovim 0.11+ is recommended for best compatibility.
+
+Using nvim-plug <https://github.com/wsdjeg/nvim-plug>
+
+>
+    require("plug").add({
+	    {
+		    "wsdjeg/picker.nvim",
+	    },
+    })
+<
+
+Using lazy.nvim <https://github.com/folke/lazy.nvim>
+
+>
+    {
+      "wsdjeg/picker.nvim",
+      event = "VeryLazy",
+      config = function()
+        require("picker").setup()
+      end,
+    }
+<
+
+Using packer.nvim <https://github.com/wbthomason/packer.nvim>
+
+>
+    use({
+      "wsdjeg/picker.nvim",
+      config = function()
+        require("picker").setup()
+      end,
+    })
+<
+
+Using luarocks <https://luarocks.org/>
+
+>
+    luarocks install picker.nvim
+<

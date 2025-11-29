@@ -10,6 +10,11 @@ CONTENTS                                                            *picker*
   2. Features                                                |picker-features|
   3. Installation                                        |picker-installation|
   4. Configuration                                      |picker-configuration|
+  5. Basic Usage                                                |picker-usage|
+    5.1 Picker Command                                        |picker-command|
+    5.2 Picker Key Bindings                               |picker-keybindings|
+  6. Builtin Sources                                          |picker-sources|
+    6.1 Files                                            |picker-source-files|
 
 ==============================================================================
  1. INTRODUCTION                                       *picker-introduction*
@@ -124,3 +129,88 @@ Using luarocks <https://luarocks.org/>
     })
 <
 
+==============================================================================
+ 5. Basic Usage                                               *picker-usage*
+
+------------------------------------------------------------------------------
+ 5.1 Picker Command                                         *picker-command*
+
+ fuzzy finder picker source.
+
+ run `:Picker` command without source name.
+
+>
+ :Picker
+<
+
+ open picker source.
+
+ run `:Picker` command with a name of source.
+
+>
+ :Picker <name>
+<
+
+ specific default input
+
+ with `--input` option, users also can specific default input text.
+
+>
+ :Picker file --input=foo
+<
+ or use `<cword>` for word under cursor.
+
+>
+ :Picker help_tags --input=<cword>
+<
+
+------------------------------------------------------------------------------
+ 5.2 Key Bindings                                       *picker-keybindings*
+
+ In picker prompt window, the these mappings are defined by default.
+
+ | key binding | description    |
+ | ----------- | -------------- |
+ | Tab         | next item      |
+ | S-Tab       | previous item  |
+ | Enter       | default action |
+ | Esc         | close picker   |
+
+==============================================================================
+ 6. Builtin Sources                                         *picker-sources*
+
+ | source                | description                             |
+ | --------------------- | --------------------------------------- |
+ | buffers               | listed buffers                          |
+ | buftags               | ctags outline for current buffer        |
+ | cmd_history           | results from `:history :`                 |
+ | colorscheme           | all colorschemes                        |
+ | files                 | files in current dir                    |
+ | help_tags             | neovim help tags source                 |
+ | highlights            | highlight group source                  |
+ | jumps                 | jump list                               |
+ | lines                 | lines in current buffer                 |
+ | loclist               | location list source                    |
+ | lsp_document_symbols  | document symbols result from lsp client |
+ | lsp_references        | lsp references                          |
+ | lsp_workspace_symbols | workspace symbols                       |
+ | marks                 | marks list                              |
+ | picker_config         | picker config source                    |
+ | qflist                | quickfix source                         |
+ | registers             | registers context                       |
+ | emoji                 | emoji entries                           |
+ | key-mappings          | key mappings                            |
+
+------------------------------------------------------------------------------
+ 6.1. files                                            *picker-source-files*
+
+ The default commands for listing files is `{'rg', '--files'}`.
+ this can be changed via:
+>
+ require("picker.sources.files").set({ cmd = { "rg", "--files" } })
+<
+ | key binding | description                        |
+ | ----------- | ---------------------------------- |
+ | `<Enter>`     | open select file                   |
+ | `<C-v>`       | open select file in vertical split |
+ | `<C-t>`       | open select file in new tabpage    |

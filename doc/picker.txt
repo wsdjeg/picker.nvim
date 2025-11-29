@@ -393,7 +393,8 @@ filter colorschemes.
 ------------------------------------------------------------------------------
  6.19 emoji                                            *picker-source-emoji*
 
-filter emoji entries from muan/unicode-emoji-json <https://github.com/muan/unicode-emoji-json>
+filter emoji entries from muan/unicode-emoji-json:
+https://github.com/muan/unicode-emoji-json
 
 This source will try to use job.nvim to download emoji json data, if job.nvim
 is not installed, `vim.fn.system()` will be used.
@@ -412,17 +413,17 @@ is not installed, `vim.fn.system()` will be used.
 ==============================================================================
  7. Third party sources                         *picker-third-party-sources*
 
-| source            | description                                                                                     |
-| ----------------- | ----------------------------------------------------------------------------------------------- |
-| mru               | most recent used files, need mru.nvim <https://github.com/wsdjeg/mru.nvim>                     |
-| project           | project history, need rooter.nvim <https://github.com/wsdjeg/rooter.nvim>                      |
-| bookmarks         | all bookmarks, need bookmarks.nvim <https://github.com/wsdjeg/bookmarks.nvim>                  |
-| zettelkasten      | zettelkasten notes source from zettelkasten.nvim <https://github.com/wsdjeg/zettelkasten.nvim> |
-| zettelkasten_tags | zettelkasten tags source from zettelkasten.nvim <https://github.com/wsdjeg/zettelkasten.nvim>  |
-| git-branch        | git branch source from git.nvim <https://github.com/wsdjeg/git.nvim>                           |
-| music-player      | music-player source form music-player.nvim <https://github.com/wsdjeg/music-player.nvim>       |
-| plug              | plugins source for nvim-plug <https://github.com/wsdjeg/nvim-plug>                             |
-| async_files       | async files source, require job.nvim <https://github.com/wsdjeg/job.nvim>                      |
+| source            | description                                            |
+| ----------------- | ------------------------------------------------------ |
+| mru               | most recent used files, need `wsdjeg/mru.nvim`           |
+| project           | project history, need `wsdjeg/rooter.nvim`               |
+| bookmarks         | all bookmarks, need `wsdjeg/bookmarks.nvim`              |
+| zettelkasten      | zk notes source from `wsdjeg/zettelkasten.nvim`          |
+| zettelkasten_tags | zk tags source from `wsdjeg/zettelkasten.nvim`           |
+| git-branch        | git branch source from `wsdjeg/git.nvim`                 |
+| music-player      | music-player source form `wsdjeg/music-player.nvim`      |
+| plug              | plugins source for `wsdjeg/nvim-plug`                    |
+| async_files       | async files source, require `wsdjeg/job.nvim`            |
 
 ==============================================================================
  8. Custom source                                     *picker-custom-source*
@@ -538,7 +539,8 @@ Love this plugin? Follow [me](https://wsdjeg.net/) on
 ==============================================================================
  12. Feedback                                              *picker-feedback*
 
-If you encounter any bugs or have suggestions, please file an issue in the [issue tracker](https://github.com/wsdjeg/picker.nvim/issues)
+If you encounter any bugs or have suggestions, please file an issue in the
+issue tracker: https://github.com/wsdjeg/picker.nvim/issues
 
 ==============================================================================
  13. Credits                                                *picker-credits*

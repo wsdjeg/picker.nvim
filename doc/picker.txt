@@ -9,6 +9,7 @@ CONTENTS                                                            *picker*
   1. Introduction                                        |picker-introduction|
   2. Features                                                |picker-features|
   3. Installation                                        |picker-installation|
+  4. Configuration                                      |picker-configuration|
 
 ==============================================================================
  1. INTRODUCTION                                       *picker-introduction*
@@ -76,3 +77,50 @@ Using luarocks <https://luarocks.org/>
 >
     luarocks install picker.nvim
 <
+==============================================================================
+ 4. Configuration                                       *picker-configuration*
+
+>
+    require("plug").add({
+        {
+            "wsdjeg/picker.nvim",
+            config = function()
+                require("picker").setup({
+                    filter = {
+                        ignorecase = false, -- ignorecase (boolean): defaults to false
+                    },
+                    window = {
+                        width = 0.8, -- set picker screen width, default is 0.8 * vim.o.columns
+                        height = 0.8,
+                        col = 0.1,
+                        row = 0.1,
+                        current_icon = ">",
+                        current_icon_hl = "CursorLine",
+                        enable_preview = false,
+                        preview_timeout = 500,
+                        show_score = false,  -- display/hide match score at the end of each item.
+                    },
+                    highlight = {
+                        matched = "Tag",
+                        score = "Comment",
+                    },
+                    prompt = {
+                        position = "bottom", -- set prompt position, bottom or top
+                        icon = ">",
+                        icon_hl = "Error",
+                        insert_timeout = 100,
+                        title = true, -- display/hide source name
+                    },
+                    mappings = {
+                        close = "<Esc>",
+                        next_item = "<Tab>",
+                        previous_item = "<S-Tab>",
+                        open_item = "<Enter>",
+                        toggle_preview = "<C-p>",
+                    },
+                })
+            end,
+        },
+    })
+<
+

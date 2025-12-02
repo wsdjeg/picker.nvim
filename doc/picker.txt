@@ -120,6 +120,9 @@ Using luarocks <https://luarocks.org/>
                     filter = {
                         -- ignorecase (boolean): defaults to false
                         ignorecase = false,
+                        -- set default matcher, default is fzy
+                        -- this can be fzy or matchfuzzy
+                        matcher = 'fzy',
                     },
                     window = {
                         -- set picker screen width, height, col and row

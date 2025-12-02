@@ -119,6 +119,7 @@ require("plug").add({
 			require("picker").setup({
 				filter = {
 					ignorecase = false, -- ignorecase (boolean): defaults to false
+                    matcher = 'fzy', -- fzy or matchfuzzy
 				},
 				window = {
 					width = 0.8, -- set picker screen width, default is 0.8 * vim.o.columns

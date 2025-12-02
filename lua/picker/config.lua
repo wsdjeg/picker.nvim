@@ -2,11 +2,11 @@ local M = {}
 
 ---@class PickerConfig
 
-
 ---@type PickerConfig
 local default = {
     filter = {
         ignorecase = false,
+        matcher = 'fzy',
     },
     window = {
         layout = 'default',

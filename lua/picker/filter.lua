@@ -5,7 +5,10 @@ local M = {}
 ---@param ignorecase boolean
 function M.filter(input, source, ignorecase)
     local config = require('picker.config').get()
-    local matcher = require('picker.matchers.' .. config.filter.matcher)
+    local ok, matcher = pcall(require, 'picker.matchers.' .. config.filter.matcher)
+    if not ok then
+        matcher = require('picker.matchers.fzy')
+    end
     if #input == 0 then
         local i = 1
         source.filter_items = vim.tbl_map(function(t)

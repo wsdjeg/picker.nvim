@@ -88,6 +88,17 @@ local configs = {
             })
         end,
     },
+    {
+        name = 'matcher-levenshtein',
+        desc = 'use levenshtein matcher',
+        func = function()
+            require('picker').setup({
+                filter = {
+                    matcher = 'levenshtein',
+                },
+            })
+        end,
+    },
 }
 
 ---@return table<PickerItem>

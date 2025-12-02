@@ -46,7 +46,6 @@ local function clear_highlight()
 end
 
 local function highlight_list_windows()
-    util.info('highlight list_buf')
     clear_highlight()
     local info = vim.fn.getwininfo(layout.list_win)[1]
     local from = info.topline
@@ -268,7 +267,6 @@ function M.handle_prompt_changed()
         vim.api.nvim_win_set_cursor(layout.list_win, { 1, 1 })
         filter.filter(input, source, config.filter.ignorecase)
 
-        util.info('update list_buf context')
         vim.api.nvim_buf_set_lines(
             layout.list_buf,
             0,

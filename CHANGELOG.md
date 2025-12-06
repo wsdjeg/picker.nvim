@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.7.0](https://github.com/wsdjeg/picker.nvim/compare/v1.6.0...v1.7.0) (2025-12-06)
+
+
+### Features
+
+* add levenshtein matcher ([f90d6f0](https://github.com/wsdjeg/picker.nvim/commit/f90d6f02c1529488822f183632fc488e943116b4))
+* support built-in matchfuzzy matcher ([bf684b4](https://github.com/wsdjeg/picker.nvim/commit/bf684b465730247dc5fbc39a4e6030ae1f59d5c1))
+
+
+### Bug Fixes
+
+* remove debug log ([3006588](https://github.com/wsdjeg/picker.nvim/commit/300658824c090d59546b764daaa991924b451c05))
+* remove match test ([36a868f](https://github.com/wsdjeg/picker.nvim/commit/36a868f27a0527109fe23338a2e6d0349379b27d))
+* use default matcher if failed ([fc2fb76](https://github.com/wsdjeg/picker.nvim/commit/fc2fb7664485b29515d0844934f04bc2b1b0885f))
+
 ## [1.6.0](https://github.com/wsdjeg/picker.nvim/compare/v1.5.0...v1.6.0) (2025-11-29)
 
 

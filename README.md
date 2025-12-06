@@ -411,6 +411,26 @@ that means you can create a custom source in `lua/picker/sources/` directory in 
 --- @field actions? table
 ```
 
+To create picker source in script script without using `lua/picker/` directory:
+
+```lua
+local custom_source = {
+    get = function()
+        return vim.tbl_map(function(t)
+            return {
+                value = t,
+                str = t,
+            }
+        end, vim.split(vim.o.runtimepath, ','))
+    end,
+    default_action = function(entry)
+        vim.print(entry)
+    end,
+}
+
+require('picker.windows').open(custom_source, {})
+```
+
 ## 🪟 Custom layout
 
 picker.nvim use `default` layout by default. a layout should provide following public functions:

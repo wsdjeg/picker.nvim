@@ -434,7 +434,6 @@ is not installed, `vim.fn.system()` will be used.
 a source main module should be `picker.sources.<name>`,
 that means you can create a custom source in `lua/picker/sources/`
 directory in your plugin.
-
 >
     --- @class PickerSource
     --- @field get function
@@ -444,6 +443,24 @@ directory in your plugin.
     --- @field preview function
     --- @field set function
     --- @field actions? table
+<
+To create picker source in script without using `lua/picker/` directory:
+>
+local custom_source = {
+    get = function()
+        return vim.tbl_map(function(t)
+            return {
+                value = t,
+                str = t,
+            }
+        end, vim.split(vim.o.runtimepath, ','))
+    end,
+    default_action = function(entry)
+        vim.print(entry)
+    end,
+}
+
+require('picker.windows').open(custom_source, {})
 <
 
 ==============================================================================

@@ -411,7 +411,7 @@ that means you can create a custom source in `lua/picker/sources/` directory in 
 --- @field actions? table
 ```
 
-To create picker source in script script without using `lua/picker/` directory:
+To create picker source in script without using `lua/picker/` directory:
 
 ```lua
 local custom_source = {

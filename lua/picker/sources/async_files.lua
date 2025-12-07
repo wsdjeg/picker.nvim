@@ -52,6 +52,7 @@ local function on_exit(id)
 end
 
 local function async_run()
+    items = {}
     if jobid > 0 then
         job.stop(jobid)
     end
@@ -59,7 +60,6 @@ local function async_run()
         on_stdout = on_stdout,
         on_exit = on_exit,
     })
-    return items
 end
 
 function M.set(opt)
@@ -70,8 +70,6 @@ function M.set(opt)
     opt = opt or {}
 
     cmd = opt.cmd or cmd
-    items = {}
-
     async_run()
 end
 
@@ -82,6 +80,34 @@ end
 ---@field item PickerItem
 function M.default_action(item)
     vim.cmd('edit ' .. item.value)
+end
+
+function M.actions()
+    return {
+        ['<C-v>'] = function(entry)
+            vim.cmd('vsplit ' .. entry.value)
+        end,
+        ['<C-t>'] = function(entry)
+            vim.cmd('tabedit ' .. entry.value)
+        end,
+    }
+end
+
+local hidden = true
+
+function M.redraw_actions()
+    return {
+        ['<C-h>'] = function(entry)
+            if hidden then
+                cmd = { 'rg', '--files', '--hidden' }
+                hidden = false
+            else
+                cmd = { 'rg', '--files' }
+                hidden = true
+            end
+            async_run()
+        end,
+    }
 end
 
 M.preview_win = true

@@ -408,7 +408,8 @@ that means you can create a custom source in `lua/picker/sources/` directory in 
 --- @field preview_win boolean
 --- @field preview function
 --- @field set function
---- @field actions? table
+--- @field actions? table close picker window and trigger action
+--- @field redraw_actions? table picker window will not be closed after action
 ```
 
 To create picker source in script without using `lua/picker/` directory:

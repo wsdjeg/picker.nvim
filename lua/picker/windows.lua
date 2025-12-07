@@ -189,6 +189,24 @@ function M.open(s, opt)
             end, { buffer = layout.prompt_buf })
         end
     end
+    if type(source.redraw_actions) == 'function' then
+        for key, action in pairs(source.redraw_actions()) do
+            vim.keymap.set('i', key, function()
+                vim.fn.timer_stop(insert_timer_id)
+                local cursor = vim.api.nvim_win_get_cursor(layout.list_win)
+                -- make sure filter_items is not empty
+                if source.filter_items and #source.filter_items >= 1 then
+                    action(source.filter_items[cursor[1]][4])
+                else
+                    action()
+                end
+                source.state = {}
+                source.state.items = source.get()
+                source.filter_items = {}
+                M.handle_prompt_changed()
+            end, { buffer = layout.prompt_buf })
+        end
+    end
     vim.keymap.set('i', config.mappings.next_item, function()
         local cursor = vim.api.nvim_win_get_cursor(layout.list_win)
         if cursor[1] < vim.api.nvim_buf_line_count(layout.list_buf) then

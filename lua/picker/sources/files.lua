@@ -57,6 +57,22 @@ function M.actions()
     }
 end
 
+local hidden = true
+
+function M.redraw_actions()
+    return {
+        ['<C-h>'] = function(entry)
+            if hidden then
+                list_files_cmd = { 'rg', '--files', '--hidden' }
+                hidden = false
+            else
+                list_files_cmd = { 'rg', '--files' }
+                hidden = true
+            end
+        end,
+    }
+end
+
 ---@field item PickerItem
 function M.default_action(item)
     vim.cmd('edit ' .. item.value)

@@ -22,12 +22,15 @@ function M.get()
     return vim.tbl_map(function(t)
         if get_icon then
             local bufname = vim.api.nvim_buf_get_name(t)
-            local icon, hl = get_icon(vim.fn.fnamemodify(bufname, ':t'))
+            local base_name = vim.fn.fnamemodify(bufname, ':t')
+            local icon, hl = get_icon(base_name)
+            local str = vim.fn.fnamemodify(bufname, ':.')
             return {
-                str = (icon or '󰈔') .. ' ' .. vim.fn.fnamemodify(bufname, ':.'),
+                str = (icon or '󰈔') .. ' ' .. str,
                 value = t,
                 highlight = {
                     { 0, 2, hl },
+                    { 3, #str - #base_name + 4, 'Comment' },
                 },
             }
         else

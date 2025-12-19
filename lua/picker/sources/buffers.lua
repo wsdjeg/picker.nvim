@@ -43,6 +43,17 @@ function M.default_action(s)
     vim.api.nvim_set_current_buf(s.value)
 end
 
+function M.actions()
+    return {
+        ['<C-v>'] = function(entry)
+            vim.cmd(string.format('vertical sbuffer %d', entry.value))
+        end,
+        ['<C-t>'] = function(entry)
+            vim.cmd(string.format('tab sbuffer %d', entry.value))
+        end,
+    }
+end
+
 M.preview_win = true
 
 ---@field item PickerItem

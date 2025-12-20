@@ -51,16 +51,6 @@ function M.get()
 	table.insert(cmd, "--fields=+line")
 	table.insert(cmd, bufname)
 
-	---@class PickerCtagsOutput
-	---@field name
-	---@field line
-	---@field _type
-	---@field path
-	---@field pattern
-	---@field language
-	---@field line
-	---@field kind
-
 	---@type table<PickerCtagsOutput>
 	local ctags_output = vim.split(vim.system(cmd, { text = true }):wait().stdout, "\n", { trimempty = true })
 

@@ -81,20 +81,6 @@ local function highlight_list_windows()
     end
 end
 
---- @class PickerItem
---- @field str string
---- @field value? any
-
---- @class PickerSource
---- @field get function
---- @field default_action function
---- @field preview_win boolean
---- @field preview function
---- @field set function
---- @field actions? table action tables <key binding> - <function>
---- @field enabled? function returning false means source can not be used.
---- @field state? table filter state
---- @field filter_items table
 
 --- @param s PickerSource
 --- @param opt? table

@@ -1,13 +1,5 @@
 local M = {}
 
----@class PickerLayout
----@field prompt_buf integer
----@field prompt_win integer
----@field list_buf integer
----@field list_win integer
----@field preview_buf integer
----@field preview_win integer
-
 ---@type PickerLayout
 local layout = {
     preview_buf = -1,

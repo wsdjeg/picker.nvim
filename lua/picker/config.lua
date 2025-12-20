@@ -1,7 +1,5 @@
 local M = {}
 
----@class PickerConfig
-
 ---@type PickerConfig
 local default = {
     filter = {

@@ -73,10 +73,10 @@ Neovim 0.11+ is recommended for best compatibility.
 - **Using [nvim-plug](https://github.com/wsdjeg/nvim-plug)**
 
 ```lua
-require("plug").add({
-	{
-		"wsdjeg/picker.nvim",
-	},
+require('plug').add({
+  {
+    'wsdjeg/picker.nvim',
+  },
 })
 ```
 
@@ -96,9 +96,9 @@ require("plug").add({
 
 ```lua
 use({
-  "wsdjeg/picker.nvim",
+  'wsdjeg/picker.nvim',
   config = function()
-    require("picker").setup()
+    require('picker').setup()
   end,
 })
 ```
@@ -112,47 +112,47 @@ luarocks install picker.nvim
 ## 🔧 Configuration
 
 ```lua
-require("plug").add({
-	{
-		"wsdjeg/picker.nvim",
-		config = function()
-			require("picker").setup({
-				filter = {
-					ignorecase = false, -- ignorecase (boolean): defaults to false
-                    matcher = 'fzy', -- fzy or matchfuzzy
-				},
-				window = {
-					width = 0.8, -- set picker screen width, default is 0.8 * vim.o.columns
-					height = 0.8,
-					col = 0.1,
-					row = 0.1,
-					current_icon = ">",
-					current_icon_hl = "CursorLine",
-					enable_preview = false,
-					preview_timeout = 500,
-					show_score = false,  -- display/hide match score at the end of each item.
-				},
-				highlight = {
-					matched = "Tag",
-					score = "Comment",
-				},
-				prompt = {
-					position = "bottom", -- set prompt position, bottom or top
-					icon = ">",
-					icon_hl = "Error",
-					insert_timeout = 100,
-					title = true, -- display/hide source name
-				},
-				mappings = {
-					close = "<Esc>",
-					next_item = "<Tab>",
-					previous_item = "<S-Tab>",
-					open_item = "<Enter>",
-					toggle_preview = "<C-p>",
-				},
-			})
-		end,
-	},
+require('plug').add({
+  {
+    'wsdjeg/picker.nvim',
+    config = function()
+      require('picker').setup({
+        filter = {
+          ignorecase = false, -- ignorecase (boolean): defaults to false
+          matcher = 'fzy', -- fzy or matchfuzzy
+        },
+        window = {
+          width = 0.8, -- set picker screen width, default is 0.8 * vim.o.columns
+          height = 0.8,
+          col = 0.1,
+          row = 0.1,
+          current_icon = '>',
+          current_icon_hl = 'CursorLine',
+          enable_preview = false,
+          preview_timeout = 500,
+          show_score = false, -- display/hide match score at the end of each item.
+        },
+        highlight = {
+          matched = 'Tag',
+          score = 'Comment',
+        },
+        prompt = {
+          position = 'bottom', -- set prompt position, bottom or top
+          icon = '>',
+          icon_hl = 'Error',
+          insert_timeout = 100,
+          title = true, -- display/hide source name
+        },
+        mappings = {
+          close = '<Esc>',
+          next_item = '<Tab>',
+          previous_item = '<S-Tab>',
+          open_item = '<Enter>',
+          toggle_preview = '<C-p>',
+        },
+      })
+    end,
+  },
 })
 ```
 
@@ -230,7 +230,7 @@ In picker prompt window, the these mappings are defined by default.
 The default commands for listing files is `{'rg', '--files'}`. this can be changed via:
 
 ```lua
-require("picker.sources.files").set({ cmd = { "rg", "--files" } })
+require('picker.sources.files').set({ cmd = { 'rg', '--files' } })
 ```
 
 | key binding | description                        |
@@ -416,17 +416,17 @@ To create picker source in script without using `lua/picker/` directory:
 
 ```lua
 local custom_source = {
-    get = function()
-        return vim.tbl_map(function(t)
-            return {
-                value = t,
-                str = t,
-            }
-        end, vim.split(vim.o.runtimepath, ','))
-    end,
-    default_action = function(entry)
-        vim.print(entry)
-    end,
+  get = function()
+    return vim.tbl_map(function(t)
+      return {
+        value = t,
+        str = t,
+      }
+    end, vim.split(vim.o.runtimepath, ','))
+  end,
+  default_action = function(entry)
+    vim.print(entry)
+  end,
 }
 
 require('picker.windows').open(custom_source, {})
@@ -450,8 +450,7 @@ local M = {}
 ---@param source PickerSource
 ---@param config PickerConfig
 ---@return PickerLayout
-function M.render_windows(source, config)
-end
+function M.render_windows(source, config) end
 
 return M
 ```
@@ -461,13 +460,13 @@ return M
 1. how to disable nvim-cmp in picker.nvim buffer?
 
 ```lua
-require("cmp").setup({
-	enabled = function()
-		if vim.bo.filetype == "picker-prompt" then
-			return false
-		end
-		return true
-	end,
+require('cmp').setup({
+  enabled = function()
+    if vim.bo.filetype == 'picker-prompt' then
+      return false
+    end
+    return true
+  end,
 })
 ```
 
@@ -475,41 +474,41 @@ require("cmp").setup({
 
 ```lua
 vim.ui.select = function(items, opt, callback)
-	local source = {}
-	opt = opt or {}
-	if opt.prompt then
-		source.name = opt.prompt
-	else
-		source.name = "Select one of:"
-	end
+  local source = {}
+  opt = opt or {}
+  if opt.prompt then
+    source.name = opt.prompt
+  else
+    source.name = 'Select one of:'
+  end
 
-	source.get = function()
-		local entrys = {}
-		for idx, item in ipairs(items) do
-			local entry = {
-				value = item,
-				idx = idx, -- this also can be nil
-			}
+  source.get = function()
+    local entrys = {}
+    for idx, item in ipairs(items) do
+      local entry = {
+        value = item,
+        idx = idx, -- this also can be nil
+      }
 
-			if opt.format_item then
-				entry.str = opt.format_item(item)
-			else
-				entry.str = item
-			end
-			table.insert(entrys, entry)
-		end
-		return entrys
-	end
+      if opt.format_item then
+        entry.str = opt.format_item(item)
+      else
+        entry.str = item
+      end
+      table.insert(entrys, entry)
+    end
+    return entrys
+  end
 
-	source.default_action = function(entry)
-		if callback then
-			callback(entry.value, entry.idx)
-		end
-	end
+  source.default_action = function(entry)
+    if callback then
+      callback(entry.value, entry.idx)
+    end
+  end
 
-	require("picker.windows").open(source, {
-		buf = vim.api.nvim_get_current_buf(),
-	})
+  require('picker.windows').open(source, {
+    buf = vim.api.nvim_get_current_buf(),
+  })
 end
 ```
 

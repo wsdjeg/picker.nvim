@@ -12,66 +12,66 @@ local M = {}
 -- 9. The black hole register "_
 -- 10. Last search pattern register "/
 
-local previewer = require("picker.previewer.buffer")
+local previewer = require('picker.previewer.buffer')
 
 function M.get()
-	-- "
-	local registers = { '"' }
+  -- "
+  local registers = { '"' }
 
-	-- 0 - 9
-	for i = 0, 9 do
-		table.insert(registers, tostring(i))
-	end
+  -- 0 - 9
+  for i = 0, 9 do
+    table.insert(registers, tostring(i))
+  end
 
-	-- a - z
-	for i = 97, 122 do
-		table.insert(registers, string.char(i))
-	end
+  -- a - z
+  for i = 97, 122 do
+    table.insert(registers, string.char(i))
+  end
 
-	-- A - Z
-	for i = 65, 90 do
-		table.insert(registers, string.char(i))
-	end
-	for _, i in ipairs({ ":", ".", "%", "#", "=", "*", "+", "_", "/" }) do
-		table.insert(registers, i)
-	end
+  -- A - Z
+  for i = 65, 90 do
+    table.insert(registers, string.char(i))
+  end
+  for _, i in ipairs({ ':', '.', '%', '#', '=', '*', '+', '_', '/' }) do
+    table.insert(registers, i)
+  end
 
-	local entrys = {}
+  local entrys = {}
 
-	for _, reg in ipairs(registers) do
-		local context = vim.fn.getreg(reg)
-		if context ~= "" then
-			-- if the context is `\n\+`
-			local lines = vim.split(context, "\n")
+  for _, reg in ipairs(registers) do
+    local context = vim.fn.getreg(reg)
+    if context ~= '' then
+      -- if the context is `\n\+`
+      local lines = vim.split(context, '\n')
 
-			local text = #lines > 1 and lines[1] .. "\\n" or lines[1]
+      local text = #lines > 1 and lines[1] .. '\\n' or lines[1]
 
-			table.insert(entrys, {
+      table.insert(entrys, {
 
-				value = { name = reg, context = context },
-				str = string.format("[%s] %s", reg, text),
-				highlight = {
-					{
-						0,
-						#reg + 2,
-						"Tag",
-					},
-				},
-			})
-		end
-	end
-	return entrys
+        value = { name = reg, context = context },
+        str = string.format('[%s] %s', reg, text),
+        highlight = {
+          {
+            0,
+            #reg + 2,
+            'Tag',
+          },
+        },
+      })
+    end
+  end
+  return entrys
 end
 
 function M.default_action(entry)
-	vim.api.nvim_paste(entry.value.context, false, -1)
+  vim.api.nvim_paste(entry.value.context, false, -1)
 end
 
 M.preview_win = true
 
 function M.preview(item, win, buf)
-	previewer.buflines = vim.split(item.value.context, "[\r]?\n")
-	previewer.filetype = nil
-	previewer.preview(1, win, buf, true)
+  previewer.buflines = vim.split(item.value.context, '[\r]?\n')
+  previewer.filetype = nil
+  previewer.preview(1, win, buf, true)
 end
 return M

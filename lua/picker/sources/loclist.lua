@@ -3,38 +3,35 @@ local M = {}
 local previewer = require('picker.previewer.file')
 
 function M.get()
+  local p = vim.fn.getloclist(vim.api.nvim_get_current_win())
 
-    local p = vim.fn.getloclist(vim.api.nvim_get_current_win())
-
-    return vim.tbl_map(function(t)
-        t.file = vim.api.nvim_buf_get_name(t.bufnr)
-        t.shortname = vim.fn.fnamemodify(t.file, ':.')
-        return {
-            value = t,
-            str = string.format('%s:%d:%s', t.shortname, t.lnum, t.text),
-            highlight = {
-                {
-                    0,
-                    #t.shortname + #tostring(t.lnum) + 2,
-                    'Comment',
-                },
-            },
-        }
-    end, p)
+  return vim.tbl_map(function(t)
+    t.file = vim.api.nvim_buf_get_name(t.bufnr)
+    t.shortname = vim.fn.fnamemodify(t.file, ':.')
+    return {
+      value = t,
+      str = string.format('%s:%d:%s', t.shortname, t.lnum, t.text),
+      highlight = {
+        {
+          0,
+          #t.shortname + #tostring(t.lnum) + 2,
+          'Comment',
+        },
+      },
+    }
+  end, p)
 end
 
 function M.default_action(entry)
-    vim.cmd('edit ' .. entry.value.file)
-    vim.cmd(tostring(entry.value.lnum))
+  vim.cmd('edit ' .. entry.value.file)
+  vim.cmd(tostring(entry.value.lnum))
 end
 
 M.preview_win = true
 
 ---@field item PickerItem
 function M.preview(item, win, buf)
-    previewer.preview(item.value.file, win, buf, item.value.lnum)
+  previewer.preview(item.value.file, win, buf, item.value.lnum)
 end
 
 return M
-
-

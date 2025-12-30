@@ -21,16 +21,18 @@ local current_icon_extmark
 local function update_result_count()
     local count = vim.api.nvim_buf_line_count(layout.list_buf)
     local line = vim.api.nvim_win_get_cursor(layout.list_win)[1]
-    prompt_count_id = vim.api.nvim_buf_set_extmark(layout.prompt_buf, extns, 0, 0, {
-        id = prompt_count_id,
-        virt_text = { { string.format('%d/%d', line, count), 'Comment' } },
-        virt_text_pos = 'right_align',
-    })
-    current_icon_extmark = vim.api.nvim_buf_set_extmark(layout.list_buf, extns, line - 1, 0, {
-        id = current_icon_extmark,
-        sign_text = config.window.current_icon,
-        sign_hl_group = config.window.current_icon_hl,
-    })
+    prompt_count_id =
+        vim.api.nvim_buf_set_extmark(layout.prompt_buf, extns, 0, 0, {
+            id = prompt_count_id,
+            virt_text = { { string.format('%d/%d', line, count), 'Comment' } },
+            virt_text_pos = 'right_align',
+        })
+    current_icon_extmark =
+        vim.api.nvim_buf_set_extmark(layout.list_buf, extns, line - 1, 0, {
+            id = current_icon_extmark,
+            sign_text = config.window.current_icon,
+            sign_hl_group = config.window.current_icon_hl,
+        })
 end
 
 local extmars = {}
@@ -54,33 +56,56 @@ local function highlight_list_windows()
         for x = from, to do
             for y = 1, #source.filter_items[x][2] do
                 local col = source.filter_items[x][2][y]
-                local id = vim.api.nvim_buf_set_extmark(layout.list_buf, ns, x - 1, col - 1, {
-                    end_col = col,
-                    hl_group = config.highlight.matched,
-                })
+                local id = vim.api.nvim_buf_set_extmark(
+                    layout.list_buf,
+                    ns,
+                    x - 1,
+                    col - 1,
+                    {
+                        end_col = col,
+                        hl_group = config.highlight.matched,
+                    }
+                )
                 table.insert(extmars, id)
             end
             if config.window.show_score then
-                local id = vim.api.nvim_buf_set_extmark(layout.list_buf, ns, x - 1, 0, {
-                    virt_text = { { tostring(source.filter_items[x][3]), config.highlight.score } },
-                    virt_text_pos = 'eol_right_align',
-                })
+                local id = vim.api.nvim_buf_set_extmark(
+                    layout.list_buf,
+                    ns,
+                    x - 1,
+                    0,
+                    {
+                        virt_text = {
+                            {
+                                tostring(source.filter_items[x][3]),
+                                config.highlight.score,
+                            },
+                        },
+                        virt_text_pos = 'eol_right_align',
+                    }
+                )
                 table.insert(extmars, id)
             end
             if source.filter_items[x][4].highlight then
                 for y = 1, #source.filter_items[x][4].highlight do
-                    local col_a, col_b, hl = unpack(source.filter_items[x][4].highlight[y])
-                    local id = vim.api.nvim_buf_set_extmark(layout.list_buf, ns, x - 1, col_a, {
-                        end_col = col_b,
-                        hl_group = hl,
-                    })
+                    local col_a, col_b, hl =
+                        unpack(source.filter_items[x][4].highlight[y])
+                    local id = vim.api.nvim_buf_set_extmark(
+                        layout.list_buf,
+                        ns,
+                        x - 1,
+                        col_a,
+                        {
+                            end_col = col_b,
+                            hl_group = hl,
+                        }
+                    )
                     table.insert(extmars, id)
                 end
             end
         end
     end
 end
-
 
 --- @param s PickerSource
 --- @param opt? table
@@ -96,12 +121,19 @@ function M.open(s, opt)
     source.filter_items = {}
 
     local ok, _ = pcall(function()
-        layout = require('picker.layout.' .. config.window.layout).render_windows(source, config)
+        layout =
+            require('picker.layout.' .. config.window.layout).render_windows(
+                source,
+                config
+            )
     end)
 
     if not ok then
         util.notify(
-            string.format('can not found layout "%s" for picker.nvim', config.window.layout)
+            string.format(
+                'can not found layout "%s" for picker.nvim',
+                config.window.layout
+            )
         )
         return
     end
@@ -241,7 +273,10 @@ function M.open(s, opt)
     end, { buffer = layout.prompt_buf })
     vim.keymap.set('i', config.mappings.toggle_preview, function()
         config.window.enable_preview = not config.window.enable_preview
-        require('picker.layout.' .. config.window.layout).render_windows(source, config)
+        require('picker.layout.' .. config.window.layout).render_windows(
+            source,
+            config
+        )
         local cursor = vim.api.nvim_win_get_cursor(layout.list_win)
         if
             config.window.enable_preview
@@ -258,7 +293,13 @@ function M.open(s, opt)
         highlight_list_windows()
     end, { buffer = layout.prompt_buf })
     if opt.input then
-        vim.api.nvim_buf_set_lines(layout.prompt_buf, 0, -1, false, { opt.input })
+        vim.api.nvim_buf_set_lines(
+            layout.prompt_buf,
+            0,
+            -1,
+            false,
+            { opt.input }
+        )
     end
     vim.api.nvim_input('A')
     M.handle_prompt_changed()
@@ -266,30 +307,38 @@ end
 
 function M.handle_prompt_changed()
     vim.fn.timer_stop(insert_timer_id)
-    insert_timer_id = vim.fn.timer_start(config.prompt.insert_timeout, function()
-        local input = vim.api.nvim_buf_get_lines(layout.prompt_buf, 0, 1, false)[1]
-        vim.api.nvim_win_set_cursor(layout.list_win, { 1, 1 })
-        filter.filter(input, source, config.filter.ignorecase)
+    insert_timer_id = vim.fn.timer_start(
+        config.prompt.insert_timeout,
+        function()
+            local input =
+                vim.api.nvim_buf_get_lines(layout.prompt_buf, 0, 1, false)[1]
+            vim.api.nvim_win_set_cursor(layout.list_win, { 1, 1 })
+            filter.filter(input, source, config.filter.ignorecase)
 
-        vim.api.nvim_buf_set_lines(
-            layout.list_buf,
-            0,
-            -1,
-            false,
-            vim.tbl_map(function(t)
-                return t[4].str
-            end, source.filter_items)
-        )
-        if #source.filter_items > 0 then
-            highlight_list_windows()
-            if config.window.enable_preview and source.preview then
-                source.preview(source.filter_items[1][4], layout.preview_win, layout.preview_buf)
+            vim.api.nvim_buf_set_lines(
+                layout.list_buf,
+                0,
+                -1,
+                false,
+                vim.tbl_map(function(t)
+                    return t[4].str
+                end, source.filter_items)
+            )
+            if #source.filter_items > 0 then
+                highlight_list_windows()
+                if config.window.enable_preview and source.preview then
+                    source.preview(
+                        source.filter_items[1][4],
+                        layout.preview_win,
+                        layout.preview_buf
+                    )
+                end
+            else
+                clear_highlight()
             end
-        else
-            clear_highlight()
+            update_result_count()
         end
-        update_result_count()
-    end)
+    )
 end
 
 return M

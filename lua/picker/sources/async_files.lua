@@ -18,7 +18,8 @@ end
 ---@type PickerItem[]
 local items = {}
 
-local cmd = { 'rg', '--files' }
+local cmd =
+  { 'rg', '--files', '--hidden', '--ignore', '--text', '--glob', '!.git/' }
 
 local jobid = -1
 
@@ -99,10 +100,18 @@ function M.redraw_actions()
   return {
     ['<C-h>'] = function(entry)
       if hidden then
-        cmd = { 'rg', '--files', '--hidden' }
+        cmd = {
+          'rg',
+          '--files',
+          '--hidden',
+          '--ignore',
+          '--text',
+          '--glob',
+          '!.git/',
+        }
         hidden = false
       else
-        cmd = { 'rg', '--files' }
+        cmd = { 'rg', '--files', '--ignore', '--text', '--glob', '!.git/' }
         hidden = true
       end
       async_run()

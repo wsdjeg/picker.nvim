@@ -2,7 +2,7 @@ local M = {}
 
 local previewer = require('picker.previewer.file')
 
-local list_files_cmd = { 'rg', '--files' }
+local list_files_cmd = { 'rg', '--files', '--hidden', '--ignore', '--text', '--glob', '!.git/' }
 
 local get_icon
 

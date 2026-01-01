@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.7.0](https://github.com/wsdjeg/picker.nvim/compare/v1.6.0...v1.7.0) (2026-01-01)
+
+
+### Features
+
+* add async_files redraw_actions ([ad053d6](https://github.com/wsdjeg/picker.nvim/commit/ad053d6096c54f7b58afb83ffa3799dd860ed380))
+* add levenshtein matcher ([f90d6f0](https://github.com/wsdjeg/picker.nvim/commit/f90d6f02c1529488822f183632fc488e943116b4))
+* add redraw_actions ([b5dd418](https://github.com/wsdjeg/picker.nvim/commit/b5dd418ad2fb5a3a8616861387c67f5bd602abfa))
+* **buffers:** add ctrl-v/t actions ([df2d668](https://github.com/wsdjeg/picker.nvim/commit/df2d668bfcc6983775ea651e493f9fb3188f1ab4))
+* **buffers:** highlight directory as Comment ([5f38279](https://github.com/wsdjeg/picker.nvim/commit/5f3827909fb42a452fc716882ba5c2c900aa75a4))
+* support built-in matchfuzzy matcher ([bf684b4](https://github.com/wsdjeg/picker.nvim/commit/bf684b465730247dc5fbc39a4e6030ae1f59d5c1))
+
+
+### Bug Fixes
+
+* add editorconfig file ([eb59f2c](https://github.com/wsdjeg/picker.nvim/commit/eb59f2ce47f4587fec47c2705ac3c12ec29eb298))
+* remove debug log ([3006588](https://github.com/wsdjeg/picker.nvim/commit/300658824c090d59546b764daaa991924b451c05))
+* remove match test ([36a868f](https://github.com/wsdjeg/picker.nvim/commit/36a868f27a0527109fe23338a2e6d0349379b27d))
+* **types:** move all [@class](https://github.com/class) into types.lua ([e0a4d3f](https://github.com/wsdjeg/picker.nvim/commit/e0a4d3fad80abfd1708dead5a6f3a6ecd726ee42))
+* update async_files cmd ([75c83ed](https://github.com/wsdjeg/picker.nvim/commit/75c83edba5e9ec7980e0cb3a5156401d5247108a))
+* use default matcher if failed ([fc2fb76](https://github.com/wsdjeg/picker.nvim/commit/fc2fb7664485b29515d0844934f04bc2b1b0885f))
+
 ## [1.6.0](https://github.com/wsdjeg/picker.nvim/compare/v1.5.0...v1.6.0) (2025-11-29)
 
 

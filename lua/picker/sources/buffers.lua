@@ -27,7 +27,7 @@ function M.get()
       local str = vim.fn.fnamemodify(bufname, ':.')
       return {
         str = (icon or '󰈔') .. ' ' .. str,
-        value = t,
+        bufnr = t,
         highlight = {
           { 0, 2, hl },
           { 3, #str - #base_name + 4, 'Comment' },
@@ -35,7 +35,7 @@ function M.get()
       }
     else
       return {
-        value = t,
+        bufnr = t,
         str = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(t), ':.'),
       }
     end
@@ -43,16 +43,16 @@ function M.get()
 end
 
 function M.default_action(s)
-  vim.api.nvim_set_current_buf(s.value)
+  vim.api.nvim_set_current_buf(s.bufnr)
 end
 
 function M.actions()
   return {
     ['<C-v>'] = function(entry)
-      vim.cmd(string.format('vertical sbuffer %d', entry.value))
+      vim.cmd(string.format('vertical sbuffer %d', entry.bufnr))
     end,
     ['<C-t>'] = function(entry)
-      vim.cmd(string.format('tab sbuffer %d', entry.value))
+      vim.cmd(string.format('tab sbuffer %d', entry.bufnr))
     end,
   }
 end
@@ -61,7 +61,7 @@ M.preview_win = true
 
 ---@field item PickerItem
 function M.preview(item, win, buf)
-  previewer.preview(item.str, win, buf)
+  previewer.preview(vim.api.nvim_buf_get_name(item.bufnr), win, buf)
 end
 
 return M

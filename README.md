@@ -58,13 +58,13 @@ Whether you need file search, LSP symbols, diagnostics, or fully custom workflow
 
 ## ✨ Features
 
-- ⚡ High-performance fuzzy matching powered by the fzy algorithm
-- 🔧 Simple yet extensible source API
-- 🪟 Flexible UI layouts (floating window, preview panel)
-- 🧩 built-in picker sources
-- 📦 Growing ecosystem of third-party extensions
-- ⌨️ Fully configurable actions & key mappings
-- 🔍 Live preview and asynchronous loading support
+- High-performance fuzzy matching powered by the fzy algorithm
+- Simple yet extensible source API
+- Flexible UI layouts (floating window, preview panel)
+- built-in picker sources
+- Growing ecosystem of third-party extensions
+- Fully configurable actions & key mappings
+- Live preview and asynchronous loading support
 
 ## 📦 Installation
 

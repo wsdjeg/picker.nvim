@@ -13,7 +13,7 @@ function M.default_action(entry)
   vim.cmd.edit(vim.uri_to_fname(entry.value.targetUri))
   vim.api.nvim_win_set_cursor(
     0,
-    { entry.value.targetRange.start.line + 1, entry.value.targetRange.start.character }
+    { entry.value.targetRange.start.line + 1, entry.value.targetRange.start.character + 1 }
   )
 end
 

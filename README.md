@@ -42,6 +42,7 @@ Whether you need file search, LSP symbols, diagnostics, or fully custom workflow
     - [lsp_document_symbols](#lsp_document_symbols)
     - [lsp_workspace_symbols](#lsp_workspace_symbols)
     - [lsp_references](#lsp_references)
+    - [lsp_definitions](#lsp_definitions)
     - [emoji](#emoji)
     - [key-mappings](#key-mappings)
 - [🔌 Third party sources](#-third-party-sources)
@@ -217,6 +218,7 @@ In picker prompt window, the these mappings are defined by default.
 | loclist               | location list source                    |
 | lsp_document_symbols  | document symbols result from lsp client |
 | lsp_references        | lsp references                          |
+| lsp_definitions       | lsp definitions                         |
 | lsp_workspace_symbols | workspace symbols                       |
 | marks                 | marks list                              |
 | picker_config         | picker config source                    |
@@ -364,6 +366,12 @@ file results from `nvim_list_bufs()`
 | key binding | description             |
 | ----------- | ----------------------- |
 | `<Enter>`   | jump selected reference |
+
+### lsp_definitions
+
+| key binding | description                 |
+| ----------- | --------------------------- |
+| `<Enter>`   | jump to selected definition |
 
 ### emoji
 

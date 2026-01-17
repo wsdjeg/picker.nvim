@@ -31,8 +31,9 @@ CONTENTS                                                            *picker*
     6.16 lsp_document_symbols             |picker-source-lsp_document_symbols|
     6.17 lsp_workspace_symbols           |picker-source-lsp_workspace_symbols|
     6.18 lsp_references                         |picker-source-lsp_references|
-    6.19 emoji                                           |picker-source-emoji|
-    6.20 key-mappings                             |picker-source-key-mappings|
+    6.19 lsp_definitions                       |picker-source-lsp_definitions|
+    6.20 emoji                                           |picker-source-emoji|
+    6.21 key-mappings                             |picker-source-key-mappings|
   7. Third party sources                          |picker-third-party-sources|
   8. Custom source                                      |picker-custom-source|
   9. Custom layout                                      |picker-custom-layout|
@@ -228,6 +229,7 @@ Using luarocks <https://luarocks.org/>
  | loclist               | location list source                    |
  | lsp_document_symbols  | document symbols result from lsp client |
  | lsp_references        | lsp references                          |
+ | lsp_definitions       | lsp definitions                         |
  | lsp_workspace_symbols | workspace symbols                       |
  | marks                 | marks list                              |
  | picker_config         | picker config source                    |
@@ -394,7 +396,14 @@ filter colorschemes.
 | `<Enter>`     | jump selected reference |
 
 ------------------------------------------------------------------------------
- 6.19 emoji                                            *picker-source-emoji*
+ 6.19 lsp_definitions                        *picker-source-lsp_definitions*
+
+| key binding | description                 |
+| ----------- | --------------------------- |
+| `<Enter>`     | jump to selected definition |
+
+------------------------------------------------------------------------------
+ 6.20 emoji                                            *picker-source-emoji*
 
 filter emoji entries from muan/unicode-emoji-json:
 https://github.com/muan/unicode-emoji-json
@@ -407,7 +416,7 @@ is not installed, `vim.fn.system()` will be used.
 | `<Enter>`     | insert selected emoji |
 
 ------------------------------------------------------------------------------
- 6.20 key-mappings                              *picker-source-key-mappings*
+ 6.21 key-mappings                              *picker-source-key-mappings*
 
 | key binding | description                  |
 | ----------- | ---------------------------- |

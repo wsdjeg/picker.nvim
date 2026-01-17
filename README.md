@@ -73,44 +73,50 @@ Neovim 0.11+ is recommended for best compatibility.
 
 - **Using [nvim-plug](https://github.com/wsdjeg/nvim-plug)**
 
-```lua
-require('plug').add({
+  ```lua
+  require('plug').add({
+    {
+      'wsdjeg/picker.nvim',
+    },
+  })
+  ```
+
+- **Using [lazy.nvim](https://github.com/folke/lazy.nvim)**
+
+  ```lua
   {
+    "wsdjeg/picker.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("picker").setup()
+    end,
+  }
+  ```
+
+- **Using [packer.nvim](https://github.com/wbthomason/packer.nvim)**
+
+  ```lua
+  use({
     'wsdjeg/picker.nvim',
-  },
-})
-```
+    config = function()
+      require('picker').setup()
+    end,
+  })
+  ```
 
-**Using [lazy.nvim](https://github.com/folke/lazy.nvim)**
+- **Using [luarocks](https://luarocks.org/)**
 
-```lua
-{
-  "wsdjeg/picker.nvim",
-  event = "VeryLazy",
-  config = function()
-    require("picker").setup()
-  end,
-}
-```
-
-**Using [packer.nvim](https://github.com/wbthomason/packer.nvim)**
-
-```lua
-use({
-  'wsdjeg/picker.nvim',
-  config = function()
-    require('picker').setup()
-  end,
-})
-```
-
-**Using [luarocks](https://luarocks.org/)**
-
-```
-luarocks install picker.nvim
-```
+  ```
+  luarocks install picker.nvim
+  ```
 
 ## 🔧 Configuration
+
+This example shows a basic setup for picker.nvim.
+It customizes how items are matched, how the picker window looks
+and where it appears, and how you move around and open items.
+The goal is to keep the picker simple, fast, and comfortable to
+use while staying out of your way.
 
 ```lua
 require('plug').add({

@@ -86,6 +86,7 @@ M.feature_map = {
   workspace_symbols = 'workspace/symbol',
   incoming_calls = 'callHierarchy/incomingCalls',
   outgoing_calls = 'callHierarchy/outgoingCalls',
+  declarations = 'textDocument/declaration',
 }
 
 return M

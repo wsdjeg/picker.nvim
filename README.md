@@ -43,6 +43,9 @@ Whether you need file search, LSP symbols, diagnostics, or fully custom workflow
     - [lsp_workspace_symbols](#lsp_workspace_symbols)
     - [lsp_references](#lsp_references)
     - [lsp_definitions](#lsp_definitions)
+    - [lsp_implementations](#lsp_implementations)
+    - [lsp_type_definitions](#lsp_type_definitions)
+    - [lsp_declarations](#lsp_declarations)
     - [emoji](#emoji)
     - [key-mappings](#key-mappings)
 - [🔌 Third party sources](#-third-party-sources)
@@ -378,6 +381,24 @@ file results from `nvim_list_bufs()`
 | key binding | description                 |
 | ----------- | --------------------------- |
 | `<Enter>`   | jump to selected definition |
+
+### lsp_implementations
+
+| key binding | description               |
+| ----------- | ------------------------- |
+| `<Enter>`   | jump to selected location |
+
+### lsp_type_definitions
+
+| key binding | description                      |
+| ----------- | -------------------------------- |
+| `<Enter>`   | jump to selected type definition |
+
+### lsp_declarations
+
+| key binding | description                           |
+| ----------- | ------------------------------------- |
+| `<Enter>`   | jump to selected declaration location |
 
 ### emoji
 

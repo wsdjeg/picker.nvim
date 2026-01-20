@@ -4,7 +4,7 @@ local preview_timer_id = -1
 
 local timerout = 500
 
-local preview_winid, preview_bufid, preview_file, preview_linenr, preview_pattern, preview_syntax
+local preview_winid, preview_bufid, preview_file, preview_linenr, preview_pattern, preview_syntax, priview_cmd
 
 local function preview_timer(t)
   -- if preview win does exists, return
@@ -51,6 +51,19 @@ local function preview_timer(t)
       vim.cmd('noautocmd normal! zz')
     end)
     vim.api.nvim_set_option_value('cursorline', true, { win = preview_winid })
+  elseif priview_cmd then
+    vim.api.nvim_win_call(preview_winid, function()
+      if vim.startswith(priview_cmd, '/') then
+        local reg_search = vim.fn.getreg('/')
+        pcall(vim.fn.execute, priview_cmd)
+        vim.fn.histdel('search', -1) -- remove last search history if priview_cmd starts with /
+        vim.fn.setreg('/', reg_search)
+      else
+        pcall(vim.fn.execute, priview_cmd)
+      end
+      vim.cmd('norm! zzze')
+    end)
+    vim.api.nvim_set_option_value('cursorline', true, { win = preview_winid })
   elseif preview_pattern then
     vim.api.nvim_win_call(preview_winid, function()
       local line = vim.fn.search(preview_pattern)
@@ -77,12 +90,14 @@ function M.preview(path, win, buf, opts)
     preview_pattern = nil
     preview_linenr = opts
     preview_syntax = nil
-  else
+  elseif type(opts) == 'table' then
     preview_linenr = opts.lnum
     preview_pattern = opts.pattern
     preview_syntax = opts.syntax
+    priview_cmd = opts.cmd
   end
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, {})
+  vim.api.nvim_set_option_value('cursorline', false, { win = preview_winid })
   if preview_file and vim.fn.filereadable(preview_file) == 1 then
     preview_timer_id =
       vim.fn.timer_start(timerout, preview_timer, { ['repeat'] = 1 })

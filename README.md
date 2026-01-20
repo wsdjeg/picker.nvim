@@ -37,6 +37,7 @@ Whether you need file search, LSP symbols, diagnostics, or fully custom workflow
     - [qflist](#qflist)
     - [loclist](#loclist)
     - [registers](#registers)
+    - [tags](#tags)
     - [jumps](#jumps)
     - [marks](#marks)
     - [lsp_document_symbols](#lsp_document_symbols)
@@ -346,6 +347,12 @@ file results from `nvim_list_bufs()`
 | ----------- | ---------------------- |
 | `<Enter>`   | paste selected context |
 
+### tags
+
+| key binding | description          |
+| ----------- | -------------------- |
+| `<Enter>`   | jump to selected tag |
+
 ### jumps
 
 | key binding | description            |
@@ -566,4 +573,5 @@ If you encounter any bugs or have suggestions, please file an issue in the [issu
 
 ## 📄 License
 
+Licensed under GPL-3.0.
 Licensed under GPL-3.0.

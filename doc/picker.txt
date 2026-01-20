@@ -27,13 +27,14 @@ CONTENTS                                                            *picker*
     6.11 qflist                                         |picker-source-qflist|
     6.13 registers                                   |picker-source-registers|
     6.14 jumps                                           |picker-source-jumps|
-    6.15 marks                                           |picker-source-marks|
-    6.16 lsp_document_symbols             |picker-source-lsp_document_symbols|
-    6.17 lsp_workspace_symbols           |picker-source-lsp_workspace_symbols|
-    6.18 lsp_references                         |picker-source-lsp_references|
-    6.19 lsp_definitions                       |picker-source-lsp_definitions|
-    6.20 emoji                                           |picker-source-emoji|
-    6.21 key-mappings                             |picker-source-key-mappings|
+    6.15 tags                                             |picker-source-tags|
+    6.16 marks                                           |picker-source-marks|
+    6.17 lsp_document_symbols             |picker-source-lsp_document_symbols|
+    6.18 lsp_workspace_symbols           |picker-source-lsp_workspace_symbols|
+    6.19 lsp_references                         |picker-source-lsp_references|
+    6.20 lsp_definitions                       |picker-source-lsp_definitions|
+    6.21 emoji                                           |picker-source-emoji|
+    6.22 key-mappings                             |picker-source-key-mappings|
   7. Third party sources                          |picker-third-party-sources|
   8. Custom source                                      |picker-custom-source|
   9. Custom layout                                      |picker-custom-layout|
@@ -368,42 +369,49 @@ filter colorschemes.
  | `<Enter>`     | jump selected position |
 
 ------------------------------------------------------------------------------
- 6.15 marks                                            *picker-source-marks*
+ 6.15 tags                                              *picker-source-tags*
+
+ | key binding | description            |
+ | ----------- | ---------------------- |
+ | `<Enter>`     | jump to selected tag   |
+
+------------------------------------------------------------------------------
+ 6.16 marks                                            *picker-source-marks*
 
  | key binding | description            |
  | ----------- | ---------------------- |
  | `<Enter>`     | jump selected position |
 
 ------------------------------------------------------------------------------
- 6.16 lsp_document_symbols              *picker-source-lsp_document_symbols*
+ 6.17 lsp_document_symbols              *picker-source-lsp_document_symbols*
 
 | key binding | description          |
 | ----------- | -------------------- |
 | `<Enter>`     | jump selected symbol |
 
 ------------------------------------------------------------------------------
- 6.17 lsp_workspace_symbols            *picker-source-lsp_workspace_symbols*
+ 6.18 lsp_workspace_symbols            *picker-source-lsp_workspace_symbols*
 
 | key binding | description          |
 | ----------- | -------------------- |
 | `<Enter>`     | jump selected symbol |
 
 ------------------------------------------------------------------------------
- 6.18 lsp_references                          *picker-source-lsp_references*
+ 6.19 lsp_references                          *picker-source-lsp_references*
 
 | key binding | description             |
 | ----------- | ----------------------- |
 | `<Enter>`     | jump selected reference |
 
 ------------------------------------------------------------------------------
- 6.19 lsp_definitions                        *picker-source-lsp_definitions*
+ 6.20 lsp_definitions                        *picker-source-lsp_definitions*
 
 | key binding | description                 |
 | ----------- | --------------------------- |
 | `<Enter>`     | jump to selected definition |
 
 ------------------------------------------------------------------------------
- 6.20 emoji                                            *picker-source-emoji*
+ 6.21 emoji                                            *picker-source-emoji*
 
 filter emoji entries from muan/unicode-emoji-json:
 https://github.com/muan/unicode-emoji-json
@@ -416,7 +424,7 @@ is not installed, `vim.fn.system()` will be used.
 | `<Enter>`     | insert selected emoji |
 
 ------------------------------------------------------------------------------
- 6.21 key-mappings                              *picker-source-key-mappings*
+ 6.22 key-mappings                              *picker-source-key-mappings*
 
 | key binding | description                  |
 | ----------- | ---------------------------- |

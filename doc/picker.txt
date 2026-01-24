@@ -16,25 +16,26 @@ CONTENTS                                                            *picker*
   6. Builtin Sources                                          |picker-sources|
     6.1 Files                                            |picker-source-files|
     6.2 cmd_history                                |picker-source-cmd_history|
-    6.3 picker_config                            |picker-source-picker_config|
-    6.4 highlights                                  |picker-source-highlights|
-    6.5 async_files                                |picker-source-async_files|
-    6.6 colorscheme                                |picker-source-colorscheme|
-    6.7 buftags                                        |picker-source-buftags|
-    6.8 buffers                                        |picker-source-buffers|
-    6.9 lines                                            |picker-source-lines|
-    6.10 help_tags                                   |picker-source-help_tags|
-    6.11 qflist                                         |picker-source-qflist|
-    6.13 registers                                   |picker-source-registers|
-    6.14 jumps                                           |picker-source-jumps|
-    6.15 tags                                             |picker-source-tags|
-    6.16 marks                                           |picker-source-marks|
-    6.17 lsp_document_symbols             |picker-source-lsp_document_symbols|
-    6.18 lsp_workspace_symbols           |picker-source-lsp_workspace_symbols|
-    6.19 lsp_references                         |picker-source-lsp_references|
-    6.20 lsp_definitions                       |picker-source-lsp_definitions|
-    6.21 emoji                                           |picker-source-emoji|
-    6.22 key-mappings                             |picker-source-key-mappings|
+    6.3 search_history                          |picker-source-search_history|
+    6.4 picker_config                            |picker-source-picker_config|
+    6.5 highlights                                  |picker-source-highlights|
+    6.6 async_files                                |picker-source-async_files|
+    6.7 colorscheme                                |picker-source-colorscheme|
+    6.8 buftags                                        |picker-source-buftags|
+    6.9 buffers                                        |picker-source-buffers|
+    6.10 lines                                           |picker-source-lines|
+    6.11 help_tags                                   |picker-source-help_tags|
+    6.12 qflist                                         |picker-source-qflist|
+    6.14 registers                                   |picker-source-registers|
+    6.15 jumps                                           |picker-source-jumps|
+    6.16 tags                                             |picker-source-tags|
+    6.17 marks                                           |picker-source-marks|
+    6.18 lsp_document_symbols             |picker-source-lsp_document_symbols|
+    6.19 lsp_workspace_symbols           |picker-source-lsp_workspace_symbols|
+    6.20 lsp_references                         |picker-source-lsp_references|
+    6.21 lsp_definitions                       |picker-source-lsp_definitions|
+    6.22 emoji                                           |picker-source-emoji|
+    6.23 key-mappings                             |picker-source-key-mappings|
   7. Third party sources                          |picker-third-party-sources|
   8. Custom source                                      |picker-custom-source|
   9. Custom layout                                      |picker-custom-layout|
@@ -264,7 +265,16 @@ Using luarocks <https://luarocks.org/>
  | `<C-d>`       | delete select command history |
 
 ------------------------------------------------------------------------------
- 6.3 picker_config                             *picker-source-picker_config*
+ 6.3 search_history                            *picker-source-search_history*
+
+ filter results from `:history search`.
+
+ | key binding | description                   |
+ | ----------- | ----------------------------- |
+ | `<Enter>`     | search selected pattern        |
+
+------------------------------------------------------------------------------
+ 6.4 picker_config                             *picker-source-picker_config*
 
  filter and setup picker.nvim without changing configuration file.
 
@@ -282,7 +292,7 @@ Using luarocks <https://luarocks.org/>
  | `<Enter>`     | set selected picker config |
 
 ------------------------------------------------------------------------------
- 6.4 highlights                                   *picker-source-highlights*
+ 6.5 highlights                                   *picker-source-highlights*
 
  filter results from `:highlight`
 
@@ -291,7 +301,7 @@ Using luarocks <https://luarocks.org/>
  | `<Enter>`     | yank selected highlight group name |
 
 ------------------------------------------------------------------------------
- 6.5 async_files                                 *picker-source-async_files*
+ 6.6 async_files                                 *picker-source-async_files*
 
  same as `files` source, but require job.nvim.
 
@@ -300,7 +310,7 @@ Using luarocks <https://luarocks.org/>
  | `<Enter>`     | open select file |
 
 ------------------------------------------------------------------------------
- 6.6 colorscheme                                 *picker-source-colorscheme*
+ 6.7 colorscheme                                 *picker-source-colorscheme*
 
 filter colorschemes.
 
@@ -309,7 +319,7 @@ filter colorschemes.
  | `<Enter>`     | change to selected colorscheme |
 
 ------------------------------------------------------------------------------
- 6.7 buftags                                         *picker-source-buftags*
+ 6.8 buftags                                         *picker-source-buftags*
 
  filter ctags outline, require ctags command.
 
@@ -318,7 +328,7 @@ filter colorschemes.
  | `<Enter>`     | jump to select tag |
 
 ------------------------------------------------------------------------------
- 6.8 buffers                                         *picker-source-buffers*
+ 6.9 buffers                                         *picker-source-buffers*
 
  file results from `nvim_list_bufs()`
 
@@ -327,91 +337,91 @@ filter colorschemes.
  | `<Enter>`     | switch to select buffer |
 
 ------------------------------------------------------------------------------
- 6.9 lines                                             *picker-source-lines*
+ 6.10 lines                                             *picker-source-lines*
 
  | key binding | description           |
  | ----------- | --------------------- |
  | `<Enter>`     | jump to selected line |
 
 ------------------------------------------------------------------------------
- 6.10 help_tags                                    *picker-source-help_tags*
+ 6.11 help_tags                                    *picker-source-help_tags*
 
 | key binding | description            |
 | ----------- | ---------------------- |
 | `<Enter>`     | jump selected help tag |
 
 ------------------------------------------------------------------------------
- 6.11 qflist                                          *picker-source-qflist*
+ 6.12 qflist                                          *picker-source-qflist*
 
 | key binding | description                      |
 | ----------- | -------------------------------- |
 | `<Enter>`     | jump selected quickfix list item |
 
 ------------------------------------------------------------------------------
- 6.12 loclist                                        *picker-source-loclist*
+ 6.13 loclist                                        *picker-source-loclist*
 
 | key binding | description                |
 | ----------- | -------------------------- |
 | `<Enter>`     | jump selected loclist item |
 
 ------------------------------------------------------------------------------
- 6.13 registers                                    *picker-source-registers*
+ 6.14 registers                                    *picker-source-registers*
 
 | key binding | description            |
 | ----------- | ---------------------- |
 | `<Enter>`     | paste selected context |
 
 ------------------------------------------------------------------------------
- 6.14 jumps                                            *picker-source-jumps*
+ 6.15 jumps                                            *picker-source-jumps*
 
  | key binding | description            |
  | ----------- | ---------------------- |
  | `<Enter>`     | jump selected position |
 
 ------------------------------------------------------------------------------
- 6.15 tags                                              *picker-source-tags*
+ 6.16 tags                                              *picker-source-tags*
 
  | key binding | description            |
  | ----------- | ---------------------- |
  | `<Enter>`     | jump to selected tag   |
 
 ------------------------------------------------------------------------------
- 6.16 marks                                            *picker-source-marks*
+ 6.17 marks                                            *picker-source-marks*
 
  | key binding | description            |
  | ----------- | ---------------------- |
  | `<Enter>`     | jump selected position |
 
 ------------------------------------------------------------------------------
- 6.17 lsp_document_symbols              *picker-source-lsp_document_symbols*
+ 6.18 lsp_document_symbols              *picker-source-lsp_document_symbols*
 
 | key binding | description          |
 | ----------- | -------------------- |
 | `<Enter>`     | jump selected symbol |
 
 ------------------------------------------------------------------------------
- 6.18 lsp_workspace_symbols            *picker-source-lsp_workspace_symbols*
+ 6.19 lsp_workspace_symbols            *picker-source-lsp_workspace_symbols*
 
 | key binding | description          |
 | ----------- | -------------------- |
 | `<Enter>`     | jump selected symbol |
 
 ------------------------------------------------------------------------------
- 6.19 lsp_references                          *picker-source-lsp_references*
+ 6.20 lsp_references                          *picker-source-lsp_references*
 
 | key binding | description             |
 | ----------- | ----------------------- |
 | `<Enter>`     | jump selected reference |
 
 ------------------------------------------------------------------------------
- 6.20 lsp_definitions                        *picker-source-lsp_definitions*
+ 6.21 lsp_definitions                        *picker-source-lsp_definitions*
 
 | key binding | description                 |
 | ----------- | --------------------------- |
 | `<Enter>`     | jump to selected definition |
 
 ------------------------------------------------------------------------------
- 6.21 emoji                                            *picker-source-emoji*
+ 6.22 emoji                                            *picker-source-emoji*
 
 filter emoji entries from muan/unicode-emoji-json:
 https://github.com/muan/unicode-emoji-json
@@ -424,7 +434,7 @@ is not installed, `vim.fn.system()` will be used.
 | `<Enter>`     | insert selected emoji |
 
 ------------------------------------------------------------------------------
- 6.22 key-mappings                              *picker-source-key-mappings*
+ 6.23 key-mappings                              *picker-source-key-mappings*
 
 | key binding | description                  |
 | ----------- | ---------------------------- |

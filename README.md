@@ -26,6 +26,7 @@ Whether you need file search, LSP symbols, diagnostics, or fully custom workflow
 - [📚 Builtin sources](#-builtin-sources)
     - [files](#files)
     - [cmd_history](#cmd_history)
+    - [search_history](#search_history)
     - [picker_config](#picker_config)
     - [highlights](#highlights)
     - [async_files](#async_files)
@@ -259,6 +260,14 @@ filter results from `:history cmd`.
 | ----------- | ----------------------------- |
 | `<Enter>`   | execute select command        |
 | `<C-d>`     | delete select command history |
+
+### search_history
+
+filter results from `:history search`.
+
+| key binding | description           |
+| ----------- | --------------------- |
+| `<Enter>`   | search select pattern |
 
 ### picker_config
 

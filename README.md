@@ -281,6 +281,9 @@ filter and setup picker.nvim without changing configuration file.
 | hide-score    | hide matched score                   |
 | ignrecase     | change filter ignrecase to true      |
 | noignrecase   | change filter ignrecase to false     |
+| layout-*      | change window layout                 |
+
+picker_config source will list all available [custom layouts](#-custom-layout).
 
 | key binding | description                |
 | ----------- | -------------------------- |

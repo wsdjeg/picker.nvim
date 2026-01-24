@@ -103,7 +103,10 @@ local configs = {
 
 ---@return table<PickerItem>
 function M.get()
-  return vim.tbl_map(function(t)
+  local layouts = vim.tbl_map(function(t)
+    return vim.fn.fnamemodify(t, ':t:r')
+  end, vim.api.nvim_get_runtime_file('lua/picker/layout/*.lua', true))
+  local rst = vim.tbl_map(function(t)
     return {
       str = string.format('%s -> %s', t.name, t.desc),
       value = t,
@@ -114,6 +117,29 @@ function M.get()
       },
     }
   end, configs)
+  for _, layout in ipairs(layouts) do
+    local t = {
+      name = string.format('layout-%s', layout),
+      desc = string.format('change to %s layout', layout),
+      func = function()
+        require('picker').setup({
+          window = {
+            layout = layout,
+          },
+        })
+      end,
+    }
+    table.insert(rst, {
+      str = string.format('%s -> %s', t.name, t.desc),
+      value = t,
+      highlight = {
+        { 0, #t.name, 'TODO' },
+        { #t.name, #t.name + 4, 'Comment' },
+        { #t.name + 4, #t.name + #t.desc + 4, 'String' },
+      },
+    })
+  end
+  return rst
 end
 
 ---@param entry PickerItem

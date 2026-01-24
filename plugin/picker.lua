@@ -15,6 +15,9 @@ vim.api.nvim_create_user_command('Picker', function(opt)
 end, {
   nargs = '*',
   complete = function(ArgLead, CmdLine, CursorPos)
+    if vim.startswith(ArgLead, '-') then
+      return { '--input=' }
+    end
     local sources =
       vim.api.nvim_get_runtime_file('lua/picker/sources/*.lua', true)
     local rst = vim.tbl_map(function(t)

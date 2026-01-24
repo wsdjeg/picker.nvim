@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/wsdjeg/picker.nvim/compare/v1.7.0...v1.8.0) (2026-01-24)
+
+
+### Features
+
+* picker custom layouts ([ed133eb](https://github.com/wsdjeg/picker.nvim/commit/ed133eb3d7e806674eabb04747d7cf5beae145ab))
+
 ## [1.7.0](https://github.com/wsdjeg/picker.nvim/compare/v1.6.0...v1.7.0) (2026-01-24)
 
 

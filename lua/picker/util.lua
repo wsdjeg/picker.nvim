@@ -1,8 +1,10 @@
+---@class Picker.Util
 local M = {}
 
 local nt
 local log
 
+---@param msg string
 function M.notify(msg)
   if not nt then
     pcall(function()
@@ -15,6 +17,7 @@ function M.notify(msg)
   nt.notify(msg)
 end
 
+---@param msg string
 function M.info(msg)
   if not log then
     pcall(function()
@@ -68,16 +71,20 @@ local kind_icons = {
   Variable = '󰀫 ',
 }
 
-local kinds = {}
+local kinds = {} ---@type table<integer, string>
 for k, v in pairs(vim.lsp.protocol.SymbolKind) do
   if type(v) == 'number' then
     kinds[v] = k
   end
 end
+
+---@param kind integer
+---@return string symbol_kind
 function M.symbol_kind(kind)
   return kind_icons[kinds[kind]] or kinds[kind]
 end
-M.feature_map = {
+
+M.feature_map = { ---@type PickerFeatureMap
   document_symbols = 'textDocument/documentSymbol',
   references = 'textDocument/references',
   definitions = 'textDocument/definition',

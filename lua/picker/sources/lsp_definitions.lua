@@ -1,9 +1,11 @@
+---@class Picker.Sources.LspDefinitions
 local M = {}
 
 local util = require('picker.util')
 local previewer = require('picker.previewer.file')
-local items = {}
+local items = {} ---@type PickerItem[]
 
+---@return PickerItem[] items
 function M.get()
   return items
 end
@@ -11,33 +13,34 @@ end
 ---@param entry PickerItem
 function M.default_action(entry)
   vim.cmd.edit(vim.uri_to_fname(entry.value.targetUri))
-  vim.api.nvim_win_set_cursor(
-    0,
-    { entry.value.targetRange.start.line + 1, entry.value.targetRange.start.character + 1 }
-  )
+  vim.api.nvim_win_set_cursor(0, {
+    entry.value.targetRange.start.line + 1,
+    entry.value.targetRange.start.character + 1,
+  })
 end
 
+---@param opt { buf: integer }
 function M.set(opt)
-  local bufnr = opt.buf
-  local client = vim.lsp.get_clients({ bufnr = bufnr })[1]
+  local client = vim.lsp.get_clients({ bufnr = opt.buf })[1]
   if not client then
     return
   end
-  local params = vim.lsp.util.make_position_params(
-    vim.api.nvim_get_current_win(),
-    client.offset_encoding
-  )
-
-  params = vim.tbl_extend('force', params, {
-    context = { includeDeclaration = true },
-  })
 
   items = {}
-
   client:request(
     util.feature_map.definitions,
-    params,
-    function(err, result, ctx, ...)
+    vim.tbl_extend(
+      'force',
+      vim.lsp.util.make_position_params(
+        vim.api.nvim_get_current_win(),
+        client.offset_encoding
+      ),
+      {
+        context = { includeDeclaration = true },
+      }
+    ),
+    ---@param result? lsp.DefinitionLink[]
+    function(err, result)
       if not result or err then
         return
       end
@@ -173,28 +176,26 @@ function M.set(opt)
       --   } }
 
       for _, definition in ipairs(result) do
-        local filename = vim.uri_to_fname(definition.targetUri)
-        local file_bufnr = vim.uri_to_bufnr(definition.targetUri)
-        local context = vim.api.nvim_buf_get_lines(
-          file_bufnr,
-          definition.targetRange.start.line,
-          definition.targetRange.start.line + 1,
-          false
-        )[1] or ''
+        local filename =
+          vim.fn.fnamemodify(vim.uri_to_fname(definition.targetUri), ':.')
         table.insert(items, {
           value = definition,
-          str = string.format(
-            '%s:%d:%s',
-            vim.fn.fnamemodify(filename, ':.'),
+          str = ('%s:%d:%s'):format(
+            filename,
             definition.targetRange.start.line + 1,
-            context
+            vim.api.nvim_buf_get_lines(
+              vim.uri_to_bufnr(definition.targetUri),
+              definition.targetRange.start.line,
+              definition.targetRange.start.line + 1,
+              false
+            )[1] or ''
           ),
           highlight = {
             {
               0,
-              #vim.fn.fnamemodify(filename, ':.') + 2 + #tostring(
+              filename:len() + 2 + tostring(
                 definition.targetRange.start.line
-              ),
+              ):len(),
               'Comment',
             },
           },
@@ -202,21 +203,20 @@ function M.set(opt)
       end
       require('picker.windows').handle_prompt_changed()
     end,
-    bufnr
+    opt.buf
   )
 end
 
-M.preview_win = true
+M.preview_win = true ---@type boolean
 
+---@param item PickerItem
+---@param win integer
+---@param buf integer
 function M.preview(item, win, buf)
   local filename = vim.uri_to_fname(item.value.targetUri)
-  local line = item.value.targetRange.start.line
-  previewer.preview(
-    filename,
-    win,
-    buf,
-    { lnum = line + 1, syntax = vim.filetype.match({ filename = filename }) }
-  )
+  previewer.preview(filename, win, buf, {
+    lnum = item.value.targetRange.start.line + 1,
+    syntax = vim.filetype.match({ filename = filename }),
+  })
 end
-
 return M

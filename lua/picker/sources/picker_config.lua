@@ -1,5 +1,7 @@
+---@class Picker.Sources.PickerConfig
 local M = {}
-local configs = {
+
+local configs = { ---@type PickerSourceConfig[]
   {
     name = 'prompt-top',
     desc = 'change the prompt position to top',
@@ -101,26 +103,28 @@ local configs = {
   },
 }
 
----@return table<PickerItem>
+---@return PickerItem[] rst
 function M.get()
-  local layouts = vim.tbl_map(function(t)
+  ---@type string[]
+  local layouts = vim.tbl_map(function(t) ---@param t string
     return vim.fn.fnamemodify(t, ':t:r')
   end, vim.api.nvim_get_runtime_file('lua/picker/layout/*.lua', true))
-  local rst = vim.tbl_map(function(t)
-    return {
-      str = string.format('%s -> %s', t.name, t.desc),
+  ---@type PickerItem[]
+  local rst = vim.tbl_map(function(t) ---@param t PickerSourceConfig
+    return { ---@type PickerItem
+      str = ('%s -> %s'):format(t.name, t.desc),
       value = t,
       highlight = {
-        { 0, #t.name, 'TODO' },
-        { #t.name, #t.name + 4, 'Comment' },
-        { #t.name + 4, #t.name + #t.desc + 4, 'String' },
+        { 0, t.name:len(), 'TODO' },
+        { t.name:len(), t.name:len() + 4, 'Comment' },
+        { t.name:len() + 4, t.name:len() + t.desc:len() + 4, 'String' },
       },
     }
   end, configs)
   for _, layout in ipairs(layouts) do
-    local t = {
-      name = string.format('layout-%s', layout),
-      desc = string.format('change to %s layout', layout),
+    local t = { ---@type PickerSourceConfig
+      name = ('layout-%s'):format(layout),
+      desc = ('change to %s layout'):format(layout),
       func = function()
         require('picker').setup({
           window = {
@@ -130,12 +134,12 @@ function M.get()
       end,
     }
     table.insert(rst, {
-      str = string.format('%s -> %s', t.name, t.desc),
+      str = ('%s -> %s'):format(t.name, t.desc),
       value = t,
       highlight = {
-        { 0, #t.name, 'TODO' },
-        { #t.name, #t.name + 4, 'Comment' },
-        { #t.name + 4, #t.name + #t.desc + 4, 'String' },
+        { 0, t.name:len(), 'TODO' },
+        { t.name:len(), t.name:len() + 4, 'Comment' },
+        { t.name:len() + 4, t.name:len() + t.desc:len() + 4, 'String' },
       },
     })
   end
@@ -146,5 +150,4 @@ end
 function M.default_action(entry)
   entry.value.func()
 end
-
 return M

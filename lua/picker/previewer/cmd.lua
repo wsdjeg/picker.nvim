@@ -1,14 +1,15 @@
+---@class Picker.CmdPreviewer
 local M = {}
 
-local preview_timer_id = -1
+local preview_timer_id = -1 ---@type integer
 
-local timerout = 500
+local timerout = 500 ---@type integer
 
-local preview_bufnr
-local preview_cmd
-local context = {}
+local preview_bufnr ---@type integer
+local preview_cmd ---@type string[]|string
+local context = {} ---@type string[]
 
-local function preview_timer(_)
+local function preview_timer()
   if not preview_cmd then
     return
   end
@@ -17,12 +18,12 @@ local function preview_timer(_)
     if ok then
       context = {}
       job.start(preview_cmd, {
-        on_stdout = function(id, data)
+        on_stdout = function(_, data)
           for _, v in ipairs(data) do
             table.insert(context, v)
           end
         end,
-        on_exit = function(id, data, single)
+        on_exit = function(_, data, single)
           if data == 0 and single == 0 then
             vim.api.nvim_set_option_value(
               'modifiable',
@@ -50,7 +51,7 @@ local function preview_timer(_)
   end
 end
 
----@param cmd string|table<string>
+---@param cmd string[]|string
 ---@param buf integer
 function M.preview(cmd, _, buf)
   vim.fn.timer_stop(preview_timer_id)

@@ -1,3 +1,4 @@
+---@class Picker.Layout
 local M = {}
 
 ---@type PickerLayout
@@ -14,6 +15,8 @@ local winhighlight =
   'NormalFloat:Normal,FloatBorder:WinSeparator,Search:None,CurSearch:None'
 local extns = vim.api.nvim_create_namespace('picker.nvim')
 
+---@param source PickerSourceConfig
+---@param config PickerConfig
 ---@return PickerLayout
 function M.render_windows(source, config)
   -- 窗口位置
@@ -171,7 +174,7 @@ function M.render_windows(source, config)
         row = start_row + screen_height - 3,
         focusable = true,
         border = 'rounded',
-        title = config.prompt.title and string.format(' %s ', source.name),
+        title = config.prompt.title and (' %s '):format(source.name),
         title_pos = 'center',
         -- noautocmd = true,
       })
@@ -266,7 +269,6 @@ function M.render_windows(source, config)
       end
       if not vim.api.nvim_win_is_valid(layout.list_win) then
         layout.list_win = vim.api.nvim_open_win(layout.list_buf, false, {
-
           relative = 'editor',
           width = screen_width,
           height = screen_height - 5,
@@ -277,7 +279,6 @@ function M.render_windows(source, config)
         })
       else
         vim.api.nvim_win_set_config(layout.list_win, {
-
           relative = 'editor',
           width = screen_width,
           height = screen_height - 5,
@@ -297,7 +298,7 @@ function M.render_windows(source, config)
         row = start_row,
         focusable = true,
         border = 'rounded',
-        title = config.prompt.title and string.format(' %s ', source.name),
+        title = config.prompt.title and (' %s '):format(source.name),
         title_pos = 'center',
         -- noautocmd = true,
       })

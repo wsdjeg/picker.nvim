@@ -288,33 +288,40 @@ function M.handle_prompt_changed()
   insert_timer_id = vim.fn.timer_start(
     config.prompt.insert_timeout,
     function()
-      local input =
-        vim.api.nvim_buf_get_lines(layout.prompt_buf, 0, 1, false)[1]
-      vim.api.nvim_win_set_cursor(layout.list_win, { 1, 1 })
-      filter.filter(input, source, config.filter.ignorecase)
+      if
+        vim.api.nvim_buf_is_valid(layout.prompt_buf)
+        and vim.api.nvim_buf_is_valid(layout.list_buf)
+        and vim.api.nvim_win_is_valid(layout.prompt_win)
+        and vim.api.nvim_win_is_valid(layout.list_win)
+      then
+        local input =
+          vim.api.nvim_buf_get_lines(layout.prompt_buf, 0, 1, false)[1]
+        vim.api.nvim_win_set_cursor(layout.list_win, { 1, 1 })
+        filter.filter(input, source, config.filter.ignorecase)
 
-      vim.api.nvim_buf_set_lines(
-        layout.list_buf,
-        0,
-        -1,
-        false,
-        vim.tbl_map(function(t)
-          return t[4].str
-        end, source.filter_items)
-      )
-      if #source.filter_items > 0 then
-        highlight_list_windows()
-        if config.window.enable_preview and source.preview then
-          source.preview(
-            source.filter_items[1][4],
-            layout.preview_win,
-            layout.preview_buf
-          )
+        vim.api.nvim_buf_set_lines(
+          layout.list_buf,
+          0,
+          -1,
+          false,
+          vim.tbl_map(function(t)
+            return t[4].str
+          end, source.filter_items)
+        )
+        if #source.filter_items > 0 then
+          highlight_list_windows()
+          if config.window.enable_preview and source.preview then
+            source.preview(
+              source.filter_items[1][4],
+              layout.preview_win,
+              layout.preview_buf
+            )
+          end
+        else
+          clear_highlight()
         end
-      else
-        clear_highlight()
+        update_result_count()
       end
-      update_result_count()
     end
   )
 end

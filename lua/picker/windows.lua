@@ -4,6 +4,7 @@ local M = {}
 local filter = require('picker.filter')
 local util = require('picker.util')
 
+---@type PickerSource
 local source -- global source
 
 ---@type PickerLayout
@@ -11,13 +12,13 @@ local layout -- global layout
 
 local extns = vim.api.nvim_create_namespace('picker.nvim')
 
-local config
+local config ---@type PickerConfig
 
-local prompt_count_id
+local prompt_count_id ---@type integer
 
-local insert_timer_id = -1
+local insert_timer_id = -1 ---@type integer
 
-local current_icon_extmark
+local current_icon_extmark ---@type integer
 
 local function update_result_count()
   local line = vim.api.nvim_win_get_cursor(layout.list_win)[1]

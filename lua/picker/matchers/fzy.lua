@@ -35,13 +35,13 @@ local fzy = {}
 ---@return boolean match
 function fzy.has_match(needle, haystack, case_sensitive)
   if not case_sensitive then
-    needle = needle:lower()
-    haystack = haystack:lower()
+    needle = string.lower(needle)
+    haystack = string.lower(haystack)
   end
 
   local j = 1
-  for i = 1, needle:len() do
-    j = haystack:find(needle:sub(i, i), j, true)
+  for i = 1, string.len(needle) do
+    j = string.find(haystack, string.sub(needle, i, i), j, true)
     if not j then
       return false
     end
@@ -53,12 +53,12 @@ end
 
 ---@param c string
 local function is_lower(c)
-  return c:match('%l')
+  return string.match(c, '%l')
 end
 
 ---@param c string
 local function is_upper(c)
-  return c:match('%u')
+  return string.match(c, '%u')
 end
 
 ---@param haystack string
@@ -66,8 +66,8 @@ end
 local function precompute_bonus(haystack)
   local match_bonus = {} ---@type table<integer, number>
   local last_char = '/'
-  for i = 1, haystack:len() do
-    local this_char = haystack:sub(i, i)
+  for i = 1, string.len(haystack) do
+    local this_char = string.sub(haystack, i, i)
     if last_char == '/' or last_char == '\\' then
       match_bonus[i] = SCORE_MATCH_SLASH
     elseif last_char == '-' or last_char == '_' or last_char == ' ' then
@@ -95,19 +95,19 @@ local function compute(needle, haystack, D, M, case_sensitive)
   -- Note that the match bonuses must be computed before the arguments are
   -- converted to lowercase, since there are bonuses for camelCase.
   local match_bonus = precompute_bonus(haystack)
-  local n = needle:len()
-  local m = haystack:len()
+  local n = string.len(needle)
+  local m = string.len(haystack)
 
   if not case_sensitive then
-    needle = needle:lower()
-    haystack = haystack:lower()
+    needle = string.lower(needle)
+    haystack = string.lower(haystack)
   end
 
   -- Because lua only grants access to chars through substring extraction,
   -- get all the characters from the haystack once now, to reuse below.
   local haystack_chars = {}
   for i = 1, m do
-    haystack_chars[i] = haystack:sub(i, i)
+    haystack_chars[i] = string.sub(haystack, i, i)
   end
 
   for i = 1, n do
@@ -116,7 +116,7 @@ local function compute(needle, haystack, D, M, case_sensitive)
 
     local prev_score = SCORE_MIN
     local gap_score = i == n and SCORE_GAP_TRAILING or SCORE_GAP_INNER
-    local needle_char = needle:sub(i, i)
+    local needle_char = string.sub(needle, i, i)
 
     for j = 1, m do
       if needle_char == haystack_chars[j] then
@@ -156,7 +156,7 @@ end
 ---@param case_sensitive? boolean
 ---@return number score
 function fzy.score(needle, haystack, case_sensitive)
-  local n, m = needle:len(), haystack:len()
+  local n, m = string.len(needle), string.len(haystack)
 
   if n == 0 or m == 0 or m > MATCH_MAX_LENGTH or n > m then
     return SCORE_MIN
@@ -191,7 +191,7 @@ end
 ---@return table<integer, integer> positions
 ---@return number score
 function fzy.positions(needle, haystack, case_sensitive)
-  local n, m = needle:len(), haystack:len()
+  local n, m = string.len(needle), string.len(haystack)
 
   if n == 0 or m == 0 or m > MATCH_MAX_LENGTH or n > m then
     return {}, SCORE_MIN

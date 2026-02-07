@@ -72,8 +72,8 @@ function M.set(opt)
         local kind = util.symbol_kind(symbol.kind)
         table.insert(items, {
           value = symbol,
-          str = ('%s %s'):format(kind, symbol.name),
-          highlight = { { 0, kind:len() + 1, 'Comment' } },
+          str = string.format('%s %s', kind, symbol.name),
+          highlight = { { 0, string.len(kind) + 1, 'Comment' } },
         })
       end
       require('picker.windows').handle_prompt_changed()

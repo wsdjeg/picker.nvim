@@ -50,7 +50,8 @@ function M.set(opt)
             targetUri = declaration.uri,
             targetRange = declaration.range,
           },
-          str = ('%s:%d:%s'):format(
+          str = string.format(
+            '%s:%d:%s',
             filename,
             declaration.range.start.line + 1,
             vim.api.nvim_buf_get_lines(
@@ -63,9 +64,9 @@ function M.set(opt)
           highlight = {
             {
               0,
-              filename:len()
+              string.len(filename)
                 + 2
-                + tostring(declaration.range.start.line + 1):len(),
+                + string.len(tostring(declaration.range.start.line + 1)),
               'Comment',
             },
           },

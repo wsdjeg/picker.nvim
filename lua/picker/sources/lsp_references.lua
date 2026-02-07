@@ -75,7 +75,8 @@ function M.set(opt)
         local filename = vim.fn.fnamemodify(vim.uri_to_fname(ref.uri), ':.')
         table.insert(items, {
           value = ref,
-          str = ('%s:%d:%s'):format(
+          str = string.format(
+            '%s:%d:%s',
             filename,
             ref.range.start.line,
             vim.api.nvim_buf_get_lines(
@@ -88,7 +89,9 @@ function M.set(opt)
           highlight = {
             {
               0,
-              filename:len() + 2 + tostring(ref.range.start.line):len(),
+              string.len(filename) + 2 + string.len(
+                tostring(ref.range.start.line)
+              ),
               'Comment',
             },
           },

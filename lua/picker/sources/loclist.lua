@@ -12,7 +12,7 @@ function M.get()
       t.shortname = vim.fn.fnamemodify(t.file, ':.')
       return { ---@type PickerItem
         value = t,
-        str = ('%s:%d:%s'):format(t.shortname, t.lnum, t.text),
+        str = string.format('%s:%d:%s', t.shortname, t.lnum, t.text),
         highlight = {
           {
             0,

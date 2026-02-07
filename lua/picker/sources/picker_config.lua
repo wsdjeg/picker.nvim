@@ -112,19 +112,23 @@ function M.get()
   ---@type PickerItem[]
   local rst = vim.tbl_map(function(t) ---@param t PickerSourceConfig
     return { ---@type PickerItem
-      str = ('%s -> %s'):format(t.name, t.desc),
+      str = string.format('%s -> %s', t.name, t.desc),
       value = t,
       highlight = {
-        { 0, t.name:len(), 'TODO' },
-        { t.name:len(), t.name:len() + 4, 'Comment' },
-        { t.name:len() + 4, t.name:len() + t.desc:len() + 4, 'String' },
+        { 0, string.len(t.name), 'TODO' },
+        { string.len(t.name), string.len(t.name) + 4, 'Comment' },
+        {
+          string.len(t.name) + 4,
+          string.len(t.name) + string.len(t.desc) + 4,
+          'String',
+        },
       },
     }
   end, configs)
   for _, layout in ipairs(layouts) do
     local t = { ---@type PickerSourceConfig
-      name = ('layout-%s'):format(layout),
-      desc = ('change to %s layout'):format(layout),
+      name = string.format('layout-%s', layout),
+      desc = string.format('change to %s layout', layout),
       func = function()
         require('picker').setup({
           window = {
@@ -134,12 +138,16 @@ function M.get()
       end,
     }
     table.insert(rst, {
-      str = ('%s -> %s'):format(t.name, t.desc),
+      str = string.format('%s -> %s', t.name, t.desc),
       value = t,
       highlight = {
-        { 0, t.name:len(), 'TODO' },
-        { t.name:len(), t.name:len() + 4, 'Comment' },
-        { t.name:len() + 4, t.name:len() + t.desc:len() + 4, 'String' },
+        { 0, string.len(t.name), 'TODO' },
+        { string.len(t.name), string.len(t.name) + 4, 'Comment' },
+        {
+          string.len(t.name) + 4,
+          string.len(t.name) + string.len(t.desc) + 4,
+          'String',
+        },
       },
     })
   end

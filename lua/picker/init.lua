@@ -14,7 +14,7 @@ function M.open(argv, opt)
   local ok, source = pcall(require, 'picker.sources.' .. argv[1])
   if not ok then
     util.notify(
-      ('Unable to find source "%s" for picker.nvim'):format(argv[1])
+      string.format('Unable to find source "%s" for picker.nvim', argv[1])
     )
     return
   end

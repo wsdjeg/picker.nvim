@@ -11,14 +11,20 @@ function M.get()
   for _, t in ipairs(marks) do
     table.insert(items, {
       value = t,
-      str = ('[%s] %s:%d:%d'):format(t.mark, t.file, t.pos[2], t.pos[3]),
+      str = string.format(
+        '[%s] %s:%d:%d',
+        t.mark,
+        t.file,
+        t.pos[2],
+        t.pos[3]
+      ),
       highlight = {
-        { 0, t.mark:len() + 2, 'Tag' },
+        { 0, string.len(t.mark) + 2, 'Tag' },
         {
-          t.mark:len() + t.file:len() + 3,
-          t.mark:len() + t.file:len() + tostring(t.pos[2]):len() + tostring(
-            t.pos[3]
-          ):len() + 5,
+          string.len(t.mark) + string.len(t.file) + 3,
+          string.len(t.mark) + string.len(t.file) + string.len(
+            tostring(t.pos[2])
+          ) + string.len(tostring(t.pos[3])) + 5,
           'Comment',
         },
       },

@@ -14,7 +14,8 @@ function M.get()
       ),
       value = map,
     }
-    item.str = ('%s%s%s'):format(
+    item.str = string.format(
+      '%s%s%s',
       item.str,
       (' '):rep(50 - #item.str),
       (map.desc or map.rhs or (map.callback and 'callback'))
@@ -39,7 +40,12 @@ local f_previewer = require('picker.previewer.file')
 function M.preview(item, win, buf)
   if item.value.callback then
     local info = debug.getinfo(item.value.callback, 'S')
-    f_previewer.preview(info.source:sub(2), win, buf, info.linedefined)
+    f_previewer.preview(
+      string.sub(info.source, 2),
+      win,
+      buf,
+      info.linedefined
+    )
     return
   end
 

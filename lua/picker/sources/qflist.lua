@@ -11,11 +11,11 @@ function M.get()
       t.file = vim.api.nvim_buf_get_name(t.bufnr)
       return {
         value = t,
-        str = ('%s:%d:%s'):format(t.file, t.lnum, t.text),
+        str = string.format('%s:%d:%s', t.file, t.lnum, t.text),
         highlight = {
           {
             0,
-            t.file:len() + tostring(t.lnum):len() + 2,
+            string.len(t.file) + string.len(tostring(t.lnum)) + 2,
             'Comment',
           },
         },

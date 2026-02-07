@@ -46,12 +46,12 @@ end
 
 ---@return table<string, fun(entry: PickerItem)> actions
 function M.actions()
-  return {---@type table<string, fun(entry: PickerItem)>
+  return { ---@type table<string, fun(entry: PickerItem)>
     ['<C-v>'] = function(entry)
-      vim.cmd(('vertical sbuffer %d'):format(entry.bufnr))
+      vim.cmd(string.format('vertical sbuffer %d', entry.bufnr))
     end,
     ['<C-t>'] = function(entry)
-      vim.cmd(('tab sbuffer %d'):format(entry.bufnr))
+      vim.cmd(string.format('tab sbuffer %d', entry.bufnr))
     end,
   }
 end

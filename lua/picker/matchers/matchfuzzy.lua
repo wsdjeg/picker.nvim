@@ -9,7 +9,7 @@ function matchfuzzy.has_match(needle, haystack, case_sensitive)
 
   local j = 1
   for i = 1, string.len(needle) do
-    j = string.find(haystack, needle:sub(i, i), j, true)
+    j = string.find(haystack, string.sub(needle, i, i), j, true)
     if not j then
       return false
     else

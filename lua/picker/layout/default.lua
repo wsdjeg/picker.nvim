@@ -174,7 +174,7 @@ function M.render_windows(source, config)
         row = start_row + screen_height - 3,
         focusable = true,
         border = 'rounded',
-        title = config.prompt.title and (' %s '):format(source.name),
+        title = config.prompt.title and string.format(' %s ', source.name),
         title_pos = 'center',
         -- noautocmd = true,
       })
@@ -298,7 +298,7 @@ function M.render_windows(source, config)
         row = start_row,
         focusable = true,
         border = 'rounded',
-        title = config.prompt.title and (' %s '):format(source.name),
+        title = config.prompt.title and string.format(' %s ', source.name),
         title_pos = 'center',
         -- noautocmd = true,
       })

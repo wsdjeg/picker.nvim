@@ -43,7 +43,7 @@ local function preview_timer()
     local ftdetect_autocmd = vim.api.nvim_get_autocmds({
       group = 'filetypedetect',
       event = 'BufRead',
-      pattern = ('*.%s'):format(vim.fn.fnamemodify(preview_file, ':e')),
+      pattern = string.format('*.%s', vim.fn.fnamemodify(preview_file, ':e')),
     })
     -- logger.info(vim.inspect(ftdetect_autocmd))
     if
@@ -51,7 +51,7 @@ local function preview_timer()
       and ftdetect_autocmd[1].command
       and vim.startswith(ftdetect_autocmd[1].command, 'set filetype=')
     then
-      ft = ftdetect_autocmd[1].command:gsub('set filetype=', '')
+      ft = string.gsub(ftdetect_autocmd[1].command, 'set filetype=', '')
       vim.api.nvim_set_option_value('syntax', ft, { buf = preview_bufid })
     end
   end

@@ -36,7 +36,7 @@ function M.get()
             vim.fn.fnamemodify(tag_file, ':h'),
             fields[2]
           ),
-          pattern = fields[3]:sub(2),
+          pattern = string.sub(fields[3], 2),
         })
       end
     end

@@ -18,7 +18,7 @@ local function load()
       info.icon = icon
       table.insert(
         emojis,
-        { value = info, str = ('%s %s'):format(icon, info.name) }
+        { value = info, str = string.format('%s %s', icon, info.name) }
       )
     end
   end

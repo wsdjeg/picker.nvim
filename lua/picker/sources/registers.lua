@@ -47,8 +47,8 @@ function M.get()
       local text = lines[1] .. (#lines > 1 and '' or '\\n')
       table.insert(entries, {
         value = { name = reg, context = context },
-        str = ('[%s] %s'):format(reg, text),
-        highlight = { { 0, reg:len() + 2, 'Tag' } },
+        str = string.format('[%s] %s', reg, text),
+        highlight = { { 0, string.len(reg) + 2, 'Tag' } },
       })
     end
   end

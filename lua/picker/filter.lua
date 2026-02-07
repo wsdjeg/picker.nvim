@@ -20,7 +20,7 @@ function M.filter(input, source, ignorecase)
   else
     if
       source.state.previous_input
-      and source.state.previous_input:len() > 0
+      and string.len(source.state.previous_input) > 0
       and matcher.has_match(source.state.previous_input, input, ignorecase)
     then
       local rst = {}

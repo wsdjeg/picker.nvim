@@ -52,7 +52,7 @@
 
 ---@class PickerConfigFilter
 ---@field ignorecase? boolean
----@field matcher? 'fzy'|'matchfuzzy'
+---@field matcher? 'fzy'|'matchfuzzy'|'levenshtein'
 
 -- NOTE: (DrKJeff16) What other values does `window.layout` take?
 

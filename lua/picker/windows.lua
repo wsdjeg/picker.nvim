@@ -27,7 +27,8 @@ local function update_result_count()
       id = prompt_count_id,
       virt_text = {
         {
-          ('%d/%d'):format(
+          string.format(
+            '%d/%d',
             line,
             vim.api.nvim_buf_line_count(layout.list_buf)
           ),
@@ -125,7 +126,8 @@ function M.open(s, opt)
 
   if not ok then
     util.notify(
-      ('Unable to find layout "%s" for picker.nvim'):format(
+      string.format(
+        'Unable to find layout "%s" for picker.nvim',
         config.window.layout
       )
     )

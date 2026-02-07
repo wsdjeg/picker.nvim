@@ -8,7 +8,8 @@ function M.get()
   local items = {} ---@type PickerItem[]
   for _, t in ipairs(vim.fn.taglist('.*')) do
     if vim.fn.filereadable(t.filename) == 1 then
-      local display_str = ('%s%s%s'):format(
+      local display_str = string.format(
+        '%s%s%s',
         t.name,
         (' '):rep(38 - vim.fn.strdisplaywidth(t.name)),
         vim.fn.fnamemodify(t.filename, ':.')
@@ -18,8 +19,8 @@ function M.get()
         str = display_str,
         highlight = {
           {
-            math.max(38, t.name:len()),
-            display_str:len(),
+            math.max(38, string.len(t.name)),
+            string.len(display_str),
             'Comment',
           },
         },

@@ -32,7 +32,7 @@ M.preview_win = true ---@type boolean
 local function format(hl)
   for _, v in ipairs({ 'fg', 'bg', 'sp' }) do
     if type(hl[v]) == 'number' then
-      hl[v] = ('#%06X'):format(hl[v])
+      hl[v] = string.format('#%06X', hl[v])
     end
   end
   return hl
@@ -42,14 +42,20 @@ end
 ---@param win integer
 ---@param buf integer
 function M.preview(item, win, buf)
-  local def = ('%s = %s'):format(item.str, vim.inspect(format(item.value)))
+  local def =
+    string.format('%s = %s', item.str, vim.inspect(format(item.value)))
   local link_group = item.value.link
 
   while link_group do
     local link_group_def = vim.api.nvim_get_hl(0, { name = link_group })
-    def = ('%s\n\n%s'):format(
+    def = string.format(
+      '%s\n\n%s',
       def,
-      ('%s = %s'):format(link_group, vim.inspect(format(link_group_def)))
+      string.format(
+        '%s = %s',
+        link_group,
+        vim.inspect(format(link_group_def))
+      )
     )
     link_group = link_group_def.link
     if not link_group then

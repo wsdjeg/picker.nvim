@@ -1,12 +1,12 @@
+---@class Picker.Sources.Highlights
 local M = {}
 
 local previewer = require('picker.previewer.buffer')
 
+---@return PickerItem[] items
 function M.get()
   local hls = vim.api.nvim_get_hl(0, {})
-
-  local items = {}
-
+  local items = {} ---@type PickerItem[]
   for k, v in pairs(hls) do
     table.insert(items, {
       value = v,
@@ -20,12 +20,15 @@ function M.get()
   return items
 end
 
+---@param entry PickerItem
 function M.default_action(entry)
   vim.fn.setreg('"', entry.str)
 end
 
-M.preview_win = true
+M.preview_win = true ---@type boolean
 
+---@param hl vim.api.keyset.get_hl_info
+---@return vim.api.keyset.get_hl_info hl
 local function format(hl)
   for _, v in ipairs({ 'fg', 'bg', 'sp' }) do
     if type(hl[v]) == 'number' then
@@ -35,23 +38,25 @@ local function format(hl)
   return hl
 end
 
----@field item PickerItem
+---@param item PickerItem
+---@param win integer
+---@param buf integer
 function M.preview(item, win, buf)
   local def =
     string.format('%s = %s', item.str, vim.inspect(format(item.value)))
-
   local link_group = item.value.link
 
   while link_group do
     local link_group_def = vim.api.nvim_get_hl(0, { name = link_group })
-
-    def = def
-      .. '\n\n'
-      .. string.format(
+    def = string.format(
+      '%s\n\n%s',
+      def,
+      string.format(
         '%s = %s',
         link_group,
         vim.inspect(format(link_group_def))
       )
+    )
     link_group = link_group_def.link
     if not link_group then
       break

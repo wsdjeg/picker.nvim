@@ -15,6 +15,7 @@ local SCORE_MAX = math.huge
 local SCORE_MIN = -math.huge
 local MATCH_MAX_LENGTH = 1024
 
+---@class Pickers.Matchers.Fzy
 local fzy = {}
 
 -- Check if `needle` is a subsequence of the `haystack`.
@@ -28,6 +29,10 @@ local fzy = {}
 --
 -- Returns:
 --   bool
+---@param needle string
+---@param haystack string
+---@param case_sensitive? boolean
+---@return boolean match
 function fzy.has_match(needle, haystack, case_sensitive)
   if not case_sensitive then
     needle = string.lower(needle)
@@ -36,31 +41,33 @@ function fzy.has_match(needle, haystack, case_sensitive)
 
   local j = 1
   for i = 1, string.len(needle) do
-    j = string.find(haystack, needle:sub(i, i), j, true)
+    j = string.find(haystack, string.sub(needle, i, i), j, true)
     if not j then
       return false
-    else
-      j = j + 1
     end
+    j = j + 1
   end
 
   return true
 end
 
+---@param c string
 local function is_lower(c)
-  return c:match('%l')
+  return string.match(c, '%l')
 end
 
+---@param c string
 local function is_upper(c)
-  return c:match('%u')
+  return string.match(c, '%u')
 end
 
+---@param haystack string
+---@return table<integer, number> match_bonus
 local function precompute_bonus(haystack)
-  local match_bonus = {}
-
+  local match_bonus = {} ---@type table<integer, number>
   local last_char = '/'
   for i = 1, string.len(haystack) do
-    local this_char = haystack:sub(i, i)
+    local this_char = string.sub(haystack, i, i)
     if last_char == '/' or last_char == '\\' then
       match_bonus[i] = SCORE_MATCH_SLASH
     elseif last_char == '-' or last_char == '_' or last_char == ' ' then
@@ -79,6 +86,11 @@ local function precompute_bonus(haystack)
   return match_bonus
 end
 
+---@param needle string
+---@param haystack string
+---@param D number[][]
+---@param M number[][]
+---@param case_sensitive? boolean
 local function compute(needle, haystack, D, M, case_sensitive)
   -- Note that the match bonuses must be computed before the arguments are
   -- converted to lowercase, since there are bonuses for camelCase.
@@ -95,7 +107,7 @@ local function compute(needle, haystack, D, M, case_sensitive)
   -- get all the characters from the haystack once now, to reuse below.
   local haystack_chars = {}
   for i = 1, m do
-    haystack_chars[i] = haystack:sub(i, i)
+    haystack_chars[i] = string.sub(haystack, i, i)
   end
 
   for i = 1, n do
@@ -104,7 +116,7 @@ local function compute(needle, haystack, D, M, case_sensitive)
 
     local prev_score = SCORE_MIN
     local gap_score = i == n and SCORE_GAP_TRAILING or SCORE_GAP_INNER
-    local needle_char = needle:sub(i, i)
+    local needle_char = string.sub(needle, i, i)
 
     for j = 1, m do
       if needle_char == haystack_chars[j] then
@@ -139,20 +151,23 @@ end
 -- Returns:
 --   number: higher scores indicate better matches. See also `get_score_min`
 --     and `get_score_max`.
+---@param needle string
+---@param haystack string
+---@param case_sensitive? boolean
+---@return number score
 function fzy.score(needle, haystack, case_sensitive)
-  local n = string.len(needle)
-  local m = string.len(haystack)
+  local n, m = string.len(needle), string.len(haystack)
 
   if n == 0 or m == 0 or m > MATCH_MAX_LENGTH or n > m then
     return SCORE_MIN
-  elseif n == m then
-    return SCORE_MAX
-  else
-    local D = {}
-    local M = {}
-    compute(needle, haystack, D, M, case_sensitive)
-    return M[n][m]
   end
+  if n == m then
+    return SCORE_MAX
+  end
+
+  local D, M = {}, {} ---@type number[][], number[][]
+  compute(needle, haystack, D, M, case_sensitive)
+  return M[n][m]
 end
 
 -- Compute the locations where fzy matches a string.
@@ -170,13 +185,18 @@ end
 --   {int,...}: indices, where `indices[n]` is the location of the `n`th
 --     character of `needle` in `haystack`.
 --   number: the same matching score returned by `score`
+---@param needle string
+---@param haystack string
+---@param case_sensitive? boolean
+---@return table<integer, integer> positions
+---@return number score
 function fzy.positions(needle, haystack, case_sensitive)
-  local n = string.len(needle)
-  local m = string.len(haystack)
+  local n, m = string.len(needle), string.len(haystack)
 
   if n == 0 or m == 0 or m > MATCH_MAX_LENGTH or n > m then
     return {}, SCORE_MIN
-  elseif n == m then
+  end
+  if n == m then
     local consecutive = {}
     for i = 1, n do
       consecutive[i] = i
@@ -184,25 +204,24 @@ function fzy.positions(needle, haystack, case_sensitive)
     return consecutive, SCORE_MAX
   end
 
-  local D = {}
-  local M = {}
+  local D, M = {}, {} ---@type number[][], number[][]
   compute(needle, haystack, D, M, case_sensitive)
 
-  local positions = {}
+  local positions = {} ---@type table<integer, integer>
   local match_required = false
   local j = m
   for i = n, 1, -1 do
     while j >= 1 do
       if D[i][j] ~= SCORE_MIN and (match_required or D[i][j] == M[i][j]) then
-        match_required = (i ~= 1)
+        match_required = i ~= 1
           and (j ~= 1)
           and (M[i][j] == D[i - 1][j - 1] + SCORE_MATCH_CONSECUTIVE)
         positions[i] = j
         j = j - 1
         break
-      else
-        j = j - 1
       end
+
+      j = j - 1
     end
   end
 
@@ -221,9 +240,13 @@ end
 --     in `haystacks`, each entry giving the index of the line in `haystacks`
 --     as well as the equivalent to the return value of `positions` for that
 --     line.
+---@param needle string
+---@param haystacks string[]
+---@param case_sensitive? boolean
+---@return { [1]: integer, [2]: table<integer, integer>, [3]: number, [4]: string }[]
 function fzy.filter(needle, haystacks, case_sensitive)
+  ---@type { [1]: integer, [2]: table<integer, integer>, [3]: number, [4]: string }[]
   local result = {}
-
   for i, line in ipairs(haystacks) do
     if fzy.has_match(needle, line, case_sensitive) then
       local p, s = fzy.positions(needle, line, case_sensitive)
@@ -241,16 +264,19 @@ end
 --  - a `needle` or `haystack` larger than than `get_max_length`,
 -- the `score` function will return this exact value, which can be used as a
 -- sentinel. This is the lowest possible score.
+---@return number SCORE_MIN
 function fzy.get_score_min()
   return SCORE_MIN
 end
 
 -- The score returned for exact matches. This is the highest possible score.
+---@return number SCORE_MAX
 function fzy.get_score_max()
   return SCORE_MAX
 end
 
 -- The maximum size for which `fzy` will evaluate scores.
+---@return integer MATCH_MAX_LENGTH
 function fzy.get_max_length()
   return MATCH_MAX_LENGTH
 end
@@ -259,6 +285,7 @@ end
 --
 -- For matches that don't return `get_score_min`, their score will be greater
 -- than than this value.
+---@return number floor
 function fzy.get_score_floor()
   return MATCH_MAX_LENGTH * SCORE_GAP_INNER
 end
@@ -267,11 +294,13 @@ end
 --
 -- For matches that don't return `get_score_max`, their score will be less than
 -- this value.
+---@return number ceiling
 function fzy.get_score_ceiling()
   return MATCH_MAX_LENGTH * SCORE_MATCH_CONSECUTIVE
 end
 
 -- The name of the currently-running implmenetation, "lua" or "native".
+---@return 'lua'|'native' implementation
 function fzy.get_implementation_name()
   return 'lua'
 end

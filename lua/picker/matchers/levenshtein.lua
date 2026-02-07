@@ -9,7 +9,7 @@ function M.has_match(needle, haystack, case_sensitive)
 
   local j = 1
   for i = 1, string.len(needle) do
-    j = string.find(haystack, needle:sub(i, i), j, true)
+    j = string.find(haystack, string.sub(needle, i, i), j, true)
     if not j then
       return false
     else
@@ -46,7 +46,9 @@ function M.positions(needle, haystack, case_sensitive)
   -- fill
   for i = 1, n do
     for j = 1, m do
-      local cost = (needle:sub(i, i) == haystack:sub(j, j)) and 0 or 1
+      local cost = string.sub(needle, i, i) == string.sub(haystack, j, j)
+          and 0
+        or 1
       dp[i][j] = math.min(
         dp[i - 1][j] + 1, -- delete
         dp[i][j - 1] + 1, -- insert
@@ -64,7 +66,8 @@ function M.positions(needle, haystack, case_sensitive)
   local i, j = n, m
 
   while i > 0 and j > 0 do
-    local cost = (needle:sub(i, i) == haystack:sub(j, j)) and 0 or 1
+    local cost = string.sub(needle, i, i) == string.sub(haystack, j, j) and 0
+      or 1
 
     if dp[i][j] == dp[i - 1][j - 1] + cost then
       -- match or replace

@@ -1,8 +1,10 @@
+---@class Picker.Windows
 local M = {}
 
 local filter = require('picker.filter')
 local util = require('picker.util')
 
+---@type PickerSource
 local source -- global source
 
 ---@type PickerLayout
@@ -10,21 +12,29 @@ local layout -- global layout
 
 local extns = vim.api.nvim_create_namespace('picker.nvim')
 
-local config
+local config ---@type PickerConfig
 
-local prompt_count_id
+local prompt_count_id ---@type integer
 
-local insert_timer_id = -1
+local insert_timer_id = -1 ---@type integer
 
-local current_icon_extmark
+local current_icon_extmark ---@type integer
 
 local function update_result_count()
-  local count = vim.api.nvim_buf_line_count(layout.list_buf)
   local line = vim.api.nvim_win_get_cursor(layout.list_win)[1]
   prompt_count_id =
     vim.api.nvim_buf_set_extmark(layout.prompt_buf, extns, 0, 0, {
       id = prompt_count_id,
-      virt_text = { { string.format('%d/%d', line, count), 'Comment' } },
+      virt_text = {
+        {
+          string.format(
+            '%d/%d',
+            line,
+            vim.api.nvim_buf_line_count(layout.list_buf)
+          ),
+          'Comment',
+        },
+      },
       virt_text_pos = 'right_align',
     })
   current_icon_extmark =
@@ -35,16 +45,18 @@ local function update_result_count()
     })
 end
 
-local extmars = {}
+local extmarks = {} ---@type integer[]
 local ns = vim.api.nvim_create_namespace('picker-matched-chars')
 
 local function clear_highlight()
-  if #extmars > 0 then
-    for _, id in ipairs(extmars) do
-      vim.api.nvim_buf_del_extmark(layout.list_buf, ns, id)
-    end
-    extmars = {}
+  if vim.tbl_isempty(extmarks) then
+    return
   end
+
+  for _, id in ipairs(extmarks) do
+    vim.api.nvim_buf_del_extmark(layout.list_buf, ns, id)
+  end
+  extmarks = {}
 end
 
 local function highlight_list_windows()
@@ -61,7 +73,7 @@ local function highlight_list_windows()
             end_col = col,
             hl_group = config.highlight.matched,
           })
-        table.insert(extmars, id)
+        table.insert(extmarks, id)
       end
       if config.window.show_score then
         local id =
@@ -74,7 +86,7 @@ local function highlight_list_windows()
             },
             virt_text_pos = 'eol_right_align',
           })
-        table.insert(extmars, id)
+        table.insert(extmarks, id)
       end
       if source.filter_items[x][4].highlight then
         for y = 1, #source.filter_items[x][4].highlight do
@@ -85,7 +97,7 @@ local function highlight_list_windows()
               end_col = col_b,
               hl_group = hl,
             })
-          table.insert(extmars, id)
+          table.insert(extmarks, id)
         end
       end
     end
@@ -93,7 +105,7 @@ local function highlight_list_windows()
 end
 
 --- @param s PickerSource
---- @param opt? table
+--- @param opt? { input?: string }
 function M.open(s, opt)
   source = s
   opt = opt or {}
@@ -105,7 +117,7 @@ function M.open(s, opt)
   source.state.items = source.get()
   source.filter_items = {}
 
-  local ok, _ = pcall(function()
+  local ok = pcall(function()
     layout = require('picker.layout.' .. config.window.layout).render_windows(
       source,
       config
@@ -115,24 +127,23 @@ function M.open(s, opt)
   if not ok then
     util.notify(
       string.format(
-        'can not found layout "%s" for picker.nvim',
+        'Unable to find layout "%s" for picker.nvim',
         config.window.layout
       )
     )
     return
   end
 
-  local augroup = vim.api.nvim_create_augroup('picker.nvim', {
-    clear = true,
-  })
-
   vim.api.nvim_create_autocmd({ 'TextChangedI' }, {
-    group = augroup,
+    group = vim.api.nvim_create_augroup('picker.nvim', {
+      clear = true,
+    }),
     buffer = layout.prompt_buf,
     callback = M.handle_prompt_changed,
   })
+
   -- disable this key binding in promot buffer
-  for _, k in ipairs({
+  local disable = {
     '<C-c>',
     '<F1>',
     '<F2>',
@@ -147,7 +158,8 @@ function M.open(s, opt)
     '<F11>',
     '<F12>',
     '<C-j>', -- disable ctrl-j by default
-  }) do
+  }
+  for _, k in ipairs(disable) do
     vim.keymap.set('i', k, '<Nop>', { buffer = layout.prompt_buf })
   end
   vim.keymap.set('i', config.mappings.close, function()
@@ -308,11 +320,11 @@ function M.handle_prompt_changed()
             return t[4].str
           end, source.filter_items)
         )
-        if #source.filter_items > 0 then
+        if not vim.tbl_isempty(source.filter_items) then
           highlight_list_windows()
           if config.window.enable_preview and source.preview then
             source.preview(
-              source.filter_items[1][4],
+              source.filter_items[1][4], -- WARN: (DrKJeff16) Avoid using magic numbers
               layout.preview_win,
               layout.preview_buf
             )
@@ -325,5 +337,4 @@ function M.handle_prompt_changed()
     end
   )
 end
-
 return M

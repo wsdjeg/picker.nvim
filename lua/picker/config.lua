@@ -1,7 +1,7 @@
+---@class Picker.Config
 local M = {}
 
----@type PickerConfig
-local default = {
+local default = { ---@type PickerConfig
   filter = {
     ignorecase = false,
     matcher = 'fzy',
@@ -38,12 +38,13 @@ local default = {
   },
 }
 
+---@param opt? PickerConfig
 function M.setup(opt)
-  default = vim.tbl_deep_extend('force', default, opt)
+  default = vim.tbl_deep_extend('force', default, opt or {})
 end
 
+---@return PickerConfig default
 function M.get()
   return default
 end
-
 return M

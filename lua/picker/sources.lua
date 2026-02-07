@@ -1,7 +1,9 @@
+---@class Picker.Sources
 local M = {}
 
 M.name = 'picker sources'
 
+---@return PickerItem[] items
 function M.get()
   return vim.tbl_map(function(t)
     t = vim.fn.fnamemodify(t, ':t:r')
@@ -14,10 +16,10 @@ end
 
 ---@param selected PickerItem
 function M.default_action(selected)
-  vim.cmd('Picker ' .. selected.value)
+  vim.cmd.Picker(selected.value)
   -- @fixme why the default mode is normal mode.
 end
 
-M.preview_win = false
+M.preview_win = false ---@type boolean
 
 return M

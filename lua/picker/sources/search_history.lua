@@ -1,7 +1,9 @@
+---@class Picker.Sources.SearchHistory
 local M = {}
----@return table<PickerItem>
+
+---@return PickerItem[] items
 function M.get()
-  local items = {}
+  local items = {} ---@type PickerItem[]
   for i = vim.fn.histnr('search'), 1, -1 do
     table.insert(items, {
       str = vim.fn.histget('search', i),
@@ -11,8 +13,9 @@ function M.get()
   return items
 end
 
+---@return table<string, fun(entry: PickerItem)>
 function M.actions()
-  return {
+  return { ---@type table<string, fun(entry: PickerItem)>
     ['<C-d>'] = function(entry)
       vim.fn.histdel('search', entry.value.index)
     end,
@@ -24,6 +27,4 @@ function M.default_action(selected)
   vim.fn.setreg('/', selected.str)
   vim.api.nvim_input('n')
 end
-
 return M
-

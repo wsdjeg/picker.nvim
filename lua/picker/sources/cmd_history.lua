@@ -1,7 +1,9 @@
+---@class Picker.Sources.CmdHistory
 local M = {}
----@return table<PickerItem>
+
+---@return PickerItem[] items
 function M.get()
-  local items = {}
+  local items = {} ---@type PickerItem[]
   for i = vim.fn.histnr('cmd'), 1, -1 do
     table.insert(items, {
       str = vim.fn.histget('cmd', i),
@@ -11,8 +13,9 @@ function M.get()
   return items
 end
 
+---@return table<string, fun(entry: PickerItem)> actions
 function M.actions()
-  return {
+  return { ---@type table<string, fun(entry: PickerItem)>
     ['<C-d>'] = function(entry)
       vim.fn.histdel('cmd', entry.value.index)
     end,

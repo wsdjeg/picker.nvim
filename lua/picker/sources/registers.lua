@@ -1,3 +1,4 @@
+---@class Picker.Sources.Registers
 local M = {}
 
 -- There are ten types of registers:		*registers* *{register}* *E354*
@@ -14,9 +15,10 @@ local M = {}
 
 local previewer = require('picker.previewer.buffer')
 
+---@return PickerItem[] items
 function M.get()
   -- "
-  local registers = { '"' }
+  local registers = { '"' } ---@type string[]
 
   -- 0 - 9
   for i = 0, 9 do
@@ -36,39 +38,33 @@ function M.get()
     table.insert(registers, i)
   end
 
-  local entrys = {}
-
+  local entries = {} ---@type PickerItem[]
   for _, reg in ipairs(registers) do
     local context = vim.fn.getreg(reg)
     if context ~= '' then
       -- if the context is `\n\+`
       local lines = vim.split(context, '\n')
-
-      local text = #lines > 1 and lines[1] .. '\\n' or lines[1]
-
-      table.insert(entrys, {
-
+      local text = lines[1] .. (#lines > 1 and '' or '\\n')
+      table.insert(entries, {
         value = { name = reg, context = context },
         str = string.format('[%s] %s', reg, text),
-        highlight = {
-          {
-            0,
-            #reg + 2,
-            'Tag',
-          },
-        },
+        highlight = { { 0, string.len(reg) + 2, 'Tag' } },
       })
     end
   end
-  return entrys
+  return entries
 end
 
+---@param entry PickerItem
 function M.default_action(entry)
   vim.api.nvim_paste(entry.value.context, false, -1)
 end
 
-M.preview_win = true
+M.preview_win = true ---@type boolean
 
+---@param item PickerItem
+---@param win integer
+---@param buf integer
 function M.preview(item, win, buf)
   previewer.buflines = vim.split(item.value.context, '[\r]?\n')
   previewer.filetype = nil

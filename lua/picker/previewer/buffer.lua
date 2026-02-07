@@ -1,16 +1,17 @@
+---@class Picker.BufferPreviewer
 local M = {}
 
-local preview_timer_id = -1
+local preview_timer_id = -1 ---@type integer
 
-local timerout = 500
+local timerout = 500 ---@type integer
 
-local line_number = 1
-local previous_line = 1
-local preview_winid
-local preview_bufnr
-local update_context = false
+local line_number = 1 ---@type integer
+local previous_line = 1 ---@type integer
+local preview_winid ---@type integer
+local preview_bufnr ---@type integer
+local update_context = false ---@type boolean
 
-local function preview_timer(_)
+local function preview_timer()
   if
     preview_bufnr
     and vim.api.nvim_buf_is_valid(preview_bufnr)
@@ -44,13 +45,13 @@ local function preview_timer(_)
   end
 end
 
-M.buflines = {}
-M.filetype = ''
+M.buflines = {} ---@type string[]
+M.filetype = '' ---@type string|nil
 
 ---@param linenr integer
 ---@param win integer
 ---@param buf integer
----@param redraw boolean force update context
+---@param redraw? boolean force update context
 function M.preview(linenr, win, buf, redraw)
   vim.fn.timer_stop(preview_timer_id)
   line_number = linenr

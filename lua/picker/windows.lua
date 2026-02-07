@@ -104,7 +104,7 @@ local function highlight_list_windows()
 end
 
 --- @param s PickerSource
---- @param opt? table
+--- @param opt? { input?: string }
 function M.open(s, opt)
   source = s
   opt = opt or {}

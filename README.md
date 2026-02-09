@@ -281,7 +281,7 @@ filter and setup picker.nvim without changing configuration file.
 | hide-score    | hide matched score                   |
 | ignrecase     | change filter ignrecase to true      |
 | noignrecase   | change filter ignrecase to false     |
-| layout-*      | change window layout                 |
+| layout-\*     | change window layout                 |
 
 picker_config source will list all available [custom layouts](#-custom-layout).
 
@@ -448,6 +448,9 @@ This source will try to use job.nvim to download emoji json data, if job.nvim is
 | music-player      | music-player source form [music-player.nvim](https://github.com/wsdjeg/music-player.nvim)       |
 | plug              | plugins source for [nvim-plug](https://github.com/wsdjeg/nvim-plug)                             |
 | async_files       | async files source, require [job.nvim](https://github.com/wsdjeg/job.nvim)                      |
+| chat              | AI chat sessions [chat.nvim](https://github.com/wsdjeg/chat.nvim)                               |
+| chat_model        | available models of current provider in chat.nvim                                               |
+| chat_provider     | available providers in chat.nvim                                                                |
 
 ## 🧩 Custom source
 

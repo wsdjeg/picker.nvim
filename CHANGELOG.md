@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.8.0](https://github.com/wsdjeg/picker.nvim/compare/v1.7.0...v1.8.0) (2026-02-14)
+
+
+### Features
+
+* picker custom layouts ([ed133eb](https://github.com/wsdjeg/picker.nvim/commit/ed133eb3d7e806674eabb04747d7cf5beae145ab))
+
+
+### Bug Fixes
+
+* check buf and win is valid ([0466fd4](https://github.com/wsdjeg/picker.nvim/commit/0466fd4ec149d1eed2c8a646fef0b007f9b93965))
+* massively improve annotations, optimized code portions ([#16](https://github.com/wsdjeg/picker.nvim/issues/16)) ([470a98c](https://github.com/wsdjeg/picker.nvim/commit/470a98cbffb549d8b1086e00672b17caaabeecd5))
+
 ## [1.7.0](https://github.com/wsdjeg/picker.nvim/compare/v1.6.0...v1.7.0) (2026-01-24)
 
 

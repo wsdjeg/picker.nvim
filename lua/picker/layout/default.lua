@@ -213,6 +213,11 @@ function M.render_windows(source, config)
           { win = layout.preview_win }
         )
         vim.api.nvim_set_option_value(
+          'list',
+          false,
+          { win = layout.preview_win }
+        )
+        vim.api.nvim_set_option_value(
           'relativenumber',
           false,
           { win = layout.preview_win }
@@ -335,6 +340,7 @@ function M.render_windows(source, config)
     { buf = layout.list_buf }
   )
   vim.api.nvim_set_option_value('number', false, { win = layout.list_win })
+  vim.api.nvim_set_option_value('list', false, { win = layout.list_win })
   vim.api.nvim_set_option_value(
     'relativenumber',
     false,
@@ -347,6 +353,7 @@ function M.render_windows(source, config)
     { win = layout.list_win }
   )
   vim.api.nvim_set_option_value('number', false, { win = layout.prompt_win })
+  vim.api.nvim_set_option_value('list', false, { win = layout.prompt_win })
   vim.api.nvim_set_option_value(
     'relativenumber',
     false,

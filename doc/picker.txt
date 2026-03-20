@@ -278,14 +278,14 @@ Using luarocks <https://luarocks.org/>
 
  filter and setup picker.nvim without changing configuration file.
 
- | items         | description                          |
- | ------------- | ------------------------------------ |
- | prompt-top    | change the prompt position to top    |
- | prompt-bottom | change the prompt position to bottom |
- | show-score    | display matched score                |
- | hide-score    | hide matched score                   |
- | ignrecase     | change filter ignrecase to true      |
- | noignrecase   | change filter ignrecase to false     |
+ | items         | description                            |
+ | ------------- | -------------------------------------- |
+ | prompt-top    | change the prompt position to top      |
+ | prompt-bottom | change the prompt position to bottom   |
+ | show-score    | display matched score                  |
+ | hide-score    | hide matched score                     |
+ | ignorecase     | change filter ignorecase to true      |
+ | noignorecase   | change filter ignorecase to false     |
 
  | key binding | description                |
  | ----------- | -------------------------- |

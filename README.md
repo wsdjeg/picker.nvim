@@ -279,8 +279,8 @@ filter and setup picker.nvim without changing configuration file.
 | prompt-bottom | change the prompt position to bottom |
 | show-score    | display matched score                |
 | hide-score    | hide matched score                   |
-| ignrecase     | change filter ignrecase to true      |
-| noignrecase   | change filter ignrecase to false     |
+| ignorecase     | change filter ignorecase to true      |
+| noignorecase   | change filter ignorecase to false     |
 | layout-\*     | change window layout                 |
 
 picker_config source will list all available [custom layouts](#-custom-layout).

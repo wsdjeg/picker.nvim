@@ -47,8 +47,8 @@ local configs = { ---@type PickerSourceConfig[]
     end,
   },
   {
-    name = 'ignrecase',
-    desc = 'change filter ignrecase to true',
+    name = 'ignorecase',
+    desc = 'change filter ignorecase to true',
     func = function()
       require('picker').setup({
         filter = {
@@ -58,8 +58,8 @@ local configs = { ---@type PickerSourceConfig[]
     end,
   },
   {
-    name = 'noignrecase',
-    desc = 'change filter ignrecase to false',
+    name = 'noignorecase',
+    desc = 'change filter ignorecase to false',
     func = function()
       require('picker').setup({
         filter = {

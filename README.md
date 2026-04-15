@@ -217,26 +217,32 @@ In picker prompt window, the these mappings are defined by default.
 
 | source                | description                             |
 | --------------------- | --------------------------------------- |
+| async_files           | async files (requires job.nvim)         |
 | buffers               | listed buffers                          |
 | buftags               | ctags outline for current buffer        |
 | cmd_history           | results from `:history :`               |
 | colorscheme           | all colorschemes                        |
+| emoji                 | emoji entries                           |
 | files                 | files in current dir                    |
 | help_tags             | neovim help tags source                 |
 | highlights            | highlight group source                  |
 | jumps                 | jump list                               |
+| key-mappings          | key mappings                            |
 | lines                 | lines in current buffer                 |
 | loclist               | location list source                    |
-| lsp_document_symbols  | document symbols result from lsp client |
-| lsp_references        | lsp references                          |
+| lsp_declarations      | lsp declarations                        |
 | lsp_definitions       | lsp definitions                         |
+| lsp_document_symbols  | document symbols result from lsp client |
+| lsp_implementations   | lsp implementations                     |
+| lsp_references        | lsp references                          |
+| lsp_type_definitions  | lsp type definitions                    |
 | lsp_workspace_symbols | workspace symbols                       |
 | marks                 | marks list                              |
 | picker_config         | picker config source                    |
 | qflist                | quickfix source                         |
 | registers             | registers context                       |
-| emoji                 | emoji entries                           |
-| key-mappings          | key mappings                            |
+| search_history        | results from `:history /`               |
+| tags                  | tags list                               |
 
 ### files
 
@@ -279,8 +285,8 @@ filter and setup picker.nvim without changing configuration file.
 | prompt-bottom | change the prompt position to bottom |
 | show-score    | display matched score                |
 | hide-score    | hide matched score                   |
-| ignorecase     | change filter ignorecase to true      |
-| noignorecase   | change filter ignorecase to false     |
+| ignorecase   | change filter ignorecase to true     |
+| noignorecase | change filter ignorecase to false    |
 | layout-\*     | change window layout                 |
 
 picker_config source will list all available [custom layouts](#-custom-layout).
@@ -447,7 +453,6 @@ This source will try to use job.nvim to download emoji json data, if job.nvim is
 | git-branch        | git branch source from [git.nvim](https://github.com/wsdjeg/git.nvim)                           |
 | music-player      | music-player source form [music-player.nvim](https://github.com/wsdjeg/music-player.nvim)       |
 | plug              | plugins source for [nvim-plug](https://github.com/wsdjeg/nvim-plug)                             |
-| async_files       | async files source, require [job.nvim](https://github.com/wsdjeg/job.nvim)                      |
 | chat              | AI chat sessions [chat.nvim](https://github.com/wsdjeg/chat.nvim)                               |
 | chat_model        | available models of current provider in chat.nvim                                               |
 | chat_provider     | available providers in chat.nvim                                                                |

@@ -291,7 +291,9 @@ function M.open(s, opt)
   if opt.input then
     vim.api.nvim_buf_set_lines(layout.prompt_buf, 0, -1, false, { opt.input })
   end
-  vim.api.nvim_input('A')
+  vim.schedule(function()
+    vim.cmd('startinsert!')
+  end)
   M.handle_prompt_changed()
 end
 

@@ -138,6 +138,7 @@ require('plug').add({
           height = 0.8,
           col = 0.1,
           row = 0.1,
+          border = 'rounded',
           current_icon = '>',
           current_icon_hl = 'CursorLine',
           enable_preview = false,

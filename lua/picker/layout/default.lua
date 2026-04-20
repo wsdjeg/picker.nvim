@@ -61,7 +61,7 @@ function M.render_windows(source, config)
             col = start_col,
             row = start_row,
             focusable = false,
-            border = 'rounded',
+            border = config.window.border,
           })
         vim.api.nvim_set_option_value(
           'winhighlight',
@@ -96,7 +96,7 @@ function M.render_windows(source, config)
           col = start_col,
           row = start_row,
           focusable = false,
-          border = 'rounded',
+          border = config.window.border,
         })
       end
       if not vim.api.nvim_win_is_valid(layout.list_win) then
@@ -110,7 +110,7 @@ function M.render_windows(source, config)
           col = start_col,
           row = start_row + math.floor((screen_height - 5) / 2) + 2,
           focusable = false,
-          border = 'rounded',
+          border = config.window.border,
           -- title = 'Result',
           -- title_pos = 'center',
           -- noautocmd = true,
@@ -126,7 +126,7 @@ function M.render_windows(source, config)
           col = start_col,
           row = start_row + math.floor((screen_height - 5) / 2) + 2,
           focusable = false,
-          border = 'rounded',
+          border = config.window.border,
           -- title = 'Result',
           -- title_pos = 'center',
           -- noautocmd = true,
@@ -145,7 +145,7 @@ function M.render_windows(source, config)
           col = start_col,
           row = start_row,
           focusable = false,
-          border = 'rounded',
+          border = config.window.border,
           -- title = 'Result',
           -- title_pos = 'center',
           -- noautocmd = true,
@@ -158,7 +158,7 @@ function M.render_windows(source, config)
           col = start_col,
           row = start_row,
           focusable = false,
-          border = 'rounded',
+          border = config.window.border,
           -- title = 'Result',
           -- title_pos = 'center',
           -- noautocmd = true,
@@ -173,7 +173,7 @@ function M.render_windows(source, config)
         col = start_col,
         row = start_row + screen_height - 3,
         focusable = true,
-        border = 'rounded',
+        border = config.window.border,
         title = config.prompt.title and string.format(' %s ', source.name),
         title_pos = 'center',
         -- noautocmd = true,
@@ -200,7 +200,7 @@ function M.render_windows(source, config)
             col = start_col,
             row = start_row + math.floor((screen_height - 5) / 2) + 4,
             focusable = false,
-            border = 'rounded',
+            border = config.window.border,
           })
         vim.api.nvim_set_option_value(
           'winhighlight',
@@ -240,7 +240,7 @@ function M.render_windows(source, config)
           col = start_col,
           row = start_row + math.floor((screen_height - 5) / 2) + 4,
           focusable = false,
-          border = 'rounded',
+          border = config.window.border,
         })
       end
       if not vim.api.nvim_win_is_valid(layout.list_win) then
@@ -253,7 +253,7 @@ function M.render_windows(source, config)
           col = start_col,
           row = start_row + 3,
           focusable = false,
-          border = 'rounded',
+          border = config.window.border,
         })
       else
         vim.api.nvim_win_set_config(layout.list_win, {
@@ -265,7 +265,7 @@ function M.render_windows(source, config)
           col = start_col,
           row = start_row + 3,
           focusable = false,
-          border = 'rounded',
+          border = config.window.border,
         })
       end
     else
@@ -280,7 +280,7 @@ function M.render_windows(source, config)
           col = start_col,
           row = start_row + 3,
           focusable = false,
-          border = 'rounded',
+          border = config.window.border,
         })
       else
         vim.api.nvim_win_set_config(layout.list_win, {
@@ -290,7 +290,7 @@ function M.render_windows(source, config)
           col = start_col,
           row = start_row + 3,
           focusable = false,
-          border = 'rounded',
+          border = config.window.border,
         })
       end
     end
@@ -302,7 +302,7 @@ function M.render_windows(source, config)
         col = start_col,
         row = start_row,
         focusable = true,
-        border = 'rounded',
+        border = config.window.border,
         title = config.prompt.title and string.format(' %s ', source.name),
         title_pos = 'center',
         -- noautocmd = true,

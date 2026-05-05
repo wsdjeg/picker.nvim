@@ -105,13 +105,13 @@ function M.actions()
     end,
   }
 end
-
 local hidden = true ---@type boolean
 
 ---@return table<string, function> keymaps
 function M.redraw_actions()
   return {
     ['<C-h>'] = function()
+      hidden = not hidden
       if hidden then
         cmd = {
           'rg',
@@ -122,10 +122,8 @@ function M.redraw_actions()
           '--glob',
           '!.git/',
         }
-        hidden = false
       else
         cmd = { 'rg', '--files', '--ignore', '--text', '--glob', '!.git/' }
-        hidden = true
       end
       async_run()
     end,

@@ -178,18 +178,24 @@ function M.set(opt)
       for _, definition in ipairs(result) do
         local filename =
           vim.fn.fnamemodify(vim.uri_to_fname(definition.targetUri), ':.')
+        -- Ensure buffer is loaded before getting lines
+        local bufnr = vim.uri_to_bufnr(definition.targetUri)
+        if not vim.api.nvim_buf_is_loaded(bufnr) then
+          vim.fn.bufload(bufnr)
+        end
+        local line_content = vim.api.nvim_buf_get_lines(
+          bufnr,
+          definition.targetRange.start.line,
+          definition.targetRange.start.line + 1,
+          false
+        )[1] or ''
         table.insert(items, {
           value = definition,
           str = string.format(
             '%s:%d:%s',
             filename,
             definition.targetRange.start.line + 1,
-            vim.api.nvim_buf_get_lines(
-              vim.uri_to_bufnr(definition.targetUri),
-              definition.targetRange.start.line,
-              definition.targetRange.start.line + 1,
-              false
-            )[1] or ''
+            line_content
           ),
           highlight = {
             {
@@ -201,8 +207,6 @@ function M.set(opt)
             },
           },
         })
-      end
-      require('picker.windows').handle_prompt_changed()
     end,
     opt.buf
   )

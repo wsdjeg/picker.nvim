@@ -12,7 +12,7 @@ function M.filter(input, source, ignorecase)
     matcher = require('picker.matchers.fzy')
   end
   if input == '' then
-    local i = 1
+    local i = 0
     source.filter_items = vim.tbl_map(function(t)
       i = i + 1
       return { i, {}, 0, t }

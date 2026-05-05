@@ -74,14 +74,27 @@ local hidden = true ---@type boolean
 function M.redraw_actions()
   return { ---@type table<string, fun(entry: PickerItem)>
     ['<C-h>'] = function()
-      list_files_cmd = { 'rg', '--files' }
-
+      hidden = not hidden
       if hidden then
-        table.insert(list_files_cmd, '--hidden')
-        hidden = false
-        return
+        list_files_cmd = {
+          'rg',
+          '--files',
+          '--hidden',
+          '--ignore',
+          '--text',
+          '--glob',
+          '!.git/',
+        }
+      else
+        list_files_cmd = {
+          'rg',
+          '--files',
+          '--ignore',
+          '--text',
+          '--glob',
+          '!.git/',
+        }
       end
-      hidden = true
     end,
   }
 end

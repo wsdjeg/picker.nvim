@@ -65,39 +65,43 @@ local function highlight_list_windows()
   local from = info.topline
   local to = info.botline
   if source.filter_items and #source.filter_items > 0 then
+    -- Ensure we don't iterate beyond available items
+    to = math.min(to, #source.filter_items)
     for x = from, to do
-      for y = 1, #source.filter_items[x][2] do
-        local col = source.filter_items[x][2][y]
-        local id =
-          vim.api.nvim_buf_set_extmark(layout.list_buf, ns, x - 1, col - 1, {
-            end_col = col,
-            hl_group = config.highlight.matched,
-          })
-        table.insert(extmarks, id)
-      end
-      if config.window.show_score then
-        local id =
-          vim.api.nvim_buf_set_extmark(layout.list_buf, ns, x - 1, 0, {
-            virt_text = {
-              {
-                tostring(source.filter_items[x][3]),
-                config.highlight.score,
-              },
-            },
-            virt_text_pos = 'eol_right_align',
-          })
-        table.insert(extmarks, id)
-      end
-      if source.filter_items[x][4].highlight then
-        for y = 1, #source.filter_items[x][4].highlight do
-          local col_a, col_b, hl =
-            unpack(source.filter_items[x][4].highlight[y])
+      if source.filter_items[x] and source.filter_items[x][2] then
+        for y = 1, #source.filter_items[x][2] do
+          local col = source.filter_items[x][2][y]
           local id =
-            vim.api.nvim_buf_set_extmark(layout.list_buf, ns, x - 1, col_a, {
-              end_col = col_b,
-              hl_group = hl,
+            vim.api.nvim_buf_set_extmark(layout.list_buf, ns, x - 1, col - 1, {
+              end_col = col,
+              hl_group = config.highlight.matched,
             })
           table.insert(extmarks, id)
+        end
+        if config.window.show_score then
+          local id =
+            vim.api.nvim_buf_set_extmark(layout.list_buf, ns, x - 1, 0, {
+              virt_text = {
+                {
+                  tostring(source.filter_items[x][3]),
+                  config.highlight.score,
+                },
+              },
+              virt_text_pos = 'eol_right_align',
+            })
+          table.insert(extmarks, id)
+        end
+        if source.filter_items[x][4] and source.filter_items[x][4].highlight then
+          for y = 1, #source.filter_items[x][4].highlight do
+            local col_a, col_b, hl =
+              unpack(source.filter_items[x][4].highlight[y])
+            local id =
+              vim.api.nvim_buf_set_extmark(layout.list_buf, ns, x - 1, col_a, {
+                end_col = col_b,
+                hl_group = hl,
+              })
+            table.insert(extmarks, id)
+          end
         end
       end
     end

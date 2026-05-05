@@ -55,7 +55,7 @@ local function preview_timer()
       vim.api.nvim_set_option_value('syntax', ft, { buf = preview_bufid })
     end
   end
-  if preview_linenr and preview_linenr < #context then
+  if preview_linenr and preview_linenr >= 1 and preview_linenr <= #context then
     vim.api.nvim_win_set_cursor(preview_winid, { preview_linenr, 0 })
     vim.api.nvim_win_call(preview_winid, function()
       vim.cmd('noautocmd normal! zz')

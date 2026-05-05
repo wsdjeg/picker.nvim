@@ -21,6 +21,8 @@ function M.filter(input, source, ignorecase)
     if
       source.state.previous_input
       and string.len(source.state.previous_input) > 0
+      and source.filter_items
+      and #source.filter_items > 0
       and matcher.has_match(source.state.previous_input, input, ignorecase)
     then
       local rst = {}
@@ -30,7 +32,7 @@ function M.filter(input, source, ignorecase)
           table.insert(rst, { i, p, s, v[4] })
         end
       end
-      if source.state.filter_count < #source.state.items then
+      if source.state.filter_count and source.state.filter_count < #source.state.items then
         for i = source.state.filter_count, #source.state.items do
           if
             matcher.has_match(input, source.state.items[i].str, ignorecase)

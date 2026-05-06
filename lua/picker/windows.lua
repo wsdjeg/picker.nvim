@@ -174,6 +174,10 @@ function M.open(s, opt)
     if vim.api.nvim_win_is_valid(layout.preview_win) then
       vim.api.nvim_win_close(layout.preview_win, true)
     end
+    -- cleanup: restore preview state if needed
+    if source.cleanup then
+      source.cleanup()
+    end
   end, { buffer = layout.prompt_buf })
   vim.keymap.set('i', config.mappings.open_item, function()
     vim.fn.timer_stop(insert_timer_id)

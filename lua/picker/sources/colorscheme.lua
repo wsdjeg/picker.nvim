@@ -24,4 +24,9 @@ function M.preview(item, win, buf)
   previewer.preview(item.value, win, buf)
 end
 
+--- Cleanup function to restore original colorscheme
+function M.cleanup()
+  previewer.restore()
+end
+
 return M

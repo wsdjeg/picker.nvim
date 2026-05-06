@@ -3,11 +3,11 @@ local M = {}
 
 local util = require('picker.util')
 
----@param argv string[]
+---@param argv? string[]
 ---@param opt? table
 function M.open(argv, opt)
   util.info('argv is: ' .. vim.inspect(argv))
-  if vim.tbl_isempty(argv) then
+  if not argv or vim.tbl_isempty(argv) then
     require('picker.windows').open(require('picker.sources'))
     return
   end

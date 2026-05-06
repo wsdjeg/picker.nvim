@@ -5,7 +5,7 @@ M.name = 'picker sources'
 
 ---@return PickerItem[] items
 function M.get()
-  return vim.tbl_map(function(t)
+  return vim.tbl_map(function(t) ---@param t string
     t = vim.fn.fnamemodify(t, ':t:r')
     return {
       value = t,

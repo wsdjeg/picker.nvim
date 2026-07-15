@@ -7,6 +7,7 @@ and an easy-to-write source API that lets you create custom pickers with minimal
 Whether you need file search, LSP symbols, diagnostics, or fully custom workflows,
 `picker.nvim` offers a clean and composable approach without the overhead of larger frameworks.
 
+[![Run Tests](https://github.com/wsdjeg/picker.nvim/actions/workflows/test.yml/badge.svg)](https://github.com/wsdjeg/picker.nvim/actions/workflows/test.yml)
 [![GitHub License](https://img.shields.io/github/license/wsdjeg/picker.nvim)](LICENSE)
 [![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/wsdjeg/picker.nvim)](https://github.com/wsdjeg/picker.nvim/issues)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/m/wsdjeg/picker.nvim)](https://github.com/wsdjeg/picker.nvim/commits/master/)

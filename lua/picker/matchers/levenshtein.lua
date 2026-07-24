@@ -1,28 +1,20 @@
---- Levenshtein编辑距离算法实现
+--- Levenshtein edit distance matcher.
+--- Scores candidates by edit distance — fewer edits means a better match.
+--- Uses the shared has_match pre-filter from the base module.
+
+local base = require('picker.matchers')
+
 local M = {}
 
-function M.has_match(needle, haystack, case_sensitive)
-  if not case_sensitive then
-    needle = string.lower(needle)
-    haystack = string.lower(haystack)
-  end
+-- Use the shared has_match from the base module
+M.has_match = base.has_match
 
-  local j = 1
-  for i = 1, string.len(needle) do
-    j = string.find(haystack, string.sub(needle, i, i), j, true)
-    if not j then
-      return false
-    else
-      j = j + 1
-    end
-  end
-
-  return true
-end
-
---- 计算Levenshtein距离并转换为得分
---- @param needle string 输入字符串
---- @param haystack string 候选字符串
+--- Compute Levenshtein distance and return matched positions with score.
+---@param needle string Input string
+---@param haystack string Candidate string
+---@param case_sensitive? boolean
+---@return table<integer, integer> positions Matched positions in haystack
+---@return number score Negative edit distance (higher is better)
 function M.positions(needle, haystack, case_sensitive)
   if not case_sensitive then
     needle = string.lower(needle)
@@ -30,10 +22,10 @@ function M.positions(needle, haystack, case_sensitive)
   end
   local n, m = #needle, #haystack
   if n == 0 or m == 0 then
-    return 0, {}, { 0, 0 }
+    return {}, 0
   end
 
-  -- full DP matrix for backtracking
+  -- Full DP matrix for backtracking
   local dp = {}
   for i = 0, n do
     dp[i] = {}
@@ -43,7 +35,7 @@ function M.positions(needle, haystack, case_sensitive)
     dp[0][j] = j
   end
 
-  -- fill
+  -- Fill DP matrix
   for i = 1, n do
     for j = 1, m do
       local cost = string.sub(needle, i, i) == string.sub(haystack, j, j)
@@ -59,9 +51,7 @@ function M.positions(needle, haystack, case_sensitive)
 
   local dist = dp[n][m]
 
-  --------------------------------------------------------------------
-  -- Backtrack to recover positions
-  --------------------------------------------------------------------
+  -- Backtrack to recover matched positions
   local positions = {}
   local i, j = n, m
 
@@ -70,16 +60,16 @@ function M.positions(needle, haystack, case_sensitive)
       or 1
 
     if dp[i][j] == dp[i - 1][j - 1] + cost then
-      -- match or replace
+      -- Match or replace
       if cost == 0 then
-        table.insert(positions, 1, j) -- record matched position
+        table.insert(positions, 1, j)
       end
       i, j = i - 1, j - 1
     elseif dp[i][j] == dp[i - 1][j] + 1 then
-      -- delete
+      -- Delete
       i = i - 1
     else
-      -- insert
+      -- Insert
       j = j - 1
     end
   end
@@ -87,4 +77,12 @@ function M.positions(needle, haystack, case_sensitive)
   return positions, -dist
 end
 
+--- The name of the currently-running implementation.
+--- Always 'lua' since this is a pure Lua implementation.
+---@return 'lua' implementation
+function M.get_implementation_name()
+  return 'lua'
+end
+
 return M
+

@@ -1,8 +1,12 @@
--- 基于：https://github.com/swarn
--- 修改：
--- 1. filter 返回列表每个 item 第四个元素候选字符串
+-- Based on: https://github.com/swarn
+-- Modifications:
+-- 1. filter returns each item's candidate string as the 4th element
 -- 2. FFI acceleration for compute() when available (double[] instead of table[][])
+-- 3. Uses shared has_match and FFI detection from matchers base module
+--
 -- The lua implementation of the fzy string matching algorithm
+
+local base = require('picker.matchers')
 
 local SCORE_GAP_LEADING = -0.005
 local SCORE_GAP_TRAILING = -0.005
@@ -16,36 +20,15 @@ local SCORE_MAX = math.huge
 local SCORE_MIN = -math.huge
 local MATCH_MAX_LENGTH = 1024
 
--- Check FFI availability at load time
-local has_ffi, ffi = pcall(require, 'ffi')
+-- Use FFI detection from the base module (shared across all matchers)
+local has_ffi = base.has_ffi
+local ffi = base.ffi
 
 ---@class Pickers.Matchers.Fzy
 local fzy = {}
 
--- Check if `needle` is a subsequence of the `haystack`.
---
--- Usually called before `score` or `positions`.
----@param needle string
----@param haystack string
----@param case_sensitive? boolean
----@return boolean match
-function fzy.has_match(needle, haystack, case_sensitive)
-  if not case_sensitive then
-    needle = string.lower(needle)
-    haystack = string.lower(haystack)
-  end
-
-  local j = 1
-  for i = 1, string.len(needle) do
-    j = string.find(haystack, string.sub(needle, i, i), j, true)
-    if not j then
-      return false
-    end
-    j = j + 1
-  end
-
-  return true
-end
+-- Use the shared has_match from the base module
+fzy.has_match = base.has_match
 
 -- ============ Lua table implementation (fallback) ============
 

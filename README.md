@@ -53,6 +53,7 @@ Whether you need file search, LSP symbols, diagnostics, or fully custom workflow
     - [key-mappings](#key-mappings)
 - [🔌 Third party sources](#-third-party-sources)
 - [🧩 Custom source](#-custom-source)
+- [🎯 Custom matcher](#-custom-matcher)
 - [🪟 Custom layout](#-custom-layout)
 - [❓ FAQ](#-faq)
 - [📣 Self-Promotion](#-self-promotion)
@@ -64,7 +65,8 @@ Whether you need file search, LSP symbols, diagnostics, or fully custom workflow
 
 ## ✨ Features
 
-- High-performance fuzzy matching powered by the fzy algorithm
+- High-performance fuzzy matching powered by the fzy algorithm with optional FFI acceleration
+- Pluggable matcher system — switch between `fzy`, `matchfuzzy`, `levenshtein`, or your own
 - Simple yet extensible source API
 - Flexible UI layouts (floating window, preview panel)
 - built-in picker sources
@@ -132,7 +134,7 @@ require('plug').add({
       require('picker').setup({
         filter = {
           ignorecase = false, -- ignorecase (boolean): defaults to false
-          matcher = 'fzy', -- fzy or matchfuzzy
+          matcher = 'fzy', -- 'fzy', 'matchfuzzy', or 'levenshtein'
         },
         window = {
           width = 0.8, -- set picker screen width, default is 0.8 * vim.o.columns
@@ -494,6 +496,98 @@ local custom_source = {
 }
 
 require('picker.windows').open(custom_source, {})
+```
+
+## 🎯 Custom matcher
+
+picker.nvim uses a pluggable matcher system. Three built-in matchers are
+provided:
+
+| Matcher       | Description                                                    |
+| ------------- | -------------------------------------------------------------- |
+| `fzy`         | Fzy algorithm with automatic FFI acceleration (default)        |
+| `matchfuzzy`  | Delegates to Neovim's built-in `vim.fn.matchfuzzypos`          |
+| `levenshtein` | Levenshtein edit distance scoring                              |
+
+Switch matchers via config:
+
+```lua
+require('picker').setup({
+  filter = {
+    matcher = 'levenshtein', -- or 'fzy', 'matchfuzzy'
+  },
+})
+```
+
+You can also pass a custom matcher module directly (instead of a string name):
+
+```lua
+local my_matcher = require('picker.matchers.fzy')
+require('picker').setup({
+  filter = {
+    matcher = my_matcher,
+  },
+})
+```
+
+### Creating a custom matcher
+
+A matcher is a Lua module that implements the `PickerMatcher` interface.
+At minimum, it must provide `positions()` and `get_implementation_name()`.
+The shared `has_match` pre-filter is available from the base module.
+
+```lua
+-- lua/picker/matchers/my_matcher.lua
+local base = require('picker.matchers')
+
+local M = {}
+
+-- Use the shared pre-filter (or implement your own)
+M.has_match = base.has_match
+
+--- Return match positions and score.
+---@param needle string Search query
+---@param haystack string Candidate string
+---@param case_sensitive? boolean
+---@return table<integer, integer> positions 1-indexed positions in haystack
+---@return number score Higher is better
+function M.positions(needle, haystack, case_sensitive)
+  -- Your matching logic here
+  -- Return matched positions and a score
+  return { 1, 2, 3 }, 1.0
+end
+
+--- Return the active implementation name.
+---@return string
+function M.get_implementation_name()
+  return 'my_matcher'
+end
+
+return M
+```
+
+Then use it by name (if placed in `lua/picker/matchers/`) or pass the
+module directly:
+
+```lua
+require('picker').setup({
+  filter = {
+    matcher = 'my_matcher', -- loads from lua/picker/matchers/my_matcher.lua
+  },
+})
+```
+
+### FFI acceleration
+
+The `fzy` matcher automatically detects LuaJIT FFI availability at load
+time and uses accelerated C-level array operations when available. No
+configuration is needed - this is fully automatic.
+
+Check the active implementation at runtime:
+
+```lua
+local fzy = require('picker.matchers.fzy')
+print(fzy.get_implementation_name()) -- "ffi" or "lua"
 ```
 
 ## 🪟 Custom layout

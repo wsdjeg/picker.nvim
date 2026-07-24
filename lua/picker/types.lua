@@ -50,9 +50,25 @@
 ---@field func function
 ---@field preview_win? integer
 
+--- A matcher module implementing the fuzzy matching interface.
+--- Built-in matchers: fzy, matchfuzzy, levenshtein.
+--- Custom matchers must implement at least `positions()` and
+--- `get_implementation_name()`.
+---@class PickerMatcher
+---@field has_match fun(needle: string, haystack: string, case_sensitive?: boolean): boolean Check if needle is a subsequence of haystack
+---@field positions fun(needle: string, haystack: string, case_sensitive?: boolean): table<integer, integer>, number Return matched positions and score
+---@field score? fun(needle: string, haystack: string, case_sensitive?: boolean): number Return only the score
+---@field filter? fun(needle: string, haystacks: string[], case_sensitive?: boolean): { [1]: integer, [2]: table<integer, integer>, [3]: number, [4]: string }[] Filter and score multiple candidates
+---@field get_implementation_name? fun(): string Return the active implementation name (e.g. 'ffi', 'lua', 'vim')
+---@field get_score_min? fun(): number Return the minimum possible score
+---@field get_score_max? fun(): number Return the maximum possible score
+---@field get_max_length? fun(): integer Return the maximum supported string length
+---@field get_score_floor? fun(): number Return the practical score floor
+---@field get_score_ceiling? fun(): number Return the practical score ceiling
+
 ---@class PickerConfigFilter
 ---@field ignorecase? boolean
----@field matcher? 'fzy'|'matchfuzzy'|'levenshtein'
+---@field matcher? string|PickerMatcher Matcher name (e.g. 'fzy', 'matchfuzzy', 'levenshtein') or a custom matcher module
 
 -- NOTE: (DrKJeff16) What other values does `window.layout` take?
 
@@ -92,3 +108,4 @@
 ---@field highlight? PickerConfigHighlight
 ---@field prompt? PickerConfigPrompt
 ---@field mappings? PickerConfigMappings
+

@@ -1,3 +1,5 @@
+local matcher_base = require('picker.matchers')
+
 ---@class Picker.Filter
 local M = {}
 
@@ -8,16 +10,24 @@ M._filter_id = 0
 --- Chunk size: items processed per coroutine yield
 local CHUNK_SIZE = 500
 
+--- Resolve the matcher from config.
+--- Accepts either a string name (e.g. 'fzy') or a custom matcher module.
+---@return PickerMatcher
+local function get_matcher()
+  local config = require('picker.config').get()
+  local matcher_config = config.filter.matcher or 'fzy'
+  if type(matcher_config) == 'string' then
+    return matcher_base.load(matcher_config)
+  end
+  -- Already a matcher module (table with positions function)
+  return matcher_config
+end
+
 ---@param input string
 ---@param source PickerSource
 ---@param ignorecase boolean
 function M.filter(input, source, ignorecase)
-  local config = require('picker.config').get()
-  local ok, matcher =
-    pcall(require, 'picker.matchers.' .. config.filter.matcher)
-  if not ok then
-    matcher = require('picker.matchers.fzy')
-  end
+  local matcher = get_matcher()
   if input == '' then
     local i = 0
     source.filter_items = vim.tbl_map(function(t)
@@ -80,12 +90,7 @@ end
 ---@param ignorecase boolean
 ---@param on_done function Called when filtering is complete
 function M.filter_async(input, source, ignorecase, on_done)
-  local config = require('picker.config').get()
-  local ok, matcher =
-    pcall(require, 'picker.matchers.' .. config.filter.matcher)
-  if not ok then
-    matcher = require('picker.matchers.fzy')
-  end
+  local matcher = get_matcher()
 
   -- Increment id to cancel any running coroutine
   M._filter_id = M._filter_id + 1

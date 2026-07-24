@@ -1,25 +1,20 @@
--- use neovim's matchfuzzy and matchfuzzypos function
+-- Uses Neovim's built-in matchfuzzy and matchfuzzypos function.
+-- This matcher delegates to vim.fn for matching logic but still uses
+-- the shared has_match pre-filter from the base module for consistency.
+
+local base = require('picker.matchers')
+
 local matchfuzzy = {}
 
-function matchfuzzy.has_match(needle, haystack, case_sensitive)
-  if not case_sensitive then
-    needle = string.lower(needle)
-    haystack = string.lower(haystack)
-  end
+-- Use the shared has_match from the base module
+matchfuzzy.has_match = base.has_match
 
-  local j = 1
-  for i = 1, string.len(needle) do
-    j = string.find(haystack, string.sub(needle, i, i), j, true)
-    if not j then
-      return false
-    else
-      j = j + 1
-    end
-  end
-
-  return true
-end
-
+--- Find match positions using vim.fn.matchfuzzypos.
+---@param needle string
+---@param haystack string
+---@param case_sensitive? boolean
+---@return table<integer, integer> positions
+---@return number score
 function matchfuzzy.positions(needle, haystack, case_sensitive)
   if not case_sensitive then
     needle = string.lower(needle)
@@ -33,4 +28,12 @@ function matchfuzzy.positions(needle, haystack, case_sensitive)
     scopes[1]
 end
 
+--- The name of the currently-running implementation.
+--- Always 'vim' since this matcher uses Neovim's built-in matchfuzzypos.
+---@return 'vim' implementation
+function matchfuzzy.get_implementation_name()
+  return 'vim'
+end
+
 return matchfuzzy
+

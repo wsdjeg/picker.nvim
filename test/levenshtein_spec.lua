@@ -54,17 +54,17 @@ function TestLevenshtein:test_positions_subsequence()
 end
 
 function TestLevenshtein:test_positions_empty_needle()
-  -- Edge case: returns 0, {}, {0, 0} (different from normal signature)
+  -- Edge case: empty needle returns empty positions, score 0
   local positions, score = levenshtein.positions('', 'abcdef')
-  lu.assertEquals(positions, 0)
-  lu.assertEquals(score, {})
+  lu.assertEquals(positions, {})
+  lu.assertEquals(score, 0)
 end
 
 function TestLevenshtein:test_positions_empty_haystack()
-  -- Edge case: returns 0, {}, {0, 0} (different from normal signature)
+  -- Edge case: empty haystack returns empty positions, score 0
   local positions, score = levenshtein.positions('abc', '')
-  lu.assertEquals(positions, 0)
-  lu.assertEquals(score, {})
+  lu.assertEquals(positions, {})
+  lu.assertEquals(score, 0)
 end
 
 function TestLevenshtein:test_positions_with_insertions()

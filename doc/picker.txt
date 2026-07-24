@@ -38,12 +38,13 @@ CONTENTS                                                              *picker*
     6.23 key-mappings                             |picker-source-key-mappings|
   7. Third party sources                          |picker-third-party-sources|
   8. Custom source                                      |picker-custom-source|
-  9. Custom layout                                      |picker-custom-layout|
-  10. FAQ                                                         |picker-faq|
-  11. Self-Promotion                                   |picker-self-promotion|
-  12. Feedback                                               |picker-feedback|
-  13. Credits                                                 |picker-credits|
-  14. License                                                 |picker-license|
+  9. Custom matcher                                  |picker-custom-matcher|
+  10. Custom layout                                      |picker-custom-layout|
+  11. FAQ                                                         |picker-faq|
+  12. Self-Promotion                                   |picker-self-promotion|
+  13. Feedback                                               |picker-feedback|
+  14. Credits                                                 |picker-credits|
+  15. License                                                 |picker-license|
 
 ==============================================================================
  1. INTRODUCTION                                         *picker-introduction*
@@ -58,7 +59,8 @@ and composable approach without the overhead of larger frameworks.
 ==============================================================================
  2. Features                                                 *picker-features*
 
-- ⚡ High-performance fuzzy matching powered by the fzy algorithm
+- ⚡ High-performance fuzzy matching powered by the fzy algorithm with optional FFI acceleration
+- 🎯 Pluggable matcher system - switch between fzy, matchfuzzy, levenshtein, or your own
 - 🔧 Simple yet extensible source API
 - 🪟 Flexible UI layouts (floating window, preview panel)
 - 🧩 built-in picker sources
@@ -124,7 +126,7 @@ Using luarocks <https://luarocks.org/>
                         -- ignorecase (boolean): defaults to false
                         ignorecase = false,
                         -- set default matcher, default is fzy
-                        -- this can be fzy or matchfuzzy
+                        -- this can be fzy, matchfuzzy or levenshtein
                         matcher = 'fzy',
                     },
                     window = {
@@ -491,7 +493,93 @@ require('picker.windows').open(custom_source, {})
 <
 
 ==============================================================================
- 9. Custom layout                                       *picker-custom-layout*
+ 9. Custom matcher                                      *picker-custom-matcher*
+
+picker.nvim uses a pluggable matcher system. Three built-in matchers are
+provided:
+
+| Matcher       | Description                                                    |
+| ------------- | -------------------------------------------------------------- |
+| `fzy`         | Fzy algorithm with automatic FFI acceleration (default)        |
+| `matchfuzzy`  | Delegates to Neovim's built-in `vim.fn.matchfuzzypos`          |
+| `levenshtein` | Levenshtein edit distance scoring                              |
+
+Switch matchers via config:
+>
+    require("picker").setup({
+        filter = {
+            matcher = "levenshtein", -- or "fzy", "matchfuzzy"
+        },
+    })
+<
+
+You can also pass a custom matcher module directly:
+>
+    local my_matcher = require("picker.matchers.fzy")
+    require("picker").setup({
+        filter = {
+            matcher = my_matcher,
+        },
+    })
+<
+
+CREATING A CUSTOM MATCHER                          *picker-new-matcher*
+
+A matcher is a Lua module that implements the PickerMatcher interface.
+At minimum, it must provide `positions()` and `get_implementation_name()`.
+The shared `has_match` pre-filter is available from the base module.
+
+>
+    -- lua/picker/matchers/my_matcher.lua
+    local base = require("picker.matchers")
+
+    local M = {}
+
+    -- Use the shared pre-filter (or implement your own)
+    M.has_match = base.has_match
+
+    ---@param needle string
+    ---@param haystack string
+    ---@param case_sensitive? boolean
+    ---@return table<integer, integer> positions
+    ---@return number score
+    function M.positions(needle, haystack, case_sensitive)
+        -- Your matching logic here
+        return { 1, 2, 3 }, 1.0
+    end
+
+    ---@return string
+    function M.get_implementation_name()
+        return "my_matcher"
+    end
+
+    return M
+<
+
+Then use it by name (if placed in `lua/picker/matchers/`) or pass the
+module directly:
+>
+    require("picker").setup({
+        filter = {
+            matcher = "my_matcher",
+        },
+    })
+<
+
+FFI ACCELERATION                                    *picker-ffi-acceleration*
+
+The `fzy` matcher automatically detects LuaJIT FFI availability at load
+time and uses accelerated C-level array operations when available. No
+configuration is needed - this is fully automatic.
+
+Check the active implementation at runtime:
+>
+    local fzy = require("picker.matchers.fzy")
+    print(fzy.get_implementation_name()) -- "ffi" or "lua"
+<
+
+==============================================================================
+ 10. Custom layout                                      *picker-custom-layout*
 
 picker.nvim use `default` layout by default. a layout should provide 
 following public functions:
@@ -517,7 +605,7 @@ following public functions:
 <
 
 ==============================================================================
- 10. FAQ                                                          *picker-faq*
+ 11. FAQ                                                          *picker-faq*
 
 1. how to disable nvim-cmp in picker.nvim buffer?
 
@@ -575,7 +663,7 @@ following public functions:
 <
 
 ==============================================================================
- 11. Self-Promotion                                    *picker-self-promotion*
+ 12. Self-Promotion                                    *picker-self-promotion*
 
 Like this plugin? Star the repository on
 GitHub.
@@ -584,19 +672,19 @@ Love this plugin? Follow [me](https://wsdjeg.net/) on
 [GitHub](https://github.com/wsdjeg).
 
 ==============================================================================
- 12. Feedback                                                *picker-feedback*
+ 13. Feedback                                                *picker-feedback*
 
 If you encounter any bugs or have suggestions, please file an issue in the
 issue tracker: https://github.com/wsdjeg/picker.nvim/issues
 
 ==============================================================================
- 13. Credits                                                  *picker-credits*
+ 14. Credits                                                  *picker-credits*
 
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
 - [denite.nvim](https://github.com/Shougo/denite.nvim)
 
 ==============================================================================
- 14. License                                                  *picker-license*
+ 15. License                                                  *picker-license*
 
 Licensed under GPL-3.0.
 

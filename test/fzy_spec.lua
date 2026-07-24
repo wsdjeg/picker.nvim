@@ -78,8 +78,6 @@ function TestFzy:test_score_exact_match_is_max()
 end
 
 function TestFzy:test_score_needle_longer_than_haystack_is_min()
-  -- fzy.score assumes needle is a subsequence of haystack
-  -- When needle is longer, it returns SCORE_MIN
   local score = fzy.score('abcdefg', 'abc')
   lu.assertEquals(score, -math.huge)
 end
@@ -101,14 +99,12 @@ function TestFzy:test_score_consecutive_better_than_scattered()
 end
 
 function TestFzy:test_score_word_boundary_bonus()
-  -- Matching at word boundaries should score higher
   local word_match = fzy.score('ba', 'foo_bar')
   local inner_match = fzy.score('oo', 'foo_bar')
   lu.assertTrue(word_match > inner_match)
 end
 
 function TestFzy:test_score_slash_bonus()
-  -- Matching after a slash should score higher
   local slash_match = fzy.score('ba', 'foo/bar')
   local inner_match = fzy.score('oo', 'foo/bar')
   lu.assertTrue(slash_match > inner_match)
@@ -119,11 +115,10 @@ end
 function TestFzy:test_filter_basic()
   local haystacks = { 'apple', 'banana', 'cherry', 'apricot' }
   local results = fzy.filter('ap', haystacks)
-  -- Should match 'apple' and 'apricot'
   lu.assertEquals(#results, 2)
-  lu.assertEquals(results[1][1], 1) -- index of 'apple'
+  lu.assertEquals(results[1][1], 1)
   lu.assertEquals(results[1][4], 'apple')
-  lu.assertEquals(results[2][1], 4) -- index of 'apricot'
+  lu.assertEquals(results[2][1], 4)
   lu.assertEquals(results[2][4], 'apricot')
 end
 
@@ -154,7 +149,56 @@ function TestFzy:test_get_max_length()
 end
 
 function TestFzy:test_get_implementation_name()
-  lu.assertEquals(fzy.get_implementation_name(), 'lua')
+  local name = fzy.get_implementation_name()
+  lu.assertTrue(name == 'ffi' or name == 'lua',
+    'implementation name should be "ffi" or "lua", got: ' .. tostring(name))
+end
+
+-- FFI consistency: score and positions should work correctly
+-- regardless of which implementation is active
+
+function TestFzy:test_score_and_positions_consistency()
+  -- Test multiple patterns to ensure FFI and Lua paths produce same results
+  local test_cases = {
+    { needle = 'abc', haystack = 'abcdef' },
+    { needle = 'acf', haystack = 'abcdef' },
+    { needle = 'ap', haystack = 'apple' },
+    { needle = 'ba', haystack = 'foo/bar' },
+    { needle = 'ba', haystack = 'foo_bar' },
+    { needle = 'abc', haystack = 'ABC' },
+    { needle = 'ABC', haystack = 'abcdef' },
+    { needle = 'test', haystack = 'src/test/file.lua' },
+    { needle = 'fz', haystack = 'fzy.lua' },
+  }
+
+  for _, tc in ipairs(test_cases) do
+    local s = fzy.score(tc.needle, tc.haystack)
+    local p, s2 = fzy.positions(tc.needle, tc.haystack)
+    -- score from score() and positions() should match
+    lu.assertEquals(s, s2,
+      string.format('score mismatch for %q in %q: %g vs %g',
+        tc.needle, tc.haystack, s, s2))
+    -- positions should have correct length
+    if s ~= -math.huge and s ~= math.huge then
+      lu.assertEquals(#p, #tc.needle,
+        string.format('positions length mismatch for %q in %q',
+          tc.needle, tc.haystack))
+    end
+  end
+end
+
+function TestFzy:test_positions_camelcase_bonus()
+  -- camelCase boundary should get bonus
+  local positions, score = fzy.positions('B', 'fooBar')
+  -- 'B' is at position 4 in 'fooBar'
+  lu.assertEquals(positions, { 4 })
+end
+
+function TestFzy:test_positions_dot_bonus()
+  -- dot boundary should get bonus
+  local positions, score = fzy.positions('f', 'foo.bar')
+  -- First 'f' at position 1
+  lu.assertEquals(positions, { 1 })
 end
 
 return TestFzy

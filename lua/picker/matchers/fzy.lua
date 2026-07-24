@@ -1,6 +1,7 @@
 -- 基于：https://github.com/swarn
 -- 修改：
 -- 1. filter 返回列表每个 item 第四个元素候选字符串
+-- 2. FFI acceleration for compute() when available (double[] instead of table[][])
 -- The lua implementation of the fzy string matching algorithm
 
 local SCORE_GAP_LEADING = -0.005
@@ -15,20 +16,15 @@ local SCORE_MAX = math.huge
 local SCORE_MIN = -math.huge
 local MATCH_MAX_LENGTH = 1024
 
+-- Check FFI availability at load time
+local has_ffi, ffi = pcall(require, 'ffi')
+
 ---@class Pickers.Matchers.Fzy
 local fzy = {}
 
 -- Check if `needle` is a subsequence of the `haystack`.
 --
 -- Usually called before `score` or `positions`.
---
--- Args:
---   needle (string)
---   haystack (string)
---   case_sensitive (bool, optional): defaults to false
---
--- Returns:
---   bool
 ---@param needle string
 ---@param haystack string
 ---@param case_sensitive? boolean
@@ -50,6 +46,8 @@ function fzy.has_match(needle, haystack, case_sensitive)
 
   return true
 end
+
+-- ============ Lua table implementation (fallback) ============
 
 ---@param c string
 local function is_lower(c)
@@ -140,22 +138,12 @@ local function compute(needle, haystack, D, M, case_sensitive)
   end
 end
 
--- Compute a matching score.
---
--- Args:
---   needle (string): must be a subequence of `haystack`, or the result is
---     undefined.
---   haystack (string)
---   case_sensitive (bool, optional): defaults to false
---
--- Returns:
---   number: higher scores indicate better matches. See also `get_score_min`
---     and `get_score_max`.
+--- Lua table version of score
 ---@param needle string
 ---@param haystack string
 ---@param case_sensitive? boolean
 ---@return number score
-function fzy.score(needle, haystack, case_sensitive)
+local function score_lua(needle, haystack, case_sensitive)
   local n, m = string.len(needle), string.len(haystack)
 
   if n == 0 or m == 0 or m > MATCH_MAX_LENGTH or n > m then
@@ -170,27 +158,13 @@ function fzy.score(needle, haystack, case_sensitive)
   return M[n][m]
 end
 
--- Compute the locations where fzy matches a string.
---
--- Determine where each character of the `needle` is matched to the `haystack`
--- in the optimal match.
---
--- Args:
---   needle (string): must be a subequence of `haystack`, or the result is
---     undefined.
---   haystack (string)
---   case_sensitive (bool, optional): defaults to false
---
--- Returns:
---   {int,...}: indices, where `indices[n]` is the location of the `n`th
---     character of `needle` in `haystack`.
---   number: the same matching score returned by `score`
+--- Lua table version of positions
 ---@param needle string
 ---@param haystack string
 ---@param case_sensitive? boolean
 ---@return table<integer, integer> positions
 ---@return number score
-function fzy.positions(needle, haystack, case_sensitive)
+local function positions_lua(needle, haystack, case_sensitive)
   local n, m = string.len(needle), string.len(haystack)
 
   if n == 0 or m == 0 or m > MATCH_MAX_LENGTH or n > m then
@@ -228,18 +202,163 @@ function fzy.positions(needle, haystack, case_sensitive)
   return positions, M[n][m]
 end
 
+-- ============ FFI implementation (accelerated) ============
+
+local score_ffi, positions_ffi
+
+if has_ffi then
+  --- Byte-level helpers (faster than string.match for ASCII)
+  ---@param b integer byte value
+  ---@return boolean
+  local function is_lower_byte(b)
+    return b >= 97 and b <= 122 -- 'a' to 'z'
+  end
+
+  ---@param b integer byte value
+  ---@return boolean
+  local function is_upper_byte(b)
+    return b >= 65 and b <= 90 -- 'A' to 'Z'
+  end
+
+  --- Compute DP matrices using FFI flat arrays
+  --- D and M are double[n*m], 0-indexed: D[(i-1)*m + (j-1)] = D[i][j]
+  ---@param needle string
+  ---@param haystack string
+  ---@param case_sensitive? boolean
+  ---@return userdata D flat double[n*m] array
+  ---@return userdata M flat double[n*m] array
+  ---@return integer n
+  ---@return integer m
+  local function compute_ffi(needle, haystack, case_sensitive)
+    local n = string.len(needle)
+    local m = string.len(haystack)
+
+    -- Bonus array (0-indexed, m elements)
+    local bonus = ffi.new('double[?]', m)
+    local last_byte = 47 -- '/' (ASCII 47)
+    for i = 0, m - 1 do
+      local b = string.byte(haystack, i + 1)
+      if last_byte == 47 or last_byte == 92 then -- '/' or '\'
+        bonus[i] = SCORE_MATCH_SLASH
+      elseif last_byte == 45 or last_byte == 95 or last_byte == 32 then -- '-', '_', ' '
+        bonus[i] = SCORE_MATCH_WORD
+      elseif last_byte == 46 then -- '.'
+        bonus[i] = SCORE_MATCH_DOT
+      elseif is_lower_byte(last_byte) and is_upper_byte(b) then
+        bonus[i] = SCORE_MATCH_CAPITAL
+      else
+        bonus[i] = 0
+      end
+      last_byte = b
+    end
+
+    if not case_sensitive then
+      needle = string.lower(needle)
+      haystack = string.lower(haystack)
+    end
+
+    -- Pre-extract haystack bytes into FFI array (uint8_t for unsigned)
+    local hbytes = ffi.new('uint8_t[?]', m + 1)
+    ffi.copy(hbytes, haystack)
+
+    -- Flat DP matrices (0-indexed)
+    local D = ffi.new('double[?]', n * m)
+    local M = ffi.new('double[?]', n * m)
+
+    for i = 1, n do
+      local needle_byte = string.byte(needle, i)
+      local prev_score = SCORE_MIN
+      local gap_score = (i == n) and SCORE_GAP_TRAILING or SCORE_GAP_INNER
+      local row_offset = (i - 1) * m
+
+      for j = 1, m do
+        local idx = row_offset + (j - 1)
+        if needle_byte == hbytes[j - 1] then
+          local score_val = SCORE_MIN
+          if i == 1 then
+            score_val = ((j - 1) * SCORE_GAP_LEADING) + bonus[j - 1]
+          elseif j > 1 then
+            local prev_idx = (i - 2) * m + (j - 2)
+            local a = M[prev_idx] + bonus[j - 1]
+            local b = D[prev_idx] + SCORE_MATCH_CONSECUTIVE
+            score_val = math.max(a, b)
+          end
+          D[idx] = score_val
+          prev_score = math.max(score_val, prev_score + gap_score)
+          M[idx] = prev_score
+        else
+          D[idx] = SCORE_MIN
+          prev_score = prev_score + gap_score
+          M[idx] = prev_score
+        end
+      end
+    end
+
+    return D, M, n, m
+  end
+
+  score_ffi = function(needle, haystack, case_sensitive)
+    local n, m = string.len(needle), string.len(haystack)
+
+    if n == 0 or m == 0 or m > MATCH_MAX_LENGTH or n > m then
+      return SCORE_MIN
+    end
+    if n == m then
+      return SCORE_MAX
+    end
+
+    local _, M = compute_ffi(needle, haystack, case_sensitive)
+    return M[(n - 1) * m + (m - 1)]
+  end
+
+  positions_ffi = function(needle, haystack, case_sensitive)
+    local n, m = string.len(needle), string.len(haystack)
+
+    if n == 0 or m == 0 or m > MATCH_MAX_LENGTH or n > m then
+      return {}, SCORE_MIN
+    end
+    if n == m then
+      local consecutive = {}
+      for i = 1, n do
+        consecutive[i] = i
+      end
+      return consecutive, SCORE_MAX
+    end
+
+    local D, M = compute_ffi(needle, haystack, case_sensitive)
+
+    local positions = {} ---@type table<integer, integer>
+    local match_required = false
+    local j = m
+    for i = n, 1, -1 do
+      while j >= 1 do
+        local idx = (i - 1) * m + (j - 1)
+        if D[idx] ~= SCORE_MIN and (match_required or D[idx] == M[idx]) then
+          -- Only access D[prev_idx] when i > 1 and j > 1 (short-circuit)
+          local prev_idx = (i - 2) * m + (j - 2)
+          match_required = i ~= 1
+            and (j ~= 1)
+            and (M[idx] == D[prev_idx] + SCORE_MATCH_CONSECUTIVE)
+          positions[i] = j
+          j = j - 1
+          break
+        end
+
+        j = j - 1
+      end
+    end
+
+    return positions, M[(n - 1) * m + (m - 1)]
+  end
+end
+
+-- ============ Public API ============
+
+-- Choose implementation at load time based on FFI availability
+fzy.score = has_ffi and score_ffi or score_lua
+fzy.positions = has_ffi and positions_ffi or positions_lua
+
 -- Apply `has_match` and `positions` to an array of haystacks.
---
--- Args:
---   needle (string)
---   haystack ({string, ...})
---   case_sensitive (bool, optional): defaults to false
---
--- Returns:
---   {{idx, positions, score, haystack}, ...}: an array with one entry per matching line
---     in `haystacks`, each entry giving the index of the line in `haystacks`
---     as well as the equivalent to the return value of `positions` for that
---     line.
 ---@param needle string
 ---@param haystacks string[]
 ---@param case_sensitive? boolean
@@ -257,52 +376,36 @@ function fzy.filter(needle, haystacks, case_sensitive)
   return result
 end
 
--- The lowest value returned by `score`.
---
--- In two special cases:
---  - an empty `needle`, or
---  - a `needle` or `haystack` larger than than `get_max_length`,
--- the `score` function will return this exact value, which can be used as a
--- sentinel. This is the lowest possible score.
 ---@return number SCORE_MIN
 function fzy.get_score_min()
   return SCORE_MIN
 end
 
--- The score returned for exact matches. This is the highest possible score.
 ---@return number SCORE_MAX
 function fzy.get_score_max()
   return SCORE_MAX
 end
 
--- The maximum size for which `fzy` will evaluate scores.
 ---@return integer MATCH_MAX_LENGTH
 function fzy.get_max_length()
   return MATCH_MAX_LENGTH
 end
 
--- The minimum score returned for normal matches.
---
--- For matches that don't return `get_score_min`, their score will be greater
--- than than this value.
 ---@return number floor
 function fzy.get_score_floor()
   return MATCH_MAX_LENGTH * SCORE_GAP_INNER
 end
 
--- The maximum score for non-exact matches.
---
--- For matches that don't return `get_score_max`, their score will be less than
--- this value.
 ---@return number ceiling
 function fzy.get_score_ceiling()
   return MATCH_MAX_LENGTH * SCORE_MATCH_CONSECUTIVE
 end
 
--- The name of the currently-running implmenetation, "lua" or "native".
----@return 'lua'|'native' implementation
+-- The name of the currently-running implementation, "ffi" or "lua".
+---@return 'ffi'|'lua' implementation
 function fzy.get_implementation_name()
-  return 'lua'
+  return has_ffi and 'ffi' or 'lua'
 end
 
 return fzy
+

@@ -319,30 +319,37 @@ function M.handle_prompt_changed()
         local input =
           vim.api.nvim_buf_get_lines(layout.prompt_buf, 0, 1, false)[1]
         vim.api.nvim_win_set_cursor(layout.list_win, { 1, 1 })
-        filter.filter(input, source, config.filter.ignorecase)
-
-        vim.api.nvim_buf_set_lines(
-          layout.list_buf,
-          0,
-          -1,
-          false,
-          vim.tbl_map(function(t)
-            return t[4].str
-          end, source.filter_items)
-        )
-        if not vim.tbl_isempty(source.filter_items) then
-          highlight_list_windows()
-          if config.window.enable_preview and source.preview then
-            source.preview(
-              source.filter_items[1][4], -- WARN: (DrKJeff16) Avoid using magic numbers
-              layout.preview_win,
-              layout.preview_buf
-            )
+        filter.filter_async(input, source, config.filter.ignorecase, function()
+          -- Windows may have been closed while filter was running
+          if
+            not vim.api.nvim_buf_is_valid(layout.list_buf)
+            or not vim.api.nvim_win_is_valid(layout.list_win)
+          then
+            return
           end
-        else
-          clear_highlight()
-        end
-        update_result_count()
+          vim.api.nvim_buf_set_lines(
+            layout.list_buf,
+            0,
+            -1,
+            false,
+            vim.tbl_map(function(t)
+              return t[4].str
+            end, source.filter_items)
+          )
+          if not vim.tbl_isempty(source.filter_items) then
+            highlight_list_windows()
+            if config.window.enable_preview and source.preview then
+              source.preview(
+                source.filter_items[1][4],
+                layout.preview_win,
+                layout.preview_buf
+              )
+            end
+          else
+            clear_highlight()
+          end
+          update_result_count()
+        end)
       end
     end
   )

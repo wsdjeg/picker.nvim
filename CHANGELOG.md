@@ -1,5 +1,65 @@
 # Changelog
 
+## [1.8.0](https://github.com/wsdjeg/picker.nvim/compare/v1.7.0...v1.8.0) (2026-07-24)
+
+
+### Features
+
+* **filter:** add async filter using Lua coroutines ([0a95cca](https://github.com/wsdjeg/picker.nvim/commit/0a95ccabc6bb848addc60a11116775130d891298))
+* make window border configurable ([b63e2b2](https://github.com/wsdjeg/picker.nvim/commit/b63e2b229e2e5bc245e8cf4a73cb9804134ea2f9))
+* picker custom layouts ([ed133eb](https://github.com/wsdjeg/picker.nvim/commit/ed133eb3d7e806674eabb04747d7cf5beae145ab))
+
+
+### Bug Fixes
+
+* add missing preview_win property to async_files source ([52f0a4b](https://github.com/wsdjeg/picker.nvim/commit/52f0a4b666ef2b32c08deb8293f8093a8feeafa7))
+* add nil checks for source.filter_items and filter_count ([5740e79](https://github.com/wsdjeg/picker.nvim/commit/5740e79fb822ef6b568ee3199caf6e865fbc9150))
+* check buf and win is valid ([0466fd4](https://github.com/wsdjeg/picker.nvim/commit/0466fd4ec149d1eed2c8a646fef0b007f9b93965))
+* disable list option in picker windows ([d4639b9](https://github.com/wsdjeg/picker.nvim/commit/d4639b9544d07cf8b0a9cd304c015411a9f62ae9))
+* improve stability and bounds checking ([4065854](https://github.com/wsdjeg/picker.nvim/commit/4065854d8e67d4fb8a7ec2d0c4458fc76ecd5c7f))
+* massively improve annotations, optimized code portions ([#16](https://github.com/wsdjeg/picker.nvim/issues/16)) ([470a98c](https://github.com/wsdjeg/picker.nvim/commit/470a98cbffb549d8b1086e00672b17caaabeecd5))
+* restore colorscheme when canceling colorscheme picker ([#18](https://github.com/wsdjeg/picker.nvim/issues/18)) ([d8fe93e](https://github.com/wsdjeg/picker.nvim/commit/d8fe93e7dd1dcafee3c8dea97420638abedea48e))
+* **sources:** `require('picker').open()` without args triggers error ([f76ab25](https://github.com/wsdjeg/picker.nvim/commit/f76ab25424274598d8726a0f3c946699ccb52b93))
+* **windows:** use vim.schedule for entering insert mode ([76a495c](https://github.com/wsdjeg/picker.nvim/commit/76a495c2bc73af841cabb6c68da46f0e2560994e))
+
+
+### Code Refactoring
+
+* **matchers:** unify matcher interface with shared base module ([d7ad008](https://github.com/wsdjeg/picker.nvim/commit/d7ad0087b57bcfb70c16770221388f06ee1a3f88))
+
+
+### Performance Improvements
+
+* **matchers:** add FFI acceleration for fzy compute() ([66e983c](https://github.com/wsdjeg/picker.nvim/commit/66e983c9ede52a26d683f6789afc22c0efb56d5e))
+
+
+### Documentation
+
+* add AGENTS.md for AI assistant guide ([7d090ff](https://github.com/wsdjeg/picker.nvim/commit/7d090ffa8edab5ba35914e746e2ac977259bd354))
+* complete builtin sources table in README ([1326b22](https://github.com/wsdjeg/picker.nvim/commit/1326b2251b9fbce9a6326b8f6a3963198b8cca90))
+* fix typo in doc ([0552be6](https://github.com/wsdjeg/picker.nvim/commit/0552be659b6a2e33c72d630c2627b1c0c9a0d109))
+* **help:** format help file ([470e033](https://github.com/wsdjeg/picker.nvim/commit/470e033f09e620066cd23c8ca5702340f5c4d209))
+* update third-party-sources ([2e7dc88](https://github.com/wsdjeg/picker.nvim/commit/2e7dc8835b2c0a9bb11ea9bf64637e7fc9b0d821))
+
+
+### Tests
+
+* add sources registry module tests ([fdc51cc](https://github.com/wsdjeg/picker.nvim/commit/fdc51ccc5a55d95f0bcb73348f2b5a9bce4f1c65))
+* add test coverage for matchers init, main module, and 7 sources ([b1a664d](https://github.com/wsdjeg/picker.nvim/commit/b1a664d44ed32b603193a88cfcf546dbc9e2e12f))
+* add test infrastructure and Makefile ([bbbb4d2](https://github.com/wsdjeg/picker.nvim/commit/bbbb4d2bfa0286b00ff479453aba89590cab5028))
+* fix config and fzy test assertions ([06b835a](https://github.com/wsdjeg/picker.nvim/commit/06b835afbbd2a58810a53e093ff4bedacd5eab90))
+* **matchers:** add levenshtein matcher tests ([34f3923](https://github.com/wsdjeg/picker.nvim/commit/34f39235b395ec33757d0233026a886c64a5768d))
+* **matchers:** add matchfuzzy matcher tests ([2a1c12a](https://github.com/wsdjeg/picker.nvim/commit/2a1c12ab11eca8c5f50c3af26339673f94d8d219))
+* **sources:** add buffers source tests ([f7a8467](https://github.com/wsdjeg/picker.nvim/commit/f7a84671c10fcf8a996ba9b6f2f4ff3643143a41))
+* **sources:** add cmd_history source tests ([a06caba](https://github.com/wsdjeg/picker.nvim/commit/a06caba44bc77bc3d46b76513b1a12e7baf737ce))
+* **sources:** add colorscheme source tests ([b1ab448](https://github.com/wsdjeg/picker.nvim/commit/b1ab4481a79ed83486fda8044beb0d5d6fe4f7f1))
+* **sources:** add highlights source tests ([e461015](https://github.com/wsdjeg/picker.nvim/commit/e461015f33d6c5afc4747e64e60f9d539eac7aa1))
+* **sources:** add lines source tests ([b13b0d6](https://github.com/wsdjeg/picker.nvim/commit/b13b0d64d1921bb845a1f50e4e54ce8ea5414ee4))
+* **sources:** add picker_config source tests ([e72c21f](https://github.com/wsdjeg/picker.nvim/commit/e72c21f4edf40c145551415e2404a033d4bf9ef8))
+* **sources:** add registers source tests ([c2611cb](https://github.com/wsdjeg/picker.nvim/commit/c2611cb686b232e15662eaec66bdbd69e053961e))
+* **sources:** add search_history source tests ([d97c39b](https://github.com/wsdjeg/picker.nvim/commit/d97c39b4113d03544ec57e3f334acd90cba7fa3f))
+* **util:** add util module tests ([50af85e](https://github.com/wsdjeg/picker.nvim/commit/50af85e3b9a204d38468d1f5b6d4ff957ac39695))
+
 ## [1.7.0](https://github.com/wsdjeg/picker.nvim/compare/v1.6.0...v1.7.0) (2026-01-24)
 
 

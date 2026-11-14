@@ -55,6 +55,7 @@ Whether you need file search, LSP symbols, diagnostics, or fully custom workflow
 - [🧩 Custom source](#-custom-source)
 - [🎯 Custom matcher](#-custom-matcher)
 - [🪟 Custom layout](#-custom-layout)
+- [🧪 Testing](#-testing)
 - [❓ FAQ](#-faq)
 - [📣 Self-Promotion](#-self-promotion)
 - [💬 Feedback](#-feedback)
@@ -69,7 +70,8 @@ Whether you need file search, LSP symbols, diagnostics, or fully custom workflow
 - Pluggable matcher system — switch between `fzy`, `matchfuzzy`, `levenshtein`, or your own
 - Simple yet extensible source API
 - Flexible UI layouts (floating window, preview panel)
-- built-in picker sources
+- 26 built-in picker sources covering files, buffers, LSP, quickfix and more
+- Asynchronous filtering with Lua coroutines, so typing never blocks the UI
 - Growing ecosystem of third-party extensions
 - Fully configurable actions & key mappings
 - Live preview and asynchronous loading support
@@ -134,14 +136,15 @@ require('plug').add({
       require('picker').setup({
         filter = {
           ignorecase = false, -- ignorecase (boolean): defaults to false
-          matcher = 'fzy', -- 'fzy', 'matchfuzzy', or 'levenshtein'
+          matcher = 'fzy', -- 'fzy', 'matchfuzzy' or 'levenshtein', or a matcher module
         },
         window = {
+          layout = 'default', -- layout name, see |picker-custom-layout|
           width = 0.8, -- set picker screen width, default is 0.8 * vim.o.columns
           height = 0.8,
           col = 0.1,
           row = 0.1,
-          border = 'rounded',
+          border = 'rounded', -- border style of picker windows
           current_icon = '>',
           current_icon_hl = 'CursorLine',
           enable_preview = false,
@@ -178,7 +181,8 @@ require('plug').add({
 
 1. fuzzy finder picker source.
 
-run `:Picker` command without source name.
+run `:Picker` command without source name, the built-in `sources` source
+lists every available picker source found in `lua/picker/sources/`.
 
 ```
 :Picker
@@ -261,6 +265,7 @@ require('picker.sources.files').set({ cmd = { 'rg', '--files' } })
 | `<Enter>`   | open select file                   |
 | `<C-v>`     | open select file in vertical split |
 | `<C-t>`     | open select file in new tabpage    |
+| `<C-h>`     | toggle hidden files (redraw list)  |
 
 ### cmd_history
 
@@ -278,20 +283,24 @@ filter results from `:history search`.
 | key binding | description           |
 | ----------- | --------------------- |
 | `<Enter>`   | search select pattern |
+| `<C-d>`     | delete select history |
 
 ### picker_config
 
 filter and setup picker.nvim without changing configuration file.
 
-| items         | description                          |
-| ------------- | ------------------------------------ |
-| prompt-top    | change the prompt position to top    |
-| prompt-bottom | change the prompt position to bottom |
-| show-score    | display matched score                |
-| hide-score    | hide matched score                   |
-| ignorecase   | change filter ignorecase to true     |
-| noignorecase | change filter ignorecase to false    |
-| layout-\*     | change window layout                 |
+| items               | description                          |
+| ------------------- | ------------------------------------ |
+| prompt-top          | change the prompt position to top    |
+| prompt-bottom       | change the prompt position to bottom |
+| show-score          | display matched score                |
+| hide-score          | hide matched score                   |
+| ignorecase          | change filter ignorecase to true     |
+| noignorecase        | change filter ignorecase to false    |
+| matcher-fzy         | use fzy matcher                      |
+| matcher-matchfuzzy  | use built-in matchfuzzy matcher      |
+| matcher-levenshtein | use levenshtein matcher              |
+| layout-\*           | change window layout                 |
 
 picker_config source will list all available [custom layouts](#-custom-layout).
 
@@ -311,9 +320,12 @@ filter results from `:highlight`
 
 same as `files` source, but require job.nvim.
 
-| key binding | description      |
-| ----------- | ---------------- |
-| `<Enter>`   | open select file |
+| key binding | description                        |
+| ----------- | ---------------------------------- |
+| `<Enter>`   | open select file                   |
+| `<C-v>`     | open select file in vertical split |
+| `<C-t>`     | open select file in new tabpage    |
+| `<C-h>`     | toggle hidden files (redraw list)  |
 
 ### colorscheme
 
@@ -335,9 +347,11 @@ filter ctags outline, require ctags command.
 
 file results from `nvim_list_bufs()`
 
-| key binding | description             |
-| ----------- | ----------------------- |
-| `<Enter>`   | switch to select buffer |
+| key binding | description                          |
+| ----------- | ------------------------------------ |
+| `<Enter>`   | switch to select buffer               |
+| `<C-v>`     | open select buffer in vertical split  |
+| `<C-t>`     | open select buffer in new tabpage     |
 
 ### lines
 
@@ -498,6 +512,9 @@ local custom_source = {
 require('picker.windows').open(custom_source, {})
 ```
 
+Any `lua/picker/sources/<name>.lua` file placed in your own plugin's runtime
+path is picked up automatically by `:Picker` and its command-line completion.
+
 ## 🎯 Custom matcher
 
 picker.nvim uses a pluggable matcher system. Three built-in matchers are
@@ -613,6 +630,65 @@ function M.render_windows(source, config) end
 return M
 ```
 
+Place the module in `lua/picker/layout/<name>.lua` and select it with
+`window.layout`:
+
+```lua
+require('picker').setup({
+  window = {
+    layout = 'my_layout',
+  },
+})
+```
+
+The `picker_config` source lists every layout found in `lua/picker/layout/`,
+so you can switch layouts at runtime without editing your config.
+
+## 🧪 Testing
+
+Tests use the [luaunit](https://github.com/bluebird75/luaunit) framework and
+run in headless Neovim.
+
+```bash
+# Run the whole test suite
+make test
+
+# Run only matching test files
+make test PATTERN=fzy
+make test PATTERN=config
+make test PATTERN=test/config_spec.lua
+```
+
+The Makefile target downloads luaunit into `test/.deps/` on first run
+(`make install-deps`), then executes `test/run.lua`.
+
+Equivalent manual invocation:
+
+```bash
+nvim --headless -u test/minimal_init.lua \
+  -c "lua dofile('test/run.lua')" \
+  -c "qa!"
+```
+
+Writing a new test file (`test/<module>_spec.lua`):
+
+```lua
+local lu = require('luaunit')
+
+TestExample = {}
+
+function TestExample:test_something()
+  lu.assertEquals(1 + 1, 2)
+end
+
+return TestExample
+```
+
+Tests are executed automatically on every push to `master` and on pull
+requests via GitHub Actions.
+
+Clean up test artifacts with `make clean`.
+
 ## ❓ FAQ
 
 1. how to disable nvim-cmp in picker.nvim buffer?
@@ -690,3 +766,4 @@ If you encounter any bugs or have suggestions, please file an issue in the [issu
 ## 📄 License
 
 Licensed under GPL-3.0.
+
